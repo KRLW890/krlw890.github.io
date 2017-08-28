@@ -40,23 +40,7 @@ var defaults = [
             fraction.num = 1;
             fraction.den = 4096;
             attempts = 1;
-        }),
-    new setting("Ditto catch results Gen 3", true,
-        function() {
-            selected = 1;
-            percent = 100-23.4;
-            attempts = 5;
-            printin("The chance of catching a ditto at 1% health with a great ball is 23.4%. Therefore, the chance of *not* catching one is the opposite, and we simply have to find how likely it is for 1 ditto to escape after 5 attempts.");
-        }),
-    new setting("Ditto catch results Gen 4", false,
-        function() {
-            selected = 1;
-            percent = 100-14.3;
-            attempts = 5;
-            printin("The chance of catching a ditto at 1% health with a poke ball is 14.3%.");
-            printin("");
-        }),
-
+        })
 ];
 
 var changeAttempts = function(val) {};
