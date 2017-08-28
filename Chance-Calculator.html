@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Chance Calculator</title>
+
+  <script src="processing.min.js"></script>
+
+  <script src="defaults.js"></script>
+
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(400, 400);
+
+        processing.background(0xFFF);
+
+
+
+        with (processing) {
+printin = println;
+
+console.log("To edit values, use the following commands:");
+console.log("changeAttempts(x), changePercent(x), changeNumerator(x), changeDenominator(x)");
+console.log("Where x = whatever number you want to change it to");
+console.log("(these are case-sensitive)");
+
+var tries = attempts + " ";
+var setTries = function() {
+    tries = attempts + " ";
+    if (attempts === 1) { tries += "time"; }
+    else { tries += "times"; }
+};
+
+for (var a = 0; a < defaults.length; a++) {
+    if (defaults[a].selected) {
+        defaults[a].setTemplate();
+        setTries();
+        break;
+    }
+}
+var doubles = [100/chancePerAttempt];
+
+changeAttempts = function(val) {
+    attempts = val;
+    setTries();
+    chance = 0;
+    frames = 0;
+    doubles = [100/chancePerAttempt];
+    loop();
+};
+changePercent = function(val) {
+    percent = val;
+    selected = 1;
+    findChance();
+    setTries();
+    chance = 0;
+    frames = 0;
+    doubles = [100/chancePerAttempt];
+    loop();
+};
+changeNumerator = function(val) {
+    fraction.num = val;
+    selected = 2;
+    findChance();
+    setTries();
+    chance = 0;
+    frames = 0;
+    doubles = [100/chancePerAttempt];
+    loop();
+};
+changeDenominator = function(val) {
+    fraction.den = val;
+    selected = 2;
+    findChance();
+    setTries();
+    chance = 0;
+    frames = 0;
+    doubles = [100/chancePerAttempt];
+    loop();
+};
+
+var speedCalc = true;
+
+textAlign(CENTER, CENTER);
+var drawData = function() {
+    fill(0);
+    text("Attempts:\n"+attempts, 100, 75);
+    text("Chance:", 250, 30);
+    if (selected === 1) { ellipse(200, 40, 6, 6); }
+    else { fill(158); }
+    text("Percent:\n"+percent+"%", 200, 75);
+    if (selected !== 1) {
+        fill(0);
+        ellipse(300, 40, 6, 6,);
+    }
+    else { fill(158); }
+    text("Fraction:\n"+fraction.num+" / "+fraction.den, 300, 75);
+};
+
+var drawButtons = function(click) {
+for (var a = 0; a < defaults.length; a++) {
+    fill(0, 150, 255);
+    if (click && mouseY > 300 && mouseY < 340) {
+        if (mouseX > a*width/defaults.length+5 && mouseX < (a+1)*width/defaults.length-5) {
+            defaults[a].selected = true;
+            frames = 0;
+            defaults[a].setTemplate();
+            setTries();
+            doubles = [100/chancePerAttempt];
+            loop();
+        }
+        else { defaults[a].selected = false; }
+    }
+    if (defaults[a].selected) { fill(30, 255, 255); }
+    rect(a*width/defaults.length+5, 300, width/defaults.length-10, 40, 10);
+    
+    fill(0);
+    text(defaults[a].name, a*width/defaults.length+5, 300, width/defaults.length-10, 40);
+}
+};
+mousePressed = function() {
+    drawButtons(true);
+};
+
+var frames = 0;
+draw = function() {
+    if (frames < attempts) {
+        if (speedCalc) {
+            if (frames > 0 && frames*2 <= attempts) {
+                var newChance = (100-chance)*chance/100;
+                chance += newChance;
+                doubles.push(chance);
+                frames *= 2;
+                frames--;
+            }
+            else if (frames > 0 && attempts-frames > 1) {
+                var a = 0;
+                while (true) {
+                    if (frames+pow(2, a) > attempts) { break; }
+                    else { a++; }
+                }
+                a--;
+                
+                var newChance = (100-chance)*doubles[a]/100;
+                chance += newChance;
+                frames += pow(2, a)-1;
+            }
+            else {
+                var newChance = (100-chance)/chancePerAttempt;
+                chance += newChance;
+            }
+        }
+        else {
+            var newChance = (100-chance)/chancePerAttempt;
+            chance += newChance;
+if (random(0, chancePerAttempt) <= 1) { println("Shiny found on frame " + (frames+1)); }
+        }
+    }
+    else {
+        noLoop();
+    }
+    
+    background(255);
+    drawButtons();
+    drawData();
+    fill(0);
+    rect(100, 225, 200, 30);
+    fill(255, 0, 0);
+    rect(100, 225, frames/attempts*200, 30);
+    fill(0, 150, 255);
+    rect(100, 225, chance*2, 30);
+    fill(0);
+    textAlign(CENTER, BOTTOM);
+    text("If an event with a\n" + (1/chancePerAttempt*100) + "% chance of happening\nis attempted " + tries + ",\nthe chance of it occuring once is\n"+chance+"%", 200, 220);
+    frames++;
+};
+
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+</body>
+
+</html>
