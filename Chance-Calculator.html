@@ -46,7 +46,7 @@ var setTries = function() {
 };
 
 for (var a = 0; a < defaults.length; a++) {
-    if (defaults[a].selected) {
+    if (settingSelected === a) {
         defaults[a].setTemplate();
         setTries();
         break;
@@ -60,6 +60,7 @@ changeAttempts = function(val) {
     chance = 0;
     frames = 0;
     doubles = [100/chancePerAttempt];
+    settingSelected = false;
     loop();
 };
 changePercent = function(val) {
@@ -70,6 +71,7 @@ changePercent = function(val) {
     chance = 0;
     frames = 0;
     doubles = [100/chancePerAttempt];
+    settingSelected = false;
     loop();
 };
 changeNumerator = function(val) {
@@ -80,6 +82,7 @@ changeNumerator = function(val) {
     chance = 0;
     frames = 0;
     doubles = [100/chancePerAttempt];
+    settingSelected = false;
     loop();
 };
 changeDenominator = function(val) {
@@ -90,6 +93,7 @@ changeDenominator = function(val) {
     chance = 0;
     frames = 0;
     doubles = [100/chancePerAttempt];
+    settingSelected = false;
     loop();
 };
 
@@ -116,16 +120,15 @@ for (var a = 0; a < defaults.length; a++) {
     fill(0, 150, 255);
     if (click && mouseY > 300 && mouseY < 340) {
         if (mouseX > a*width/defaults.length+5 && mouseX < (a+1)*width/defaults.length-5) {
-            defaults[a].selected = true;
+            settingSelected = a;
             frames = 0;
             defaults[a].setTemplate();
             setTries();
             doubles = [100/chancePerAttempt];
             loop();
         }
-        else { defaults[a].selected = false; }
     }
-    if (defaults[a].selected) { fill(30, 255, 255); }
+    if (settingSelected === a) { fill(30, 255, 255); }
     rect(a*width/defaults.length+5, 300, width/defaults.length-10, 40, 10);
     
     fill(0);
