@@ -27,7 +27,7 @@ var setting = function(name, selected, template) {
 };
 var settingSelected = true;
 var defaults = [
-    new setting("Shiny chance Gen 2-5", false,
+    new setting("Shiny chance Gen 2-5", true,
         function() {
             selected = 2;
             fraction.num = 1;
