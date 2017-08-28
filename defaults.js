@@ -24,7 +24,7 @@ var setting = function(name, template) {
         chance = 0;
     }
 };
-var settingSelected = 1;
+var settingSelected = 0;
 var defaults = [
     new setting("Shiny chance Gen 2-5",
         function() {
