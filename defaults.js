@@ -16,25 +16,24 @@ var findChance = function() {
 };
 
     
-var setting = function(name, selected, template) {
+var setting = function(name, template) {
     this.name = name;
-    this.selected = selected;
     this.setTemplate = function() {
         template();
         findChance();
         chance = 0;
     }
 };
-var settingSelected = true;
+var settingSelected = 1;
 var defaults = [
-    new setting("Shiny chance Gen 2-5", true,
+    new setting("Shiny chance Gen 2-5",
         function() {
             selected = 2;
             fraction.num = 1;
             fraction.den = 8192;
             attempts = 1;
         }),
-    new setting("Shiny chance Gen 6+", false,
+    new setting("Shiny chance Gen 6+",
         function() {
             selected = 2;
             fraction.num = 1;
