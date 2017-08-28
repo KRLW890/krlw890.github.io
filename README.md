@@ -1,4 +1,4 @@
-# Runnable Chance Calculator (v1.1)
+# Runnable Chance Calculator (v2.0)
 
 This is a program that calculates probability, and comes pre-programmed with data relevant to the answer.  This is a linkable alternative to my previous Chance Calculator that needed to be downloaded.
 
