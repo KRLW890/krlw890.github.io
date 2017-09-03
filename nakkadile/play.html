@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Nakkadile</title>
+  <script src="../processing.min.js"></script>
+
+  <script src="image_handler.js"></script>
+  <script src="grist_handler.js"></script>
+  <script src="meteor_handler.js"></script>
+</head>
+
+<style>
+    body {
+        text-Align: center;
+        font-Size: 12px;
+    }
+</style>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(720, 450);
+
+        processing.background(0xFFF);
+
+
+        
+        var dist = function(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+        };
+        
+        with (processing) {
+var soundOn = true;
+var nyak = new Audio("nyak.ogg");
+nyak.play();
+nyak.addEventListener("ended", function() {
+    this.currentTime = 12.236;
+    this.play();
+}, false);
+
+var dead = false;
+var score = 0;
+var highscore = [0, 0, 0, 0, 0];
+if (localStorage.getItem("nakkascores") !== null) { highscore = JSON.parse(localStorage.getItem("nakkascores")); }
+else { localStorage.setItem("nakkascores", JSON.stringify(highscore)); }
+var ctx = canvas.getContext('2d');
+
+var moveGrist = function() {
+    for (var a = 0; a < spawnedGrist.length; a++) {
+        if (spawnedGrist[a].type !== null) {
+            spawnedGrist[a].x -= (5 + frameCount/800);
+            ctx.drawImage(grist[spawnedGrist[a].type].image, spawnedGrist[a].x, spawnedGrist[a].y);
+            
+            if (spawnedGrist[a].x < 172) {
+                if (dist(121, constrain(mouseY, 61, 388), spawnedGrist[a].x+23, spawnedGrist[a].y+24) < 85) {
+                    score += grist[spawnedGrist[a].type].points;
+                    spawnedGrist[a].destroy();
+                }
+                else if (spawnedGrist[a].x < -48) { spawnedGrist[a].destroy(); }
+            }
+        }
+    }
+};
+
+var moveMeteors = function() {
+    for (var a = 0; a < spawnedMeteors.length; a++) {
+        if (spawnedMeteors[a].image !== null) {
+            spawnedMeteors[a].x -= (5 + frameCount/800);
+            ctx.drawImage(meteors[spawnedMeteors[a].image], spawnedMeteors[a].x, spawnedMeteors[a].y);
+            
+            if (spawnedMeteors[a].x < 172) {
+                if (dist(121, constrain(mouseY, 61, 388), spawnedMeteors[a].x+30, spawnedMeteors[a].y+30) < 80) {
+                    dead = true;
+                    noLoop();
+                }
+                else if (spawnedMeteors[a].x < -60) { spawnedMeteors[a].destroy(); }
+            }
+        }
+    }
+};
+
+var drawStars = function() {
+    for (var a = 0; a < stars.length; a++) {
+        stars[a].x -= 10;
+        ctx.drawImage(star[(Math.floor(frameCount/2) + stars[a].phase)%6], stars[a].x, stars[a].y);
+        
+        if (stars[a].x < -7) {
+            stars[a].x = 720;
+        }
+    }
+};
+
+var drawRainbow = function() {
+    for (var a = 0; a < 4; a++) {
+        var elevation = abs(a%2 - floor(frameCount/3)%2)*3;
+        ctx.drawImage(rainbow, a*36-29, constrain(mouseY-(1+elevation), 60-elevation, 387-elevation));
+    }
+};
+
+mousePressed = function() {
+    if (dead) {
+        dead = false;
+        score = 0;
+        for (var a = 0; a < 10; a++) {
+            spawnedGrist[a].destroy();
+            spawnedMeteors[a].destroy();
+        }
+        frameCount = 0;
+        nyak.currentTime = 0;
+        loop();
+    }
+    
+    if (mouseX < 60 && mouseY > 402) {
+        if (soundOn) {
+            nyak.pause();
+            soundOn = false;
+        }
+        else {
+            nyak.play();
+            soundOn = true;
+        }
+    }
+};
+
+frameRate(30);
+draw = function() {
+ctx.drawImage(medium, 0, 0);
+if (frameCount%10 === 0) { gristSpawn(); }
+if (frameCount%20 === 0) { meteorSpawn(); }
+
+drawStars();
+drawRainbow();
+moveGrist();
+moveMeteors();
+ctx.drawImage(nakkadile[floor(frameCount/5)%2], 70, constrain(mouseY-61, 0, 327));
+
+stroke(0);
+strokeWeight(3);
+fill(255);
+rect(3, 3, 90, 21);
+fill(0);
+textAlign(CENTER, CENTER);
+textSize(12);
+text(score, 45, 15);
+
+ctx.drawImage(speaker, 3, 402);
+if (soundOn) { ctx.drawImage(sound, 33, 402); }
+
+if (dead) {
+    var place = 5;
+    for (var a = 4; a >= 0; a--) {
+        if (score > highscore[a]) {
+            if (a !== 4) { highscore[a+1] = highscore[a]; }
+            highscore[a] = score;
+            place = a;
+        }
+        else { break; }
+    }
+    localStorage.setItem("nakkascores", JSON.stringify(highscore));
+    
+    fill(245, 245, 255);
+    rect(140, 25, 440, 400);
+    fill(0);
+    textSize(35);
+    text("GAME OVER\nYour score: "+score, 360, 75);
+    textSize(20);
+    for (var a = 0; a < 5; a++) {
+        fill(255);
+        rect(260, 130+45*a, 200, 45);
+        if (place === a) { fill(255, 200, 0); }
+        else { fill(0); }
+        text((a+1) + ": " + highscore[a], 360, 155+45*a);
+    }
+    fill(0);
+    textSize(25);
+    text("Click anywhere to nak again", 360, 385);
+}
+};
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+<p><i>Homestuck</i> belongs to Andrew Hussie; the track <i>Nakkadile</i> was composed by Mark Nabors; the original <i>Nyan Cat</i> belongs to the wizords of the internet.<br>I claim nothing. Please don't sue me.</p>
+</body>
+
+</html>
