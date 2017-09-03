@@ -78,7 +78,7 @@ var moveMeteors = function() {
             ctx.drawImage(meteors[spawnedMeteors[a].image], spawnedMeteors[a].x, spawnedMeteors[a].y);
             
             if (spawnedMeteors[a].x < 172) {
-                if (dist(121, constrain(mouseY, 61, 388), spawnedMeteors[a].x+30, spawnedMeteors[a].y+30) < 80) {
+                if (dist(121, constrain(mouseY, 61, 388), spawnedMeteors[a].x+30, spawnedMeteors[a].y+30) < 77 && spawnedMeteors[a].x > 50) {
                     dead = true;
                     noLoop();
                 }
