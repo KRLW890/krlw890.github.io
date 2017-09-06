@@ -24,7 +24,7 @@ var setting = function(name, template) {
         chance = 0;
     }
 };
-var settingSelected = 0;
+var settingSelected = 2;
 var defaults = [
     new setting("Shiny chance Gen 2-5",
         function() {
@@ -39,7 +39,13 @@ var defaults = [
             fraction.num = 1;
             fraction.den = 4096;
             attempts = 1;
-        })
+        }),
+    new setting("Skill Swap Synchronize, 5 tries",
+        function() {
+            selected = 1;
+            percent = 50;
+            attempts = 5;
+    })
 ];
 
 var changeAttempts = function(val) {};
