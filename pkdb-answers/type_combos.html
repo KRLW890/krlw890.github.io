@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>JavaScript</title>
+
+  <script src="processing.min.js"></script>
+
+  <script src="types.js"></script>
+
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(1000, 600);
+
+        processing.background(0xFFF);
+
+
+
+        var mouseIsPressed = false;
+
+        processing.mousePressed = function () { mouseIsPressed = true; };
+
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+
+
+        var keyIsPressed = false;
+
+        processing.keyPressed = function () { keyIsPressed = true; };
+
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+
+        var sine = function(deg){
+
+        return sin(deg/(180/3.1415926535));
+
+        }
+
+        var cosine = function(deg){
+
+            return cos(deg/(180/3.1415926535));
+
+        }
+
+        var rotate2 = function(deg){
+            rotate(deg/(180/3.1415926535));
+
+        }
+
+        function getImage(s) {
+
+            var url = "https://www.kasandbox.org/stylesheets/scratchpads-exec-package/images/" + s + ".png";
+
+            processing.externals.sketch.imageCache.add(url);
+
+            return processing.loadImage(url);
+
+        }
+
+
+        with (processing) {
+
+
+types[0].fillColor = color(164, 164, 116);
+types[1].fillColor = color(236, 122, 40);
+types[2].fillColor = color(96, 138, 240);
+types[3].fillColor = color(247, 206, 41);
+types[4].fillColor = color(114, 193, 74);
+types[5].fillColor = color(144, 213, 213);
+types[6].fillColor = color(184, 46, 38);
+types[7].fillColor = color(153, 61, 153);
+types[8].fillColor = color(222, 188, 95);
+types[9].fillColor = color(165, 142, 234);
+types[10].fillColor = color(247, 80, 131);
+types[11].fillColor = color(186, 181, 81);
+types[12].fillColor = color(179, 156, 54);
+types[13].fillColor = color(110, 86, 148);
+types[14].fillColor = color(107, 50, 246);
+types[15].fillColor = color(108, 85, 69);
+types[16].fillColor = color(179, 179, 205);
+types[17].fillColor = color(231, 145, 231);
+types[18].fillColor = color(255, 180, 0);
+types[19].fillColor = color(255);
+
+
+var typeImage = function(x, y, num) {
+    stroke(0);
+    fill(types[num].fillColor);
+    rect(x, y, 50, 20, 5);
+    fill(types[num].textColor);
+    text(types[num].name, x+4, y+15);
+};
+
+var selected = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+//var effectiveness = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+var drawImage = function(x, y) {
+    background(255);
+    fill(0);
+    text("Something with these types:", 20, 20);
+    for (var a = 0; a < selected.length; a++) {
+        typeImage(a*50+20, 40, a);
+        
+        if (x>a*50+20 && x<=a*50+70 && y>=35 && y<=85) {
+            if (selected[a]) { selected[a] = false; }
+            else { selected[a] = true; }
+        }
+        fill(255);
+        stroke(0);
+        rect(a*50+40, 65, 10, 10);
+        if (selected[a]) {
+            line(a*50+42, 70, a*50+45, 74);
+            line(a*50+45, 74, a*50+53, 64);
+        }
+    }
+    
+    fill(0);
+    text("Takes this much damage from other types:", 20, 120);
+    
+    for (var a = 0; a < selected.length; a++) {
+        typeImage(a*50+20, 140, a);
+        var effectiveness = 1;
+        for (var b = 0; b < selected.length; b++) {
+            if (selected[b]) {
+                for (var c = 0; c < types[b].weaknesses.length; c++) {
+                    if (types[b].weaknesses[c] === types[a].name) { effectiveness *= 2; }
+                }
+                
+                for (var c = 0; c < types[b].resistances.length; c++) {
+                    if (types[b].resistances[c] === types[a].name) { effectiveness *= 0.5; }
+                }
+                
+                for (var c = 0; c < types[b].immune.length; c++) {
+                    if (types[b].immune[c] === types[a].name) { effectiveness *= 0; }
+                }
+            }
+        }
+        if (effectiveness > 1) { fill(255, 0, 0); }
+        else if (effectiveness < 1) { fill(0, 200, 0); }
+        else { fill(0); }
+        text(effectiveness+"x", a*50+25, 175);
+    }
+};
+
+drawImage(0, 0);
+
+mousePressed = function() {
+    drawImage(mouseX, mouseY);
+};
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+</body>
+
+</html>
