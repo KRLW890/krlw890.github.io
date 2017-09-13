@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Types</title>
+
+  <script src="processing.min.js"></script>
+
+  <script src="types.js"></script>
+
+</head>
+
+<style>
+    body { text-align: center; }
+</style>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(1200, 2200);
+
+        processing.background(0xFFF);
+
+
+
+        with (processing) {
+
+
+types[0].fillColor = color(164, 164, 116);
+types[1].fillColor = color(236, 122, 40);
+types[2].fillColor = color(96, 138, 240);
+types[3].fillColor = color(247, 206, 41);
+types[4].fillColor = color(114, 193, 74);
+types[5].fillColor = color(144, 213, 213);
+types[6].fillColor = color(184, 46, 38);
+types[7].fillColor = color(153, 61, 153);
+types[8].fillColor = color(222, 188, 95);
+types[9].fillColor = color(165, 142, 234);
+types[10].fillColor = color(247, 80, 131);
+types[11].fillColor = color(186, 181, 81);
+types[12].fillColor = color(179, 156, 54);
+types[13].fillColor = color(110, 86, 148);
+types[14].fillColor = color(107, 50, 246);
+types[15].fillColor = color(108, 85, 69);
+types[16].fillColor = color(179, 179, 205);
+types[17].fillColor = color(231, 145, 231);
+types[18].fillColor = color(255, 180, 0);
+types[19].fillColor = color(255);
+
+
+var typeImage = function(x, y, num) {
+    stroke(0);
+    fill(types[num].fillColor);
+    rect(x, y, 50, 20, 5);
+    fill(types[num].textColor);
+    text(types[num].name, x+4, y+15);
+};
+
+var lowest = {
+    grass: {
+        weak: Infinity,
+        combos: []
+    },
+    ghost: {
+        weak: Infinity,
+        combos: []
+    }
+};
+
+pushMatrix();
+translate(20, 200);
+
+for (var a = 0; a < 18; a++) {
+    for (var b = 0; b < 18; b++) {
+        var effectiveness = [];
+        var numOfWeaknesses = 0;
+        typeImage(a*65, b*110, a);
+        
+        for (var c = 0; c < 18; c++) {
+            effectiveness[c] = findEffectiveness(a, c);
+        }
+        
+        if (a !== b) {
+            typeImage(a*65, b*110+20, b);
+            for (var c = 0; c < 18; c++) {
+                effectiveness[c] *= findEffectiveness(b, c);
+            }
+        }
+        
+        for (var c = 0; c < 18; c++) {
+            if (effectiveness[c] > 1) { numOfWeaknesses++; }
+        }
+        
+        fill(0);
+        text("Alone: "+numOfWeaknesses, a*65, b*110+60);
+        
+        if (a !== 4 && b !== 4) {
+            numOfWeaknesses = 0;
+            var grassEffectiveness = [];
+            for (var c = 0; c < 18; c++) {
+                grassEffectiveness[c] = effectiveness[c]*findEffectiveness(4, c);
+                if (grassEffectiveness[c] > 1) { numOfWeaknesses++; }
+            }
+            if (numOfWeaknesses <= lowest.grass.weak) {
+                if (numOfWeaknesses < lowest.grass.weak) {
+                    lowest.grass.weak = numOfWeaknesses
+                    lowest.grass.combos = [];
+                }
+                lowest.grass.combos.push([a, b]);
+            }
+            
+            text("+Grass: "+numOfWeaknesses, a*65, b*110+75);
+        }
+        
+        if (a !== 13 && b !== 13) {
+            numOfWeaknesses = 0;
+            var ghostEffectiveness = [];
+            for (var c = 0; c < 18; c++) {
+                ghostEffectiveness[c] = effectiveness[c]*findEffectiveness(13, c);
+                if (ghostEffectiveness[c] > 1) { numOfWeaknesses++; }
+            }
+            if (numOfWeaknesses <= lowest.ghost.weak) {
+                if (numOfWeaknesses < lowest.ghost.weak) {
+                    lowest.ghost.weak = numOfWeaknesses
+                    lowest.ghost.combos = [];
+                }
+                lowest.ghost.combos.push([a, b]);
+            }
+            
+            text("+Ghost: "+numOfWeaknesses, a*65, b*110+90);
+        }
+    }
+}
+popMatrix();
+
+textSize(25);
+fill(0);
+text("Lowest # of weaknesses\nwith Forest's Curse: "+lowest.grass.weak, 100, 20);
+text("Lowest # of weaknesses\nwith Trick-Or-Treat: "+lowest.ghost.weak, 800, 20);
+
+textSize(13);
+text("Combinations:", 150, 80);
+text("Combinations:", 850, 80);
+for (var a = 0; a < lowest.grass.combos.length; a++) {
+    typeImage(a*65+100, 100, lowest.grass.combos[a][0]);
+    if (lowest.grass.combos[a][0] !== lowest.grass.combos[a][1]) { typeImage(a*65+100, 120, lowest.grass.combos[a][1]); }
+    typeImage(a*65+100, 140, 4);
+}
+for (var a = 0; a < lowest.ghost.combos.length; a++) {
+    typeImage(a*65+550, 100, lowest.ghost.combos[a][0]);
+    if (lowest.ghost.combos[a][0] !== lowest.ghost.combos[a][1]) { typeImage(a*65+550, 120, lowest.ghost.combos[a][1]); }
+    typeImage(a*65+550, 140, 13);
+}
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+</body>
+
+</html>
