@@ -1,4 +1,4 @@
-pokemon_id,generation,wild,recieved,safari,sport,dream
+pokemon_id,version_id,wild,recieved,safari,sport,dream
 1,0,0,1,0,0,0
 1,1,0,0,0,0,0
 1,2,0,0,0,0,0
