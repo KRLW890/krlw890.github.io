@@ -3,8 +3,6 @@
 I'm just using this as a place where I can post programs and link them to wherever I might need them.  As such, this repository consists of several different, unrelated programs such as:
 
 (Pokemon)<br>
-<strong>Looking for help gathering information. Details available <a href="https://krlw890.github.io/legitimacy-test/legit-test-data-collection.html">here</a>.</strong>
-
 A type combination calculator, capable of finding the weaknesses, resistances, and immunities of a Pokemon with any number of type combinations: <a href="https://krlw890.github.io/pkdb-answers/type_combos.html">krlw890.github.io/pkdb-answers/type_combos.html</a>
 
 A very primitive Chance Calculator. Finds the chance of things happening after a certain number of attempts. While not strictly related to Pokemon, I included it here because Pokemon deals with a lot of that: <a href="https://krlw890.github.io/pkdb-answers/Chance-Calculator.html">krlw890.github.io/pkdb-answers/Chance-Calculator.html</a>
