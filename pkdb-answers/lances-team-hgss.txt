@@ -1,0 +1,36 @@
+All these test are against a Lv.100 Lugia with 263 Def and 394 SpD, without Multiscale (it didn't exist in HGSS!)
+
+Lv.72 Salamence
+Shadow Claw:            56-64 Damage
+Dragon Claw:            48-55 Damage
+Flamethrower:           23-27 Damage
+209-225 Atk, 207-229 SpA
+
+Lv.68 Gyarados
+Ice Fang:               52 Damage
+Ice Fang, +3 Atk:       122-140 Damage
+200-212 Atk
+
+Lv.72 Garchomp
+Outrage:                84-99 Damage
+242-250 Atk
+
+Lv.73 Altaria
+Dragonbreath:           19-21 Damage
+169-200 SpA
+
+Lv.68 Charizard
+Flamethrower:           33-36 Damage
+Hyper Beam:             36 Damage
+Air Slash:              28-31 Damage
+Dragon Claw:            22-25 Damage
+152-175 Atk, 207-212 SpA
+
+Lv.75 Dragonite
+Draco Meteor:           52 Damage
+Draco Meteor, -2 SpA:   27 Damage
+Draco Meteor, -4 SpA:   19 Damage
+Hyper Beam, -6 SpA:     10 Damage
+198 SpA
+
+**Formula found to be inaccurate; revisions needed
