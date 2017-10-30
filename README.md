@@ -9,6 +9,8 @@ A very primitive Chance Calculator. Finds the chance of things happening after a
  
 Finds the weaknesses of all possible triple-type combinations achievable via Forest's Curse and Trick-Or-Treat. Not too interesting, other than providing evidence for an answer on PKDB: <a href="https://krlw890.github.io/pkdb-answers/forests_curse_trick_treak_effectiveness.html">krlw890.github.io/pkdb-answers/forests_curse_trick_treak_effectiveness.html</a>
 
+Finds all Pokemon with stats mirrored over Physical and Special stata, once again to find an answer for a database question: <a href="https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html</a>
+
 <br><br>
 (Not Pokemon)<br>
 A friendly game of chess. Nothing too impressive: <a href="https://krlw890.github.io/Chess/Chess.html">krlw890.github.io/Chess/Chess.html</a>
