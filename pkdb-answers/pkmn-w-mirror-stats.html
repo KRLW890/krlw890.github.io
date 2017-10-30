@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pokemon With Mirrored Stats</title>
+  </head>
+    <script src="../PapaParse-4.3.2/papaparse.min.js"></script>
+  
+  <body>
+    <p>Pokemon stats by <a href="https://veekun.com">veekun</a>.</p>
+    <p id="text"><i>Loading... <i id="percent"></i></i></p>
+    <h1 id="atdf" style="display: none;">Pokemon with stats mirrored over attack and defense:</h1>
+    <p id="ad"></p>
+    <h1 id="at" style="display: none;">Pokemon with stats mirrored over attack only:</h1>
+    <p id="a"></p>
+  </body>
+  
+  <script>
+    var pair = function(mon1, stats1, mon2, stats2) {
+        this.mon1 = {
+            place: mon1,
+            stats: stats1
+        };
+        this.mon2 = {
+            place: mon2,
+            stats: stats2
+        };
+    };
+    
+    var mirrors = {
+        atdf: [],
+        at: []
+    };
+    
+    Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon.csv", {
+        download: true,
+        header: true,
+        complete: function(pokemon) {
+            Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_stats.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    stats = [];
+                    for (var a = 0; a < results.data.length; a++) {
+                        if (stats[results.data[a].pokemon_id] === undefined) { stats[results.data[a].pokemon_id] = []; }
+                        stats[results.data[a].pokemon_id][results.data[a].stat_id-1] = results.data[a].base_stat;
+                    }
+                    for (var a = 0; a < pokemon.data.length; a++) {
+                        if (a%100 === 0) { document.getElementById("percent").innerText = Math.round(a/pokemon.data.length*100)+"%"; }
+                        
+                        for (var b = a+1; b < pokemon.data.length; b++) {
+                            if (stats[pokemon.data[a].id][1] === stats[pokemon.data[a].id][3]) { break; }
+                            else if (stats[pokemon.data[a].id][0] !== stats[pokemon.data[b].id][0] || stats[pokemon.data[a].id][5] !== stats[pokemon.data[b].id][5]) {}
+                            else if (stats[pokemon.data[a].id][1] === stats[pokemon.data[b].id][3] && stats[pokemon.data[b].id][1] === stats[pokemon.data[a].id][3]) {
+                                if (stats[pokemon.data[a].id][2] === stats[pokemon.data[b].id][2] && stats[pokemon.data[a].id][4] === stats[pokemon.data[b].id][4]) {
+                                    mirrors.at.push(new pair(a, stats[pokemon.data[a].id], b, stats[pokemon.data[b].id]));
+                                }
+                                else if (stats[pokemon.data[a].id][2] === stats[pokemon.data[b].id][4] && stats[pokemon.data[b].id][2] === stats[pokemon.data[a].id][4]) {
+                                    mirrors.atdf.push(new pair(a, stats[pokemon.data[a].id], b, stats[pokemon.data[b].id]));
+                                }
+                            }
+                        }
+                    }
+                    
+                    document.getElementById("text").innerText = "Done!";
+                    document.getElementById("atdf").style = "";
+                    document.getElementById("at").style = "";
+                    
+                    for (var a = 0; a < mirrors.atdf.length; a++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = pokemon.data[mirrors.atdf[a].mon1.place].identifier + " (";
+                        for (var b = 0; b < 6; b++) {
+                            if (b > 0 && b < 5) {
+                               var strong = document.createElement("strong");
+                               strong.innerText = mirrors.atdf[a].mon1.stats[b];
+                               p.appendChild(strong);
+                            }
+                            else { p.innerHTML += mirrors.atdf[a].mon1.stats[b]; }
+                            
+                            if (b !== 5) { p.innerHTML += ", "; }
+                        }
+                        
+                        p.innerHTML += ") and " + pokemon.data[mirrors.atdf[a].mon2.place].identifier + " (";
+                        for (var b = 0; b < 6; b++) {
+                            if (b > 0 && b < 5) {
+                               var strong = document.createElement("strong");
+                               strong.innerText = mirrors.atdf[a].mon2.stats[b];
+                               p.appendChild(strong);
+                            }
+                            else { p.innerHTML += mirrors.atdf[a].mon2.stats[b]; }
+                            
+                            if (b !== 5) { p.innerHTML += ", "; }
+                        }
+                        p.innerHTML += ")";
+                        document.getElementById("ad").appendChild(p);
+                    }
+                    
+                    for (var a = 0; a < mirrors.at.length; a++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = pokemon.data[mirrors.at[a].mon1.place].identifier + " (";
+                        for (var b = 0; b < 6; b++) {
+                            if (b === 1 || b === 3) {
+                               var strong = document.createElement("strong");
+                               strong.innerText = mirrors.at[a].mon1.stats[b];
+                               p.appendChild(strong);
+                            }
+                            else { p.innerHTML += mirrors.at[a].mon1.stats[b]; }
+                            
+                            if (b !== 5) { p.innerHTML += ", "; }
+                        }
+                        
+                        p.innerHTML += ") and " + pokemon.data[mirrors.at[a].mon2.place].identifier + " (";
+                        for (var b = 0; b < 6; b++) {
+                            if (b === 1 || b === 3) {
+                               var strong = document.createElement("strong");
+                               strong.innerText = mirrors.at[a].mon2.stats[b];
+                               p.appendChild(strong);
+                            }
+                            else { p.innerHTML += mirrors.at[a].mon2.stats[b]; }
+                            
+                            if (b !== 5) { p.innerHTML += ", "; }
+                        }
+                        p.innerHTML += ")";
+                        document.getElementById("a").appendChild(p);
+                    }
+                }
+            });
+        }
+    });
+    
+  </script>
+
+<html>
+
