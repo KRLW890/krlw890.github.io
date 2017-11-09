@@ -15,7 +15,7 @@ Finds all Pokemon with stats mirrored over Physical and Special stats, once agai
 (Not Pokemon)<br>
 A friendly game of chess. Nothing too impressive: <a href="https://krlw890.github.io/Chess/Chess.html">krlw890.github.io/Chess/Chess.html</a>
 
-The same game of chess, except that there are only Knights:
+The same game of chess, except that there are only Knights: <a
 href="https://krlw890.github.io/Chess/Chess_butOnlyKnights.html">krlw890.github.io/Chess/Chess_butOnlyKnights.html</a>
 
 Uh, I guess I'll just sort of... uh... leave this... here: <a href="https://krlw890.github.io/nakkadile/play.html">krlw890.github.io/nakkadile/play.html</a>
