@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Chess, but there are only knights</title>
+
+  <script src="../processing.min.js"></script>
+
+  <script src="knightsOnly.js"></script>
+
+</head>
+
+<style>
+    body {
+        text-align: center;
+        background-color: #D0D0D0;
+    }
+</style
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(650, 650);
+
+        processing.background(0xFFF);
+
+
+
+        var mouseIsPressed = false;
+
+        processing.mousePressed = function () { mouseIsPressed = true; };
+
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+
+
+        var keyIsPressed = false;
+
+        processing.keyPressed = function () { keyIsPressed = true; };
+
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+
+        var sine = function(deg){
+
+        return sin(deg/(180/3.1415926535));
+
+        }
+
+        var cosine = function(deg){
+
+            return cos(deg/(180/3.1415926535));
+
+        }
+
+        var rotate2 = function(deg){
+            rotate(deg/(180/3.1415926535));
+
+        }
+
+        function getImage(s) {
+
+            var url = "https://www.kasandbox.org/stylesheets/scratchpads-exec-package/images/" + s + ".png";
+
+            processing.externals.sketch.imageCache.add(url);
+
+            return processing.loadImage(url);
+
+        }
+
+
+        with (processing) {
+var bell = new Audio("VictoryBell.ogg");
+
+var selectedTile = [0, 8];
+var move = {
+    current: {
+        array: [3, 3],
+        coordinates: [3, 3]
+    },
+    progress: [3, 3],
+    destination: {
+        array: [3, 3],
+        coordinates: [3, 3]
+    },
+    
+    frames: 10
+};
+var victory = false;
+var boardSize;
+if (height <= width) { boardSize = height; }
+else { boardSize = width; }
+
+
+var gamePiece = function(appearance, movements) {
+    this.appearance = appearance || function() {};
+    this.movements = movements || function() {};
+};
+
+var pieces = [
+    new gamePiece(),//empty space
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-20, y+size/-6.667);
+    bezierVertex(x+size/-6.923, y+size/-3.158, x+size/8.182, y+size/-3.158, x+size/25.714, y+size/-6.667);
+    vertex(x+size/9.474, y+size/-7.826);
+    vertex(x+size/25.714, y+size/-10);
+    bezierVertex(x+size/25.714, y+size/-180, x+size/13.846, y+size/4.737, x+size/6.207, y+size/3.913);
+    vertex(x+size/-7.5, y+size/3.913);
+    bezierVertex(x+size/-20, y+size/4.865, x+size/-25.714, y, x+size/-22.5, y+size/-10.588);
+    vertex(x+size/-8.571, y+size/-7.826);
+    endShape(CLOSE);
+},
+                  function(pieceX, pieceY, array) {
+                    if (pieceY-1 >= 0 && pieceY+1 < 8 && array === 2 &&
+                    board[pieceY+(turn*2-1)][pieceX][0] === 0) {
+                        board[pieceY+(turn*2-1)][pieceX][array] = true;
+                        
+                        if (pieceY === turn*-5+6 && board[pieceY+(turn*4-2)][pieceX][0] === 0) {
+                            board[pieceY+(turn*4-2)][pieceX][array] = true;
+                        }
+                    }
+                    
+                    if (pieceX < 7 && pieceY-1 >= 0 && pieceY+1 < 8) {
+                        if (board[pieceY+(turn*2-1)][pieceX+1][1] === (turn*-1)+1 || array === 3) {
+                            board[pieceY+(turn*2-1)][pieceX+1][array] = true;
+                        }
+                    }
+                    
+                    if (pieceX > 0 && pieceY-1 >= 0 && pieceY+1 < 8) {
+                        if (board[pieceY+(turn*2-1)][pieceX-1][1] === (turn*-1)+1 || array === 3) {
+                            board[pieceY+(turn*2-1)][pieceX-1][array] = true;
+                        }
+                    }
+                  }),//pawn
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-7.857, y+size/-3.86);
+    vertex(x+size/-12.941, y+size/-3.86);
+    vertex(x+size/-12.941, y+size/-4.783);
+    vertex(x+size/-27.5, y+size/-4.783);
+    vertex(x+size/-27.5, y+size/-3.86);
+    vertex(x+size/73.333, y+size/-3.86);
+    vertex(x+size/73.333, y+size/-4.783);
+    vertex(x+size/18.333, y+size/-4.783);
+    vertex(x+size/18.333, y+size/-3.86);
+    vertex(x+size/9.167, y+size/-3.86);
+    vertex(x+size/9.167, y+size/-5.366);
+    bezierVertex(x+size/15.714, y+size/-10, x+size/10.476, y+size/5.789, x+size/5.641, y+size/3.729);
+    vertex(x+size/-5.946, y+size/3.729);
+    bezierVertex(x+size/-11.579, y+size/5.789, x+size/-13.75, y+size/-10, x+size/-7.857, y+size/-5.366);
+    endShape(CLOSE);
+},
+                  function(pieceX, pieceY, array) {
+                    for (var a = pieceX+1; a < 8; a++) {
+                        if (board[pieceY][a][1] !== turn || array === 3) {
+                            board[pieceY][a][array] = true;
+                            if (board[pieceY][a][1] !== undefined) { a = 8; }
+                        }
+                        
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = pieceX-1; a > -1; a--) {
+                        if (board[pieceY][a][1] !== turn || array === 3) {
+                            board[pieceY][a][array] = true;
+                            if (board[pieceY][a][1] !== undefined) { a = -1; }
+                        }
+                        
+                        else { a = -1; }
+                    }
+                    
+                    for (var a = pieceY+1; a < 8; a++) {
+                        if (board[a][pieceX][1] !== turn || array === 3) {
+                            board[a][pieceX][array] = true;
+                            if (board[a][pieceX][1] !== undefined) { a = 8; }
+                        }
+                        
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = pieceY-1; a > -1; a--) {
+                        if (board[a][pieceX][1] !== turn || array === 3) {
+                            board[a][pieceX][array] = true;
+                            if (board[a][pieceX][1] !== undefined) { a = -1; }
+                        }
+                        
+                        else { a = -1; }
+                    }
+                  }),//rook
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-5.953, y+size/3.765);
+    bezierVertex(x+size/13.474, y+size/17.067, x+size/-3.938, y+size/-4.83, x+size/51.2, y+size/-3.765);
+    vertex(x+size/51.2, y+size/-4.491);
+    bezierVertex(x+size/25.6, y+size/-4.491, x+size/6.4, y+size/-5.818, x+size/8.828, y+size/-7.111);
+    bezierVertex(x+size/7.314, y+size/-12.8, x+size/21.333, y+size/-6.095, x+size/25.6, y+size/-23.273);
+    bezierVertex(x+size/25.6, y+size/17.067, x+size/15.059, y+size/4.741, x+size/5.333, y+size/3.765);
+    endShape(CLOSE);
+},
+                  function(pieceX, pieceY, array) {
+                    for (var a = -2; a <= 2; a++) {
+                        for (var b = -2; b <= 2; b++) {
+                            if (abs(a) !== abs(b) && a !== 0 && b !== 0 &&
+                                pieceY+a < 8 && pieceY+a >= 0 && pieceX+b < 8 && pieceX+b >= 0) {
+                                if (board[pieceY+a][pieceX+b][1] !== turn || array === 3) {
+                                    board[pieceY+a][pieceX+b][array] = true;
+                                }
+                            }
+                        }
+                    }
+                }),//knight
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-8.378, y+size/3.163);
+    bezierVertex(x+size/-23.846, y+size/3.827, x+size/-38.75, y+size/25.833, x+size/-18.235, y+size/-16.316);
+    vertex(x+size/-9.394, y+size/-11.923);
+    vertex(x+size/-19.375, y+size/-10);
+    bezierVertex(x+size/-10.69, y+size/-7.209, x+size/-16.316, y+size/-4.189, x+size/-155, y+size/-3.647);
+    bezierVertex(x+size/-22.143, y+size/-3.069, x+size/20.667, y+size/-3.069, x+size/62, y+size/-3.647);
+    bezierVertex(x+size/17.222, y+size/-4.366, x+size/11.923, y+size/-7.045, x+size/22.143, y+size/-10);
+    vertex(x+size/10.333, y+size/-11.923);
+    vertex(x+size/22.143, y+size/-16.316);
+    bezierVertex(x+size/44.286, y+size/25.833, x+size/22.143, y+size/3.78, x+size/7.949, y+size/3.163);
+    endShape(CLOSE);
+
+    line(x+size/34.444, y+size/-3.875, x+size/51.667, y+size/-6.2);
+},
+                  function(pieceX, pieceY, array) {
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY+a < 8 && pieceX+a < 8) {
+                            if (board[pieceY+a][pieceX+a][1] !== turn || array === 3) {
+                                board[pieceY+a][pieceX+a][array] = true;
+                                if (board[pieceY+a][pieceX+a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY+a < 8 && pieceX-a >= 0) {
+                            if (board[pieceY+a][pieceX-a][1] !== turn || array === 3) {
+                                board[pieceY+a][pieceX-a][array] = true;
+                                if (board[pieceY+a][pieceX-a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY-a >= 0 && pieceX+a < 8) {
+                            if (board[pieceY-a][pieceX+a][1] !== turn || array === 3) {
+                                board[pieceY-a][pieceX+a][array] = true;
+                                if (board[pieceY-a][pieceX+a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY-a >= 0 && pieceX-a >= 0) {
+                            if (board[pieceY-a][pieceX-a][1] !== turn || array === 3) {
+                                board[pieceY-a][pieceX-a][array] = true;
+                                if (board[pieceY-a][pieceX-a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                }),//bishop
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-5.854, y+size/2.553);
+    bezierVertex(x+size/-14.118, y+size/3.692, x+size/-12.632, y+size/-60, x+size/-10.435, y+size/-5.217);
+    vertex(x+size/-6.667, y+size/-4.706);
+    vertex(x+size/-10, y+size/-4.286);
+    bezierVertex(x+size/-13.333, y+size/-3.81, x+size/-12.632, y+size/-3.333, x+size/-8.889, y+size/-3.077);
+    vertex(x+size/-15, y+size/-3.288);
+    bezierVertex(x+size/-13.333, y+size/-2.927, x+size/-30, y+size/-2.637, x+size/-120, y+size/-2.824);
+    bezierVertex(x+size/-30, y+size/-2.637, x+size/21.818, y+size/-2.5, x+size/40, y+size/-2.824);
+    bezierVertex(x+size/15, y+size/-2.667, x+size/10.909, y+size/-2.963, x+size/12.632, y+size/-3.288);
+    vertex(x+size/8.276, y+size/-3.077);
+    bezierVertex(x+size/12, y+size/-3.38, x+size/12.632, y+size/-3.934, x+size/9.6, y+size/-4.211);
+    vertex(x+size/6.667, y+size/-4.615);
+    vertex(x+size/10.435, y+size/-5.106);
+    bezierVertex(x+size/12, y+size/-60, x+size/12, y+size/3.75, x+size/5.714, y+size/2.553);
+    endShape(CLOSE);
+},
+                  function(pieceX, pieceY, array) {
+                    for (var a = pieceX+1; a < 8; a++) {
+                        if (board[pieceY][a][1] !== turn || array === 3) {
+                            board[pieceY][a][array] = true;
+                            if (board[pieceY][a][1] !== undefined) { a = 8; }
+                        }
+                        
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = pieceX-1; a > -1; a--) {
+                        if (board[pieceY][a][1] !== turn || array === 3) {
+                            board[pieceY][a][array] = true;
+                            if (board[pieceY][a][1] !== undefined) { a = -1; }
+                        }
+                        
+                        else { a = -1; }
+                    }
+                    
+                    for (var a = pieceY+1; a < 8; a++) {
+                        if (board[a][pieceX][1] !== turn || array === 3) {
+                            board[a][pieceX][array] = true;
+                            if (board[a][pieceX][1] !== undefined) { a = 8; }
+                        }
+                        
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = pieceY-1; a > -1; a--) {
+                        if (board[a][pieceX][1] !== turn || array === 3) {
+                            board[a][pieceX][array] = true;
+                            if (board[a][pieceX][1] !== undefined) { a = -1; }
+                        }
+                        
+                        else { a = -1; }
+                    }
+                    
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY+a < 8 && pieceX+a < 8) {
+                            if (board[pieceY+a][pieceX+a][1] !== turn || array === 3) {
+                                board[pieceY+a][pieceX+a][array] = true;
+                                if (board[pieceY+a][pieceX+a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY+a < 8 && pieceX-a >= 0) {
+                            if (board[pieceY+a][pieceX-a][1] !== turn || array === 3) {
+                                board[pieceY+a][pieceX-a][array] = true;
+                                if (board[pieceY+a][pieceX-a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY-a >= 0 && pieceX+a < 8) {
+                            if (board[pieceY-a][pieceX+a][1] !== turn || array === 3) {
+                                board[pieceY-a][pieceX+a][array] = true;
+                                if (board[pieceY-a][pieceX+a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                    
+                    for (var a = 1; a < 8; a++) {
+                        if (pieceY-a >= 0 && pieceX-a >= 0) {
+                            if (board[pieceY-a][pieceX-a][1] !== turn || array === 3) {
+                                board[pieceY-a][pieceX-a][array] = true;
+                                if (board[pieceY-a][pieceX-a][1] !== undefined) { a = 8; }
+                            }
+                            else { a = 8; }
+                        }
+                        else { a = 8; }
+                    }
+                  }),//queen
+    
+    new gamePiece(function(x, y, size) {
+    //this function was made using the Chine Graphics Designer v2.0
+
+    beginShape();
+    vertex(x+size/-6.769, y+size/2.422);
+    bezierVertex(x+size/-18.857, y+size/3.259, x+size/-22, y+size/17.6, x+size/-13.895, y+size/-9.103);
+    vertex(x+size/-7.333, y+size/-7.543);
+    vertex(x+size/-16.5, y+size/-6.439);
+    bezierVertex(x+size/-29.333, y+size/-5.388, x+size/-26.4, y+size/-4, x+size/-10.154, y+size/-3.52);
+    vertex(x+size/-37.714, y+size/-3.474);
+    vertex(x+size/-37.714, y+size/-3);
+    vertex(x+size/-15.529, y+size/-3);
+    vertex(x+size/-15.529, y+size/-2.722);
+    vertex(x+size/-37.714, y+size/-2.722);
+    vertex(x+size/-37.714, y+size/-2.444);
+    vertex(x+size/66, y+size/-2.444);
+    vertex(x+size/66, y+size/-2.694);
+    vertex(x+size/18.857, y+size/-2.694);
+    vertex(x+size/18.857, y+size/-3);
+    vertex(x+size/66, y+size/-3);
+    vertex(x+size/66, y+size/-3.474);
+    vertex(x+size/11.478, y+size/-3.52);
+    bezierVertex(x+size/44, y+size/-3.771, x+size/33, y+size/-5.388, x+size/17.6, y+size/-6.439);
+    vertex(x+size/8, y+size/-7.543);
+    vertex(x+size/15.529, y+size/-9.103);
+    bezierVertex(x+size/20.308, y+size/18.857, x+size/13.2, y+size/3.22, x+size/5.867, y+size/2.422);
+    endShape(CLOSE);
+},
+                  function(pieceX, pieceY, array) {
+                    for (var a = -1; a < 2; a++) {
+                        for (var b = -1; b < 2; b++) {
+                            if (pieceY+a < 8 && pieceX+b < 8 && pieceY+a >= 0 && pieceX+b >= 0 &&
+                                board[pieceY+a][pieceX+b][3] !== true) {
+                                if (a !== 0 || b !== 0) {
+                                    if (board[pieceY+a][pieceX+b][1] !== turn || array === 3) {
+                                        board[pieceY+a][pieceX+b][array] = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                  })//king
+];
+
+
+var drawBoard = function() {
+    background(40, 142, 86);
+    for (var a = 0; a < 8; a++) {
+        for (var b = 0; b < 8; b++) {
+            noStroke();
+            if ((a+b)%2 === 0) {fill(255);}
+            else {fill(0);}
+            if (board[a][b][0] === 6 && board[a][b][1] === turn && board[a][b][3] && move.frames >= 10) {
+                fill(255, 0, 0);
+            }
+            rect(boardSize/8*b, boardSize/8*a, boardSize/8, boardSize/8);
+            
+            if (board[a][b][3] === true) {
+                fill(255, 100, 0, 150);
+                //rect(boardSize/8*b, boardSize/8*a, boardSize/8, boardSize/8);
+            }
+            if (selectedTile[1] === a && selectedTile[0] === b && board[a][b][1] === turn) {
+                fill(0, 50, 255, 200);
+                rect(boardSize/8*b, boardSize/8*a, boardSize/8, boardSize/8);
+            }
+            else if (board[a][b][2] === true) {
+                fill(0, 100, 255, 100);
+                rect(boardSize/8*b, boardSize/8*a, boardSize/8, boardSize/8);
+            }
+            
+            stroke(board[a][b][1]*255);
+            fill(255 - (board[a][b][1]*255));
+            pieces[board[a][b][0]].appearance(boardSize/16*(b*2+1), boardSize/16*(a*2+1), boardSize/8);
+        }
+    }
+};
+drawBoard();
+
+var promotion = {
+    active: false,
+    piece: {
+        x: undefined,
+        y: undefined
+    },
+    board: function(pieceX, pieceY) {
+        stroke(0);
+        fill(255, 200, 0);
+        rect(boardSize/20, boardSize/6, boardSize-boardSize/10, boardSize-boardSize/3, 10);
+        fill(0);
+        textSize(boardSize/20);
+        textAlign(CENTER, CENTER);
+        text("Promotion", boardSize/2, boardSize/4);
+        
+        for (var a = 0; a < 4; a++) {
+            stroke(255*turn);
+            fill(255-255*turn);
+            rect((boardSize*a)/4.5+boardSize/12, 5*boardSize/12, boardSize/6, boardSize/6);
+            
+            pieces[a+2].appearance((boardSize*a)/4.5+boardSize/6, boardSize/2, boardSize/6);
+        }
+        
+        if (pieceX !== undefined) {
+            this.piece.x = pieceX;
+            this.piece.y = pieceY;
+        }
+        
+        else {
+            for (var a = 0; a < 4; a++) {
+                if (mouseX >= (boardSize*a)/4.5+boardSize/12 && mouseY >= 5*boardSize/12 &&
+                mouseX <= (boardSize*a)/4.5+(3*boardSize/12) && mouseY <= 5*boardSize/12+boardSize/6) {
+                    board[this.piece.y][this.piece.x][0] = a+2;
+                    pieces[board[this.piece.y][this.piece.x][0]].movements(this.piece.x, this.piece.y, 3);
+                    this.active = false;
+                    turn = (turn*-1)+1;
+                    drawBoard();
+                }
+            }
+        }
+    }
+};
+
+var forfiet = {
+    active: false,
+    board: function(noClick) {
+        stroke(turn*255);
+        fill(255-turn*255);
+        rect(boardSize/20, boardSize/6, boardSize-boardSize/10, boardSize-boardSize/3, 10);
+        fill(turn*255);
+        textSize(boardSize/15);
+        textAlign(CENTER, CENTER);
+        text("Forfiet?", boardSize/2, boardSize/4);
+        
+        var options = ["Yes", "No"];
+        for (var a = 0; a < 2; a++) {
+            fill(turn*255);
+            rect(boardSize/2.4*a+boardSize/8, boardSize/2, boardSize/3, boardSize/6, 5);
+            fill(255-turn*255);
+            text(options[a], boardSize/2.4*a+boardSize/8, boardSize/2, boardSize/3, boardSize/6);
+            
+            if (noClick !== true &&
+            mouseX >= boardSize/2.4*a+boardSize/8 && mouseY >= boardSize/2 &&
+            mouseX <= boardSize/2.4*a + 11*boardSize/24 && mouseY <= boardSize/1.5) {
+                if (a === 0) {
+                    victory = true;
+                    bell.play();
+                    stroke(0);
+                    fill(255, 200, 0);
+                    rect(boardSize/20, boardSize/6, boardSize-boardSize/10, boardSize-boardSize/3, 10);
+                    fill(0);
+                    textSize(boardSize/10);
+                    textAlign(CENTER, CENTER);
+                    text("Victory!", boardSize/2, boardSize/3.5);
+                    textSize(boardSize/20);
+                    if (turn === 1) {
+                        text("Black has surrendered their king.\nWhite wins!", boardSize/2, boardSize/2);
+                    }
+                    if (turn === 0) {
+                        text("White has surrendered their king.\nBlack wins!", boardSize/2, boardSize/2);
+                    }
+                    textSize(boardSize/40);
+                    text("Click anywhere to restart.", boardSize/2, boardSize/1.5);
+                    
+                    a = 2;
+                }
+                else {
+                    forfiet.active = false;
+                    drawBoard();
+                }
+            }
+        }
+    }
+};
+
+keyPressed = function() {
+    if (key.toString() === "f") {
+        forfiet.active = true;
+        forfiet.board(true);
+    }
+    
+    if (key.toString() === "s") {
+        println("var turn = " + (turn*-1+1)+";");
+        println("");
+        println("var board = [");
+            for (var a = 0; a < board.length; a++) {
+                println("[["+board[a][0][0]+", "+board[a][0][1]+"], ["+board[a][1][0]+", "+board[a][1][1]+"], ["+board[a][2][0]+", "+board[a][2][1]+"], ["+board[a][3][0]+", "+board[a][3][1]+"], ["+board[a][4][0]+", "+board[a][4][1]+"], ["+board[a][5][0]+", "+board[a][5][1]+"], ["+board[a][6][0]+", "+board[a][6][1]+"], ["+board[a][7][0]+", "+board[a][7][1]+"]],");
+            }
+        println("];");
+    }
+};
+
+mousePressed = function() {
+    var clearChoicesOnBoard = function(clearAll) {
+        for (var a = 0; a < 8; a++) {
+            for (var b = 0; b < 8; b++) {
+                board[a][b][2] = undefined;
+                if (clearAll) {board[a][b][3] = undefined;}
+            }
+        }
+    };
+    
+if (promotion.active === false && victory === false && forfiet.active === false) {    
+    
+    if (board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))][1] === turn &&
+    selectedTile[0] !== floor(mouseX/(boardSize/8)) && move.frames >= 10 ||
+    board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))][1] === turn &&
+    selectedTile[1] !== floor(mouseY/(boardSize/8)) && move.frames >= 10) {
+        selectedTile = [floor(mouseX/(boardSize/8)), floor(mouseY/(boardSize/8))];
+        
+        clearChoicesOnBoard();
+        
+        pieces[board[selectedTile[1]][selectedTile[0]][0]].movements(selectedTile[0], selectedTile[1], 2);
+        
+        drawBoard();
+    }
+    
+    else if (board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))][2] === true) {
+        if (board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))][0] === 6) { victory = true; }
+        
+        board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))] = board[selectedTile[1]][selectedTile[0]];
+        board[selectedTile[1]][selectedTile[0]] = [0];
+        
+        clearChoicesOnBoard(true);
+        
+        move = {
+            current: {
+                array: [selectedTile[1], selectedTile[0]],
+                coordinates: [boardSize/16*(selectedTile[1]*2+1), boardSize/16*(selectedTile[0]*2+1)]
+            },
+            progress: [boardSize/16*(selectedTile[1]*2+1), boardSize/16*(selectedTile[0]*2+1)],
+            destination: {
+                array: [floor(mouseY/(boardSize/8)), floor(mouseX/(boardSize/8))],
+                coordinates: [boardSize/16*(floor(mouseY/(boardSize/8))*2+1), boardSize/16*(floor(mouseX/(boardSize/8))*2+1)]
+            },
+            
+            frames: 0
+        };
+        
+        if (board[floor(mouseY/(boardSize/8))][floor(mouseX/(boardSize/8))][0] === 1 &&
+        floor(mouseY/(boardSize/8)) === turn*7) {
+            promotion.active = true;
+        }
+        
+        loop();
+    }
+    
+    else {
+        selectedTile = [0, 8];
+        clearChoicesOnBoard();
+        drawBoard();
+    }
+    
+}
+
+else if (promotion.active) { promotion.board(); }
+
+else if (victory) { Program.restart(); }
+
+else { forfiet.board(); }
+};
+
+draw = function() {
+    drawBoard();
+    noStroke();
+    if ((move.destination.array[0]+move.destination.array[1])%2 === 0) {fill(255);}
+    else {fill(0);}
+    rect(boardSize/8*move.destination.array[1], boardSize/8*move.destination.array[0], boardSize/8, boardSize/8);
+    
+    move.progress[0] += (move.destination.coordinates[0] - move.current.coordinates[0]) / 10;
+    move.progress[1] += (move.destination.coordinates[1] - move.current.coordinates[1]) / 10;
+    move.frames++;
+    
+    stroke(board[move.destination.array[0]][move.destination.array[1]][1]*255);
+    fill(255 - (board[move.destination.array[0]][move.destination.array[1]][1]*255));
+    
+    pieces[board[move.destination.array[0]][move.destination.array[1]][0]].appearance(move.progress[1], move.progress[0], boardSize/8);
+    
+    //check for check
+    if (move.frames < 9) {
+        for (var a = 0; a < 8; a++) {
+            if (board[a][move.frames-1][1] === turn) {
+                pieces[board[a][move.frames-1][0]].movements(move.frames-1, a, 3);
+            }
+        }
+    }
+    
+    if (move.frames >= 10) {
+        if (victory) {
+            bell.play();
+            stroke(0);
+            fill(255, 200, 0);
+            rect(boardSize/20, boardSize/6, boardSize-boardSize/10, boardSize-boardSize/3, 10);
+            fill(0);
+            textSize(boardSize/10);
+            textAlign(CENTER, CENTER);
+            text("Victory!", boardSize/2, boardSize/3.5);
+            textSize(boardSize/20);
+            if (turn === 0) { text("The black king was captured.\nWhite wins!", boardSize/2, boardSize/2); }
+            if (turn === 1) { text("The white king was captured.\nBlack wins!", boardSize/2, boardSize/2); }
+            textSize(boardSize/40);
+            text("Click anywhere to restart.", boardSize/2, boardSize/1.5);
+        }
+        else if (promotion.active) {
+            promotion.board(move.destination.array[1], move.destination.array[0]);
+        }
+        else {
+            turn = (turn*-1)+1;
+            drawBoard();
+        }
+        noLoop();
+    }
+};
+
+
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+</body>
+
+</html>
