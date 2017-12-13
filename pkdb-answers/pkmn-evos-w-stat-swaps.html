@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pokemon Evolutions With Physical/Special swaps</title>
+  </head>
+    <script src="../PapaParse-4.3.2/papaparse.min.js"></script>
+  
+  <body>
+    <p>Pokemon information by <a href="https://veekun.com">veekun</a>.</p>
+    <p id="text"><i>Loading... <i id="percent"></i></i></p>
+    <h1 id="atk-to-spa">Evolutions that switch from a higher attack to a higher special attack:</h1>
+    <p id="a2s"></p>
+    <h1 id="spa-to-atk">Evolutions that switch from a higher special attack to a higher attack:</h1>
+    <p id="s2a"></p>
+  </body>
+  
+  <script>
+    var pair = function(mon1, stats1, mon2, stats2) {
+        this.mon1 = {
+            name: mon1,
+            stats: stats1
+        };
+        this.mon2 = {
+            name: mon2,
+            stats: stats2
+        };
+    };
+    
+    var swaps = {
+        atk2spa: [],
+        spa2atk: []
+    };
+    
+    Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_species.csv", {
+        download: true,
+        header: true,
+        complete: function(pokemon) {
+            Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_stats.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    stats = [];
+                    for (var a = 0; a < results.data.length; a++) {
+                        if (stats[results.data[a].pokemon_id] === undefined) { stats[results.data[a].pokemon_id] = []; }
+                        stats[results.data[a].pokemon_id][results.data[a].stat_id-1] = results.data[a].base_stat;
+                    }
+                    for (var a = 0; a < pokemon.data.length; a++) {
+                        if (a%100 === 0) { document.getElementById("percent").innerText = Math.round(a/pokemon.data.length*100)+"%"; }
+                        
+                        if (pokemon.data[a].evolves_from_species_id !== "" && stats[pokemon.data[a].id][1] !== stats[pokemon.data[a].id][3]) {
+                            var evolvesFromName;
+                            for (var b = 0; b < pokemon.data.length; b++) {
+                                if (pokemon.data[b].id === pokemon.data[a].evolves_from_species_id) { evolvesFromName = pokemon.data[b].identifier; }
+                            }
+                            
+                            if (stats[pokemon.data[a].id][1]-0 > stats[pokemon.data[a].id][3]-0 && stats[pokemon.data[a].evolves_from_species_id][1]-0 < stats[pokemon.data[a].evolves_from_species_id][3]-0) {
+                                swaps.spa2atk.push(new pair(evolvesFromName, stats[pokemon.data[a].evolves_from_species_id], pokemon.data[a].identifier, stats[pokemon.data[a].id]));
+                            }
+                            
+                            else if (stats[pokemon.data[a].id][1]-0 < stats[pokemon.data[a].id][3]-0 && stats[pokemon.data[a].evolves_from_species_id][1]-0 > stats[pokemon.data[a].evolves_from_species_id][3]-0) {
+                                swaps.atk2spa.push(new pair(evolvesFromName, stats[pokemon.data[a].evolves_from_species_id], pokemon.data[a].identifier, stats[pokemon.data[a].id]));
+                            }
+                        }
+                    }
+                    
+                    document.getElementById("text").innerText = "Done!";
+                    
+                    for (var a = 0; a < swaps.atk2spa.length; a++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = swaps.atk2spa[a].mon1.name + " ("+swaps.atk2spa[a].mon1.stats[1]+" > "+swaps.atk2spa[a].mon1.stats[3]+") into "+swaps.atk2spa[a].mon2.name + " ("+swaps.atk2spa[a].mon2.stats[1]+" < "+swaps.atk2spa[a].mon2.stats[3]+")";
+                        document.getElementById("a2s").appendChild(p);
+                    }
+                    
+                    for (var a = 0; a < swaps.spa2atk.length; a++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = swaps.spa2atk[a].mon1.name + " ("+swaps.spa2atk[a].mon1.stats[1]+" < "+swaps.spa2atk[a].mon1.stats[3]+") into "+swaps.spa2atk[a].mon2.name + " ("+swaps.spa2atk[a].mon2.stats[1]+" > "+swaps.spa2atk[a].mon2.stats[3]+")";
+                        document.getElementById("s2a").appendChild(p);
+                    }
+                }
+            });
+        }
+    });
+    
+  </script>
+
+<html>
+
