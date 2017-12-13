@@ -11,6 +11,8 @@ Finds the weaknesses of all possible triple-type combinations achievable via For
 
 Finds all Pokemon with stats mirrored over Physical and Special stats, once again to find an answer for a database question: <a href="https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html</a>
 
+An edited version of the above that find all Pokemon who switch from a higher atk to spa stat upon evolution, and vise versa (database answer): <a href="https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html">https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html</a>
+
 <br><br>
 (Not Pokemon)<br>
 A friendly game of chess. Nothing too impressive: <a href="https://krlw890.github.io/Chess/Chess.html">krlw890.github.io/Chess/Chess.html</a>
