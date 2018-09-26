@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pokemon With Equal Stats</title>
+  </head>
+    <script src="../PapaParse-4.3.2/papaparse.min.js"></script>
+  
+  <body>
+    <p>Pokemon information by <a href="https://veekun.com">veekun</a>.</p>
+    <p id="text"><i>Loading... <i id="percent"></i></i></p>
+    <h1 id="atk-to-spa">Pokemon with equal points in each stat:</h1>
+    <p id="list"></p>
+  </body>
+  
+  <script>
+    var equalPokemon = [];
+    
+    Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_species.csv", {
+        download: true,
+        header: true,
+        complete: function(pokemon) {
+            Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_stats.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    stats = [];
+                    for (var a = 0; a < results.data.length; a++) {
+                        if (stats[results.data[a].pokemon_id] === undefined) { stats[results.data[a].pokemon_id] = []; }
+                        stats[results.data[a].pokemon_id][results.data[a].stat_id-1] = results.data[a].base_stat;
+                    }
+                    
+                    for (var a = 0; a < pokemon.data.length; a++) {
+                        if (a%100 === 0) { document.getElementById("percent").innerText = Math.round(a/pokemon.data.length*100)+"%"; }
+                        var isEqual = true;
+                        
+                        for (var b = 1; b < 6; b++) {
+                            if (stats[pokemon.data[a].id][0] !== stats[pokemon.data[a].id][b]) {
+                                isEqual = false;
+                                break;
+                            }
+                        }
+                        if (isEqual && stats[pokemon.data[a].id][0] !== undefined) {
+                            equalPokemon.push({
+                                name: pokemon.data[a].identifier,
+                                stat: stats[pokemon.data[a].id][0]
+                            });
+                        }
+                    }
+                    
+                    document.getElementById("text").innerText = "Done!";
+                    
+                    for (var a = 0; a < equalPokemon.length; a++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = equalPokemon[a].name + ", with " + equalPokemon[a].stat + " in every stat";
+                        document.getElementById("list").appendChild(p);
+                    }
+                }
+            });
+        }
+    });
+    
+  </script>
+
+<html>
+
