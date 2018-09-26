@@ -15,6 +15,8 @@ An edited version of the above that find all Pokemon who switch from a higher at
 
 Finds the Hidden Power types of all possible even/odd IV combinations (database answer): <a href="https://krlw890.github.io/pkdb-answers/hptypes.html">https://krlw890.github.io/pkdb-answers/hptypes.html</a>
 
+Finds all the Pokemon that have equal points in each of their stats: <a href="https://krlw890.github.io/pkdb-answers/pkmn-equal-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-equal-stats.html</a>
+
 <br><br>
 (Not Pokemon)<br>
 A friendly game of chess. Nothing too impressive: <a href="https://krlw890.github.io/Chess/Chess.html">krlw890.github.io/Chess/Chess.html</a>
