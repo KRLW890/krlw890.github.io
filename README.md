@@ -17,6 +17,8 @@ Finds the Hidden Power types of all possible even/odd IV combinations (database 
 
 Finds all the Pokemon that have equal points in each of their stats: <a href="https://krlw890.github.io/pkdb-answers/pkmn-equal-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-equal-stats.html</a>
 
+Generates 6 letters whose scrabble values all add up to the same value. Made for a tournament on the Database: <a href="https://krlw890.github.io/pkdb-answers/random_letter_generator_balanced.html">https://krlw890.github.io/pkdb-answers/random_letter_generator_balanced.html</a>
+
 <br><br>
 (Not Pokemon)<br>
 A friendly game of chess. Nothing too impressive: <a href="https://krlw890.github.io/Chess/Chess.html">krlw890.github.io/Chess/Chess.html</a>
