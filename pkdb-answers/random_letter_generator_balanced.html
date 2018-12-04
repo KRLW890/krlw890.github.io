@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Balanced RLG</title>
+  </head>
+
+  <style>
+    body { text-align: center; }
+    table { width: 100% }
+    .letter { font-size: 2em; }
+  </style>
+  
+  <body>
+    <h2>Balanced Random Letter Generator</h2>
+    <p>This program generates 6 letters whose scrabble points will always add up to the same value.<br>Enter what number they should add up to, and choose whether to allow duplicates:<br></p>
+    <input id="total" type="number" value="15"></input>
+    <select id="dupes"><option selected value="false">No duplicates</option><option value="true">Allow duplicates</option></select>
+    <br>
+    <button onclick="generate();">Generate</button>
+    <table><tbody id="letters"></tbody</table>
+  </body>
+  
+  <script>
+var letters = [
+{char:"A", value:1},
+{char:"B", value:3},
+{char:"C", value:3},
+{char:"D", value:2},
+{char:"E", value:1},
+{char:"F", value:4},
+{char:"G", value:2},
+{char:"H", value:4},
+{char:"I", value:1},
+{char:"J", value:8},
+{char:"K", value:5},
+{char:"L", value:1},
+{char:"M", value:3},
+{char:"N", value:1},
+{char:"O", value:1},
+{char:"P", value:3},
+{char:"Q", value:10},
+{char:"R", value:1},
+{char:"S", value:1},
+{char:"T", value:1},
+{char:"U", value:1},
+{char:"V", value:4},
+{char:"W", value:4},
+{char:"X", value:8},
+{char:"Y", value:4},
+{char:"Z", value:10}
+];
+
+var generate = function() {
+    document.getElementById("letters").innerText = "";
+    var points = document.getElementById("total").value;
+    var dupes = document.getElementById("dupes").value;
+    var chosenLetters = [];
+    
+    var outputTable = document.getElementById("letters");
+    outputTable.innerHTML = "";
+    for (var a = 0; a < 2; a++) {
+        outputTable.insertRow();
+    }
+    
+    for (var a = 0; a < 6; a++) {
+        var currentChoice;
+        var isValid; // this variable is used to test for duplicates and makes sure the points always equal the right amount
+        var testCount = 0; // if the validity checker tests 200 times, the loop is aborted
+        
+        do {
+            testCount++;
+            currentChoice = Math.floor(Math.random()*26);
+            isValid = true;
+            
+            if (letters[currentChoice].value > points+a-5 || // makes sure there are enough points left over for the other rolls
+                a === 4 && (points-letters[currentChoice].value === 6 || points-letters[currentChoice].value === 7 || points-letters[currentChoice].value === 9 || points-letters[currentChoice].value > 10) || // makes sure the next roll will have a possible point value
+                a === 5 && letters[currentChoice].value !== points) { // makes sure the points add up to the correct number
+                    isValid = false;
+            }
+            else if (dupes === "false") { // duplicate checker
+                for (var b = 0; b < chosenLetters.length; b++) {
+                    if (chosenLetters[b] === currentChoice) {
+                        isValid = false;
+                    }
+                }
+            }
+        } while (isValid === false && testCount < 200);
+        
+        if (isValid) {
+            chosenLetters.push(currentChoice);
+            points -= letters[currentChoice].value;
+            
+            outputTable.rows[0].insertCell();
+            outputTable.rows[0].cells[a].classList.add("letter");
+            outputTable.rows[0].cells[a].innerText = letters[currentChoice].char;
+            outputTable.rows[1].insertCell();
+            outputTable.rows[1].cells[a].innerText = letters[currentChoice].value + " point";
+            if (letters[currentChoice].value > 1) {
+                outputTable.rows[1].cells[a].innerText += "s";
+            }
+        }
+        else {
+            outputTable.rows[0].insertCell();
+            outputTable.rows[0].cells[a].classList.add("letter");
+            outputTable.rows[0].cells[a].innerText = "Error";
+            outputTable.rows[1].insertCell();
+            outputTable.rows[1].cells[a].innerText = "Cannot find a letter with satisfactory value.";
+        }
+    }
+};
+
+
+  </script>
+
+<html>
+
