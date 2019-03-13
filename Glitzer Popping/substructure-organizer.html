@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Substructure Organizer</title>
+</head>
+<script src="pokemon-ids.js"></script>
+<script src="item-ids.js"></script>
+<script src="attack-ids.js"></script>
+<script src="location-ids.js"></script>
+<script src="table-builder.js"></script>
+<style>
+  body {
+    text-align: center;
+  }
+  p {
+    margin: 0px;
+  }
+  .substructures {
+    width: 37.5%;
+  }
+  .raw-values {
+    width: 25%;
+  }
+  td {
+    border: 1px solid black;
+  }
+  .head {
+    font-size: 25px;
+  }
+  .sub-head {
+    background-color: rgb(200, 200, 200);
+    font-size: 25px;
+  }
+  .inner {
+    border: 0px solid white;
+  }
+  table.inner {
+    width: 100%;
+    align: center;
+  }
+  .note {
+    color: rgb(255, 0, 0);
+  }
+</style>
+<body>
+  <a href="pid-analysis.html">Click here for the PID Analyzer</a><br>
+  <label>Corruption type:</label><br>
+  <input type="radio" name="type" onclick="buildOrganizer('GG AE EM MA');">1 (GG AE EM MA)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GG AM EA ME');">2 (GG AM EA ME)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GA AG EM ME');">3 (GA AG EM ME)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GA AE EG MM');">4 (GA AE EG MM)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GA AM EE MG');">5 (GA AM EE MG)</input><br>
+  <input type="radio" name="type" onclick="buildOrganizer('GE AG EA MM');">6 (GE AG EA MM)</input>
+  <input type="radio" name="type" checked="checked" onclick="buildOrganizer('GE AA EM MG');">7 (GE AA EM MG)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GE AM EG MA');">8 (GE AM EG MA)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GM AG EE MA');">9 (GM AG EE MA)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GM AA EG ME');">10 (GM AA EG ME)</input>
+  <br><br>
+
+  <table id="organizer" style="width: 100%; text-align: center;">
+  <tbody>
+  </tbody>
+  </table>
+</body>
+
+<script>
+buildOrganizer('GE AA EM MG');
+
+var hexVal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+var convertToDec = function(value) {
+    value = value.toUpperCase();
+    var output = 0;
+    for (var a = 0; a < value.length; a++) {
+        for (var b = 0; b < 15; b++) {
+            if (value.charAt(value.length-(a+1)) === hexVal[b]) { break; }
+        }
+        output += b*Math.pow(16, a);
+    }
+    return output;
+};
+var convertToHex = function(value, bytes) {
+    var output = "";
+    
+    for (bytes; bytes > 0; bytes--) {
+        output += hexVal[Math.floor(value/Math.pow(16, bytes-1))%16];
+    }
+    return output;
+};
+
+var synchValues = function(input, exempt) {
+    var value = input.value;
+    if (input.base10 !== true) { value = convertToDec(value); }
+    
+    document.getElementById("decVal"+input.row).value = value;
+    document.getElementById("hexVal"+input.row).value = convertToHex(value, 2);
+    
+    var cells = document.getElementsByClassName(input.row);
+    for (var a = 0; a < cells.length; a++) {
+        if (exempt !== cells[a].col && typeof cells[a].synch === "function") { cells[a].synch(); }
+    }
+};
+
+var setCellByNumber = function(input, f, id, external) {
+    var value = input.value;
+    if (input.base10 !== true) { value = convertToDec(value); }
+    
+    document.getElementById(id+"-"+input.col).value = f(value, input.col, input.id.charAt(4));
+    document.getElementById(id+"Dec-"+input.col).value = value;
+    document.getElementById(id+"Hex-"+input.col).value = convertToHex(value, 4);
+    
+    if (external !== true) {
+        var decval1 = document.getElementById("decVal"+input.row);
+        decval1.value = value%256;
+        synchValues(decval1, input.col);
+        var decval2 = document.getElementById("decVal"+(input.row+1));
+        decval2.value = Math.floor(value/256);
+        synchValues(decval2, input.col);
+    }
+};
+var setCellByName = function(input, f, id, external) {
+    var value = f(input.value, input.col, input.id.charAt(4));
+    if (value !== "abort") {
+        document.getElementById(id+"Dec-"+input.col).value = value;
+        document.getElementById(id+"Hex-"+input.col).value = convertToHex(value, 4);
+        if (external !== true) {
+            var decval1 = document.getElementById("decVal"+input.row);
+            decval1.value = value%256;
+            synchValues(decval1, input.col);
+            var decval2 = document.getElementById("decVal"+(input.row+1));
+            decval2.value = Math.floor(value/256);
+            synchValues(decval2, input.col);
+        }
+    }
+}
+var setCellExternally = function(col, f, id) {
+    var h = document.getElementById(id+"Hex-"+col);
+    h.value = document.getElementById("hexVal"+(h.row+1)).value + document.getElementById("hexVal"+h.row).value;
+    setCellByNumber(h, f, id, true);
+};
+
+var setExpCell = function(input, external) {
+    var value = input.value;
+    if (input.base10 !== true) { value = convertToDec(value); }
+    document.getElementById("lvByEXP-"+input.col).innerText = EXPformula[EXPgroup[input.col]](value);
+    document.getElementById("expDec-"+input.col).value = value;
+    document.getElementById("expHex-"+input.col).value = convertToHex(value, 8);
+    
+    if (external === false) {
+        value = convertToHex(value, 8);
+        for (var a = 0; a < 4; a++) {
+            document.getElementById("hexVal"+(input.row+(3-a))).value = value.charAt(a*2)+value.charAt(a*2+1);
+            synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
+        }
+    }
+};
+
+var setPPups = function(input, external) {
+    var slot = input.id.charAt(7);
+    document.getElementById("pp-"+input.col+"-"+slot).bonuses = input.value;
+    document.getElementById("pp-"+input.col+"-"+slot).synch(true);
+    
+    if (external === false) {
+        var value = 0;
+        for (var a = 0; a < 4; a++) {
+            value += Math.pow(4, a)*document.getElementById("ppup-"+input.col+"-"+a).value;
+        }
+        document.getElementById("decVal"+input.row).value = value;
+        synchValues(document.getElementById("decVal"+input.row), input.col);
+    }
+};
+
+var setOriginsFromValues = function(input) {
+    var value = 0;
+    if (document.getElementById(input.id+"-lv").value >= 0) { value += document.getElementById(input.id+"-lv").value-0; }
+    value += document.getElementById(input.id+"-game").value*128;
+    value += +document.getElementById(input.id+"-ball").value*2048;
+    value += document.getElementById(input.id+"-ot").value*32768;
+    input.value = convertToHex(value, 4);
+    
+    for (var a = 0; a < 2; a++) {
+        document.getElementById("hexVal"+(input.row+(1-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+        synchValues(document.getElementById("hexVal"+(input.row+(1-a))), input.col);
+    }
+}
+var setOriginsFromHex = function(input, external) {
+    var value = "";
+    if (external) {
+        for (var a = 1; a >= 0; a--) {
+            if (document.getElementById("hexVal"+(input.row+a)).value.length === 0) { value += "00"; }
+            else { value += document.getElementById("hexVal"+(input.row+a)).value; }
+        }
+        input.value = value;
+    }
+    
+    input.value = input.value.toUpperCase();
+    value = convertToDec(input.value);
+    document.getElementById(input.id+"-lv").value = value%128;
+    value = Math.floor(value/128);
+    document.getElementById(input.id+"-game").value = value%16;
+    value = Math.floor(value/16);
+    document.getElementById(input.id+"-ball").value = value%16;
+    value = Math.floor(value/16);
+    document.getElementById(input.id+"-ot").value = value%2;
+    
+    if (external === false) {
+        for (var a = 0; a < 2; a++) {
+            document.getElementById("hexVal"+(input.row+(1-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+            synchValues(document.getElementById("hexVal"+(input.row+(1-a))), input.col);
+        }
+    }
+}
+
+var setIEOFromValues = function(input) {
+    var value = 0;
+    for (var a = 0; a < 6; a++) {
+        if (document.getElementById(input.id+"-"+a).value >= 0) {
+            if (document.getElementById(input.id+"-"+a).value > 31) { document.getElementById(input.id+"-"+a).value = 31; }
+            value += Math.pow(32, a)*document.getElementById(input.id+"-"+a).value;
+        }
+    }
+    if (document.getElementById(input.id+"-egg").value >= 0) {
+        if (document.getElementById(input.id+"-egg").value > 1) { document.getElementById(input.id+"-egg").value = 1; }
+        value += Math.pow(32, 6)*document.getElementById(input.id+"-egg").value;
+    }
+    if (document.getElementById(input.id+"-ability").value >= 0) {
+        if (document.getElementById(input.id+"-ability").value > 1) { document.getElementById(input.id+"-ability").value = 1; }
+        value += Math.pow(32, 6)*2*document.getElementById(input.id+"-ability").value;
+    }
+    input.value = convertToHex(value, 8);
+    
+    for (var a = 0; a < 4; a++) {
+        document.getElementById("hexVal"+(input.row+(3-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+        synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
+    }
+};
+var setIEOFromHex = function(input, external) {
+    var value = "";
+    if (external) {
+        for (var a = 3; a >= 0; a--) {
+            if (document.getElementById("hexVal"+(input.row+a)).value.length === 0) { value += "00"; }
+            else { value += document.getElementById("hexVal"+(input.row+a)).value; }
+        }
+        input.value = value;
+    }
+    
+    input.value = input.value.toUpperCase();
+    value = convertToDec(input.value);
+    for (var a = 0; a < 6; a++) {
+        document.getElementById(input.id+"-"+a).value = value%32;
+        value = Math.floor(value/32);
+    }
+    document.getElementById(input.id+"-egg").value = value%2;
+    value = Math.floor(value/2);
+    document.getElementById(input.id+"-ability").value = value%2;
+    
+    if (external === false) {
+        for (var a = 0; a < 4; a++) {
+            document.getElementById("hexVal"+(input.row+(3-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+            synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
+        }
+    }
+}
+
+var setRibbonsFromHex = function(input, external) {
+    var value = "";
+    if (external) {
+        for (var a = 3; a >= 0; a--) {
+            if (document.getElementById("hexVal"+(input.row+a)).value.length === 0) { value += "00"; }
+            else { value += document.getElementById("hexVal"+(input.row+a)).value; }
+        }
+        input.value = value;
+    }
+    
+    input.value = input.value.toUpperCase();
+    value = convertToDec(input.value);
+    
+    for (var a = 0; a < 5; a++) {
+         document.getElementById("ribbons-con"+a+"-"+input.col).value = Math.floor(value/Math.pow(8, a))%8;
+    }
+    for (var a = 0; a < 10; a++) {
+         document.getElementById("ribbons"+a+"-"+input.col).value = Math.floor(value/Math.pow(2, a)/32768)%2;
+    }
+    document.getElementById("ribbons10-"+input.col).value = Math.floor(value/67108864)%2;
+    document.getElementById("ribbons11-"+input.col).value = Math.floor(value/2147483648);
+    
+    if (external === false) {
+        for (var a = 0; a < 4; a++) {
+            document.getElementById("hexVal"+(input.row+(3-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+            synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
+        }
+    }
+};
+var setRibbonsFromValues = function(input) {
+    var value = 0;
+    for (var a = 0; a < 5; a++) {
+         value += document.getElementById("ribbons-con"+a+"-"+input.col).value*Math.pow(8, a);
+    }
+    for (var a = 0; a < 10; a++) {
+         value += document.getElementById("ribbons"+a+"-"+input.col).value*Math.pow(2, a)*32768;
+    }
+    value += document.getElementById("ribbons10-"+input.col).value*67108864;
+    value += document.getElementById("ribbons11-"+input.col).value*2147483648;
+    
+    input.value = convertToHex(value, 8);
+    for (var a = 0; a < 4; a++) {
+        document.getElementById("hexVal"+(input.row+(3-a))).value = input.value.charAt(a*2)+input.value.charAt(a*2+1);
+        synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
+    }
+};
+
+</script>
+</html>

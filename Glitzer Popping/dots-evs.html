@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Substructure Organizer</title>
+</head>
+<script src="pokemon-ids.js"></script>
+<script src="item-ids.js"></script>
+<script src="table-builder.js"></script>
+<style>
+  body {
+    text-align: center;
+  }
+  p {
+    margin: 0px;
+  }
+  .substructures {
+    width: 37.5%;
+  }
+  .raw-values {
+    width: 25%;
+  }
+  td {
+    border: 1px solid black;
+  }
+  .head {
+    font-size: 25px;
+  }
+  .sub-head {
+    background-color: rgb(200, 200, 200);
+    font-size: 25px;
+  }
+  .inner {
+    border: 0px solid white;
+  }
+  table.inner {
+    width: 100%;
+    align: center;
+  }
+  .note {
+    color: rgb(255, 0, 0);
+  }
+</style>
+<body>
+  <a href="substructure-organizer.html">Click here for the full Substructure Organizer</a><br>
+
+  <table id="organizer" style="width: 100%; text-align: center;">
+  <tbody>
+  <tr>
+    <td rowspan="2" class="3 4">
+      Pokemon species<br>
+      <label>
+        Name: <input type="text" maxlength="16" id="pokemon-2" onchange="setFromName(this.value, 'pokemon');">
+        <label class="note" id="pokemonNote-0"></label>
+      </label>
+      <p>
+        Decimal ID No: <label id="pokemonDec-2">???</label>
+      </p>
+      <p>
+        Hex ID No: <label id="pokemonHex-2">???</label>
+      </p>
+    </td>
+    <td class="3">
+      HP EVs<br>
+      <label id="pokemonev-1">0</label>
+    </td>
+  </tr>
+  <tr>
+    <td class="4">
+      Attack EVs<br>
+      <label id="pokemonev-0">0</label>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2" class="5 6">
+      Item (double corruption only)<br>
+      <label>
+        Name: <input type="text" maxlength="16" id="pokemon-2" onchange="setFromName(this.value, 'item');">
+        <label class="note" id="itemNote-0"></label>
+      </label>
+      <p>
+        Decimal ID No: <label id="itemDec-2">???</label>
+      </p>
+      <p>
+        Hex ID No: <label id="itemHex-2">???</label>
+      </p>
+    </td>
+    <td class="5">
+      Defense EVs<br>
+      <label id="itemev-1">0</label>
+    </td>
+  </tr>
+  <tr>
+    <td class="6">
+      Speed EVs<br>
+      <label id="itemev-0">0</label>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+</body>
+
+<script>
+
+var hexVal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+var convertToDec = function(value) {
+    value = value.toUpperCase();
+    var output = 0;
+    for (var a = 0; a < value.length; a++) {
+        for (var b = 0; b < 15; b++) {
+            if (value.charAt(value.length-(a+1)) === hexVal[b]) { break; }
+        }
+        output += b*Math.pow(16, a);
+    }
+    return output;
+};
+var convertToHex = function(value, bytes) {
+    var output = "";
+    
+    for (bytes; bytes > 0; bytes--) {
+        output += hexVal[Math.floor(value/Math.pow(16, bytes-1))%16];
+    }
+    return output;
+};
+
+var setFromName = function(value, type) {
+    var id;
+    if (type == "pokemon") { id = getPokemon.byName(value, 0, false); }
+    else { id = getItem.byName(value, 0, false); }
+
+    if (id === "abort") {
+        document.getElementById(type+"Dec-2").innerText = "???";
+        document.getElementById(type+"Hex-2").innerText = "???";
+        document.getElementById(type+"ev-0").innerText = 0;
+        document.getElementById(type+"ev-1").innerText = 0;
+    }
+    else {
+        var hexId = convertToHex(id, 4);
+        document.getElementById(type+"Dec-2").innerText = id;
+        document.getElementById(type+"Hex-2").innerText = hexId;
+        document.getElementById(type+"ev-0").innerText = convertToDec(hexId.charAt(0)+hexId.charAt(1));
+        document.getElementById(type+"ev-1").innerText = convertToDec(hexId.charAt(2)+hexId.charAt(3));
+    }
+};
+
+</script>
+</html>

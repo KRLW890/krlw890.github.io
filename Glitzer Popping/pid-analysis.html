@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PID Analyzer</title>
+</head>
+<style>
+  body {
+    text-align: center;
+  }
+  table {
+    width: 100%;
+  }
+  td {
+    border: 0px solid white;
+  }
+  .head {
+    font-size: 25px;
+  }
+</style>
+<body>
+<a href="substructure-organizer.html">Click here for the Substructure Organizer</a><br>
+<p>Enter the Pokemon's PID in Hex:</p>
+<input id="pid" type="text"><button onclick="analyze();">Analyze</button><br><br>
+
+  <table>
+  <tbody>
+  <tr class="head">
+    <td>Pre-Corruption:</td>
+    <td>Conversion:</td>
+    <td>Post-Corruption:</td>
+  </tr>
+  <tr>
+  <td>
+    <table>
+    <tbody>
+    <tr>
+      <td>PID:</td>
+      <td id="pid1">???</td>
+    </tr>
+    <tr>
+      <td>PID (decimal):</td>
+      <td id="decpid1">???</td>
+    </tr>
+    <tr>
+      <td>Substructure Order:</td>
+      <td id="sub1">???</td>
+    </tr>
+    <tr>
+      <td>Nature:</td>
+      <td id="nat1">???</td>
+    </tr>
+    </tbody>
+    </table>
+  </td>
+  <td>
+    <table>
+    <tbody>
+    <tr>
+      <td rowspan="2">=&gt</td>
+      <td id="cor1">????</td>
+      <td rowspan="2">=&gt</td>
+    </tr>
+    <tr>
+      <td id="cor1-val">+- 0x40000000</td
+    </tr>
+    <tr><td><br></td><td><br></td><td><br></td></tr>
+    <tr>
+      <td rowspan="2">&lt=</td>
+      <td id="cor2">????</td>
+      <td rowspan="2">&lt=</td>
+    </tr>
+    <tr>
+      <td id="cor2-val">+- 0x40000000</td>
+    </tr>
+    </tbody>
+    </table>
+  </td>
+  <td>
+    <table>
+    <tbody>
+    <tr>
+      <td>PID:</td>
+      <td id="pid2">???</td>
+    </tr>
+    <tr>
+      <td>PID (decimal):</td>
+      <td id="decpid2">???</td>
+    </tr>
+    <tr>
+      <td>Substructure Order:</td>
+      <td id="sub2">???</td>
+    </tr>
+    <tr>
+      <td>Nature:</td>
+      <td id="nat2">???</td>
+    </tr>
+    </tbody>
+    </table>
+  </td>
+  </tr>
+  </tbody>
+  </table>
+  
+  <br>
+  <hr>
+  <br>
+  
+  <table style="width: 60%; margin: auto;">
+  <tbody>
+    <tr class="head">
+      <td colspan="7">The following details will remain consistent across the corruption:</td>
+    </tr>
+    <tr>
+      <td rowspan="2" style="width: 15%"></td>
+      <td rowspan="2" style="width: 25%;">Gender:</td>
+      <td>50% F</td>
+      <td>12.5% F</td>
+      <td>25% F</td>
+      <td>75% F</td>
+      <td rowspan="2" style="width: 15%"></td>
+    </tr>
+    <tr>
+      <td id="50F">???</td>
+      <td id="12F">???</td>
+      <td id="25F">???</td>
+      <td id="75F">???</td>
+    </tr>
+    <tr><td colspan="7"><br></td></tr>
+    <tr>
+      <td style="width: 15%"></td>
+      <td>Ability:</td>
+      <td id="ability">???</td><td colspan="4"></td>
+    </tr>
+  </tbody>
+  </table>
+</body>
+
+<script>
+var pid = {
+    hex: undefined,
+    dec: undefined,
+    corrupt: {
+        hex: undefined,
+        dec: undefined
+    }
+};
+var substructures = [
+    "GAEM", "GAME", "GEAM", "GEMA", "GMAE", "GMEA",
+    "AGEM", "AGME", "AEGM", "AEMG", "AMGE", "AMEG",
+    "EGAM", "EGMA", "EAGM", "EAMG", "EMGA", "EMAG",
+    "MGAE", "MGEA", "MAGE", "MAEG", "MEGA", "MEAG"
+];
+var natures = ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile", "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest", "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"];
+
+var hexVal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+var convertToDec = function(value) {
+    var output = 0;
+    for (var a = 0; a < value.length; a++) {
+        for (var b = 0; b < 16; b++) {
+            if (value.charAt(value.length-(a+1)) === hexVal[b]) { break; }
+        }
+        output += b*Math.pow(16, a);
+    }
+    return output;
+};
+
+var gender = function(value, threshold) {
+    if (value >= threshold) { return "M"; }
+    else { return "F"; }
+};
+
+var analyze = function() {
+    pid.hex = document.getElementById("pid").value;
+    pid.dec = convertToDec(pid.hex.toLowerCase());
+    
+    document.getElementById("pid1").innerText = pid.hex.toUpperCase();
+    document.getElementById("decpid1").innerText = pid.dec;
+    document.getElementById("sub1").innerText = substructures[pid.dec%24];
+    document.getElementById("nat1").innerText = natures[pid.dec%25];
+    document.getElementById("ability").innerText = pid.dec%2;
+    document.getElementById("50F").innerText = gender(pid.dec%256, 127);
+    document.getElementById("12F").innerText = gender(pid.dec%256, 31);
+    document.getElementById("25F").innerText = gender(pid.dec%256, 63);
+    document.getElementById("75F").innerText = gender(pid.dec%256, 191);
+    
+    if (pid.hex.charAt(0)==="0" || pid.hex.charAt(0)==="1" || pid.hex.charAt(0)==="2" || pid.hex.charAt(0)==="3" || pid.hex.charAt(0)==="8" || pid.hex.charAt(0)==="9" || pid.hex.charAt(0).toLowerCase()==="a" || pid.hex.charAt(0).toLowerCase==="b") {
+        document.getElementById("cor1-val").innerText = "+ 0x40000000";
+        document.getElementById("cor2-val").innerText = "- 0x40000000";
+        for (var a = 0; a < 16; a++) {
+            if (pid.hex.charAt(0).toLowerCase() === hexVal[a]) { break; }
+        }
+        pid.corrupt.hex = hexVal[a+4];
+        for (var a = 1; a < pid.hex.length; a++) { pid.corrupt.hex += pid.hex.charAt(a); }
+    }
+    else {
+        document.getElementById("cor1-val").innerText = "- 0x40000000";
+        document.getElementById("cor2-val").innerText = "+ 0x40000000";
+        for (var a = 0; a < 16; a++) {
+            if (pid.hex.charAt(0).toLowerCase() === hexVal[a]) { break; }
+        }
+        pid.corrupt.hex = hexVal[a-4];
+        for (var a = 1; a < pid.hex.length; a++) { pid.corrupt.hex += pid.hex.charAt(a); }
+    }
+    pid.corrupt.dec = convertToDec(pid.corrupt.hex.toLowerCase());
+    
+    document.getElementById("pid2").innerText = pid.corrupt.hex.toUpperCase();
+    document.getElementById("decpid2").innerText = pid.corrupt.dec;
+    document.getElementById("sub2").innerText = substructures[pid.corrupt.dec%24];
+    document.getElementById("nat2").innerText = natures[pid.corrupt.dec%25];
+    
+    var type = "";
+    for (var a = 0; a < 4; a++) {
+        for (var b = 0; b < 4; b++) {
+            if (document.getElementById("sub2").innerText.charAt(b) === substructures[0].charAt(a)) { break; }
+        }
+        type += substructures[0].charAt(a) + document.getElementById("sub1").innerText.charAt(b) + " ";
+    }
+    document.getElementById("cor1").innerText = type;
+    
+    type = "";
+    for (var a = 0; a < 4; a++) {
+        for (var b = 0; b < 4; b++) {
+            if (document.getElementById("sub1").innerText.charAt(b) === substructures[0].charAt(a)) { break; }
+        }
+        type += substructures[0].charAt(a) + document.getElementById("sub2").innerText.charAt(b) + " ";
+    }
+    document.getElementById("cor2").innerText = type;
+};
+</script>
+</html>
