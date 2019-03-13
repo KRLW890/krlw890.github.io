@@ -51,7 +51,7 @@
   <input type="radio" name="type" onclick="buildOrganizer('GA AE EG MM');">4 (GA AE EG MM)</input>
   <input type="radio" name="type" onclick="buildOrganizer('GA AM EE MG');">5 (GA AM EE MG)</input><br>
   <input type="radio" name="type" onclick="buildOrganizer('GE AG EA MM');">6 (GE AG EA MM)</input>
-  <input type="radio" name="type" checked="checked" onclick="buildOrganizer('GE AA EM MG');">7 (GE AA EM MG)</input>
+  <input type="radio" name="type" onclick="buildOrganizer('GE AA EM MG');">7 (GE AA EM MG)</input>
   <input type="radio" name="type" onclick="buildOrganizer('GE AM EG MA');">8 (GE AM EG MA)</input>
   <input type="radio" name="type" onclick="buildOrganizer('GM AG EE MA');">9 (GM AG EE MA)</input>
   <input type="radio" name="type" onclick="buildOrganizer('GM AA EG ME');">10 (GM AA EG ME)</input>
@@ -64,8 +64,6 @@
 </body>
 
 <script>
-buildOrganizer('GE AA EM MG');
-
 var hexVal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 var convertToDec = function(value) {
     value = value.toUpperCase();
