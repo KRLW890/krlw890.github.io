@@ -20,7 +20,7 @@
                              (Yes, that IS the title)
 
 
-<strong>EDIT: This is a very old game of mine. I only uploaded this here to show some friends. Please spare yourself (and me!) and don't play this game if you're just randomly stumbling upon this. Please.</strong>
+EDIT: This is a very old game of mine. I only uploaded this here to show some friends. Please spare yourself (and me!) and don't play this game if you're just randomly stumbling upon this. Please.
 
 
 The main instructions are available in-game.  This document is mainly to explain tips and
