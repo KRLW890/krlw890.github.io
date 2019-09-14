@@ -250,7 +250,7 @@ var glitchMaster = {
     first: true,
     wild: -30,
     returnTo: 5,
-    cantEscape: [["Did you really think", "you could escape the Glitch Master?!"], ["Wow.", "You're getting desperate."], ["no", ""], ["no", ""], ["no", ""], ["Okay, fine. You win.", "But only because even I agree\nthis level is BS."]]
+    cantEscape: [["Did you really think", "you could escape the Glitch Master?!"], ["Wow.", "You're getting desperate."], ["no", ""], ["no", ""], ["no", ""], ["Okay, fine. You win.", "But only because even I agree\nthis level is bullshit."]]
 };
 
 if (localStorage.getItem("GM") > 0) {
