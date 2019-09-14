@@ -1,0 +1,3843 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Title Here</title>
+  <link rel="icon" href="data/icon.ico">
+  <script src="data/processing.min.js"></script>
+  <script src="data/HolySh!t_WhyAreThereSoManyVariables.js"></script>
+
+</head>
+
+<style>
+  body {
+    text-align: center;
+  }
+</style>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+
+    var canvas = document.getElementById("canvas");
+
+    var processing = new Processing(canvas, function(processing) {
+
+        processing.size(400, 400);
+
+        processing.background(0xFFF);
+
+
+
+        var mouseIsPressed = false;
+
+
+
+        var keyIsPressed = false;
+
+        processing.keyPressed = function () { keyIsPressed = true; };
+
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+
+        var sine = function(deg){
+
+        return sin(deg/(180/3.1415926535));
+
+        }
+
+        var cosine = function(deg){
+
+            return cos(deg/(180/3.1415926535));
+
+        }
+
+        var rotate2 = function(deg){
+            rotate(deg/(180/3.1415926535));
+
+        }
+
+        function getImage(s) {
+
+            var url = "https://www.kasandbox.org/stylesheets/scratchpads-exec-package/images/" + s + ".png";
+
+            processing.externals.sketch.imageCache.add(url);
+
+            return processing.loadImage(url);
+
+        }
+
+
+        with (processing) {
+var font = createFont("monospace");
+var LicenceFont = createFont("sans-serif");
+
+var endLuck = random(0, 5);
+
+var pupil = color(255, 0, 0);
+var chargedColor = color(0, 130, 255);
+
+    var goal = function(x, y) {fill(0, 0, 0);
+stroke(0, 0, 0);
+    rect(x-3, y, 66, 47);
+    fill(0, 255, 0);
+    textAlign(LEFT, TOP);
+    textFont(font, 14);
+    text("01111110\nupdate"+ space + stage + "\n01111110", x, y);
+    if (playerX>=x-15&&playerY>=y-12&&playerX<=x+75&&playerY<=y+59) {stageComplete=true;}
+};
+    var endGoal = function(x, y) {fill(0, 0, 0);
+stroke(0, goalStroke, 0);
+if (goalStroke>=255) {glStrkFade=6;}
+if (goalStroke<=0) {glStrkFade=-30;}
+goalStroke-=glStrkFade;
+    textFont(font, 14);
+    rect(x-3, y, 66, 47);
+    fill(0, 255, 0);
+    textAlign(LEFT, TOP);
+    textSize(14);
+    if (special===true) {text("01101110\nupdate16\n01101111", x, y);}
+    else {text("01111001\n01100101\n01110011", x, y);}
+    if (playerX>=x-15&&playerY>=y-12&&playerX<=x+75&&playerY<=y+59) {end=true;}
+    };
+    var decor = function(x, y, onPlayer) {
+    textFont(font, 14);
+    stroke(0, 0, 0);
+    fill(0, 0, 0);
+    if (onPlayer==="boss") {
+        fill(200, 200, 0);
+        stroke(200, 200, 0);
+    }
+    if (onPlayer===true && toolAcquired) {stroke(0, 0, 255);
+    fill(0, 0, 255);
+    }
+    if (onPlayer===true && special) {stroke(0, 150, 0);
+    fill(0, 150, 0);
+    }
+    rect(x-2, y, 10, 15);
+    textAlign(LEFT, TOP);
+    fill(255, 255, 255);
+    stroke(0, 0, 0);
+    textFont(font, 14);
+    if (stage<16 || onPlayer!==true) {
+        text(biNum[biCount%16], x, y);
+        biCount++;
+    }
+    else if (stage>=16) {text(floor(random(0, 10)), x, y);}
+}; //little black flashing digits
+    var moveDecor = function(xRange1, xRange2, yRange1, yRange2, decNum) {
+    
+    if (dec[decNum]) {x[decNum]=round(random(xRange1, xRange2));
+    y[decNum]=round(random(yRange1, yRange2));
+    }
+    
+    decor(x, y);
+    /*stroke(0, 0, 0);
+    fill(0, 0, 0);
+    rect(x[decNum]-2, y[decNum], 10, 15);
+    textAlign(LEFT, TOP);
+    fill(255, 255, 255);
+    stroke(0, 0, 0);
+    textFont(font, 14);
+    text(round(random(1.4-0)), x[decNum], y[decNum]);*/
+    
+    dec[decNum] = false;
+    
+    if (x[decNum]>goalX+28) {x[decNum]-=decSpeed;}
+    if (x[decNum]<goalX+28) {x[decNum]+=decSpeed;}
+    if (y[decNum]>goalY+16) {y[decNum]-=decSpeed;}
+    if (y[decNum]<goalY+16) {y[decNum]+=decSpeed;}
+    
+    if (x[decNum]===goalX+28&&y[decNum]===goalY+16) {dec[decNum] = true;}
+    };
+    var scanner = function(x, y, width, height, scanMode, scanNum) {
+    noStroke();
+    var scanned = false;
+if (eneNum[scanNum]||scanMode!==1) {
+    
+    if (scanMode===1) {fill(255, 255, 0, random(50, 150));}
+    if (scanMode===2) {fill(255, 115, 0, random(50, 150));}
+    if (scanMode===3) {fill(255, 0, 0, random(50, 150));}
+    if (scanMode===3&&end&&special&&scanCount[1]>=70) {fill(0, 255, 0, random(50, 150));}
+    if (scan[scanNum]||scanNum>50||scanNum===false) {
+    rect(x, y, width, height);
+    
+    if (playerX>=x-12&&playerX<=x+width+12&&playerY>=y-12&&playerY<=y+height+12) {
+    scanned=true;
+        if (scanMode===1) {
+        scan[scanNum]=false;
+        eneActive[scanNum]=true;
+        }
+        if (scanMode===2) {slow=true;}
+        if (scanMode===3) {
+            frozen=true;
+            scanCount[1]++;
+            if (scanCount[1]>=30&&end===false||scanCount[1]>=150) {scan[scanNum]=false;}
+        }
+    }
+}
+    
+    }
+    
+if (scanMode===2) {
+    if (slow) {
+        if (scanNum!==false&&scanned===false) {scanCount[0]++;}
+        if (speed>=1) {speed-=0.02;}
+    }
+    if (scanCount[0]>=scanNum&&scanNum!==false) {
+        speed=4.5;
+        slow=false;
+        scanCount[0]=0;
+    }
+    
+}
+    
+        if (frozen&&scanMode===3) {speed=0;}
+        
+        if (eneActive[0]===false&&eneActive[1]===false&&eneActive[2]===false&&eneActive[3]===false) {
+            if (scanMode===3&&scan[scanNum]===false&&atkCalled[0]&&end===false) {
+                frozen=false;
+                scanCount[1]=0;
+                speed=4.5;
+            }
+        }
+        
+};
+    var eneBullet = function(x, y) {fill(0);
+    stroke(255, 0, 0);
+    textFont(font, 14);
+    textAlign(LEFT, TOP);
+    rect(x-2, y+1, 11, 30);
+    fill(255, 0, 0);
+    text("0\n0", x, y);
+    if (playerX>x-17&&playerX<x+24&&playerY>y-14&&playerY<y+46) {dead=true;}
+    };
+    var enemy1 = function(x, y, active, enePlc) {var placeHolder = true;
+var unhit = true;
+if (enePlc>=0) {unhit=eneNum[enePlc];}
+if (enePlc===true) {unhit=true;}
+
+var bnryColor=active;
+if (active!==true&&active!==false) {bnryColor=eneActive[active];}
+
+if (unhit) {
+stroke(0, 0, 0);
+fill(0, 0, 0);
+if (enePlc===true) {stroke(255, 0, 0);
+strokeWeight(1.2);
+}
+if (stage===16) {fill(25);}
+textFont(font, 14);
+rect(x-33, y-43, 64, 80);
+rect(x-68, y-26, 134, 46);
+stroke(0);
+noStroke();
+rect(x-33, y-27, 64, 48);
+strokeWeight(1);
+fill(255, 0, 0);
+if (bnryColor===false) {fill(160, 160, 160);}
+textAlign(CENTER, EDGE);
+text("01001001\n01101110 01110100\n01110010 01110101\n01100100 01100101\n01110010", x, y-30);
+
+if(playerX>=x-82&&playerY>=y-40&&playerX<=x+80&&playerY<=y+32||playerX>=x-46&&playerY>=y-55&&playerX<=x+46&&playerY<=y+50) {dead=true;}
+
+if(bulletX>=x-70&&bulletY>=y-28&&bulletX<=x+68&&bulletY<=y+20||bulletX>=x-34&&bulletY>=y-43&&bulletX<=x+34&&bulletY<=y+38) {
+    eneNum[enePlc]=false;
+        if (upBullet||leftBullet) {bulletX=-200;
+        bulletY=-200;}
+        
+        if (downBullet||rightBullet) {bulletX=600;
+        bulletY=600;}
+    }
+    
+}
+
+}; //follows you
+    var enemy2 = function(x, y, enePlc) {
+    var unhit = true;
+    if (enePlc>=0) {unhit=eneNum[enePlc];}
+    if (enePlc===true) {unhit=true;}
+    
+    if (unhit) {
+stroke(0, 0, 0);
+if (enePlc===true) {stroke(255, 0, 0);
+strokeWeight(1.2);
+}
+fill(0, 0, 0);
+rect(x-3, y, 136, 47);
+strokeWeight(1);
+fill(255, 41, 41);
+textAlign(LEFT, TOP);
+textFont(font, 14);
+text("01100001 01101100\n01100101 01110010\n01110100 00100001", x, y);
+if(playerX>=x-15&&playerY>=y-12&&playerX<=x+148&&playerY<=y+59) {dead=true;}
+if(enePlc>=0&&bulletX>=x-3&&bulletY>=y&&bulletX<=x+133&&bulletY<=y+44) {
+    eneNum[enePlc]=false;
+        if (upBullet||leftBullet) {bulletX=-200;
+        bulletY=-200;}
+        
+        if (downBullet||rightBullet) {bulletX=600;
+        bulletY=600;}
+}
+
+}
+
+}; //generic enemy
+    var boss = function(x, y) {
+    decor(x-8, y-30, "boss");
+    decor(x+2, y-30, "boss");
+    decor(x-20, y-15, "boss");
+    decor(x-9, y-15, "boss");
+    decor(x+3, y-15, "boss");
+    decor(x+14, y-15, "boss");
+    decor(x-8, y, "boss");
+    decor(x+2, y, "boss");
+    
+    stroke(pupil);
+    line(x, y-15, x, y);
+    textFont(font, 14);
+    
+    fill(0, 0, 0, eyeFade);
+    rect(x-25, y-30, 50, 50);
+    if (end===false) {eyeFade-=2.3;
+        if (eyeFade<=0) {eyeFade=-200;}
+    }
+    if (end&&special&&scan[0]===false) {
+        if (eyeFade===-200) {eyeFade=-80;}
+        eyeFade+=3;
+    }
+    if (end&&special===false) {
+        endActions[0]++;
+        if (endActions[0]>=30&&endActions[0]<=33||endActions[0]>=40&&endActions[0]<=43||endActions[0]>=60&&endActions[0]<=65||endActions[0]===85||endActions[0]===89||endActions[0]===92||endActions[0]===94||endActions[0]>=96) {eyeFade=255;}
+        else {eyeFade=0;}
+    }
+    
+    stroke(255, 0, 0);
+    fill(0, 0, 0);
+    rect(x-33, y-45, 66, 15);
+    rect(x+10, y-30, 66, 15);
+    rect(x-76, y-30, 66, 15);
+    rect(x+23, y-15, 66, 15);
+    rect(x-89, y-15, 66, 15);
+    rect(x+10, y, 66, 15);
+    rect(x-76, y, 66, 15);
+    rect(x, y+15, 66, 15);
+    rect(x-66, y+15, 66, 15);
+    rect(x-33, y+30, 66, 15);
+    rect(x-66, y+45, 66, 15);
+    rect(x, y+45, 66, 15);
+    
+    fill(255, 0, 0);
+    text("01000001", x-30, y-45);
+    text("01101110", x-73, y-30);
+    text("01110100", x+13, y-30);
+    text("01101001", x-86, y-15);
+    text("00101101", x+26, y-15);
+    text("01001101", x-73, y);
+    text("01100001", x+13, y);
+    text("01101100", x-63, y+15);
+    text("01110111", x+3, y+15);
+    text("01100001", x-30, y+30);
+    text("01110010", x-63, y+45);
+    text("01100101", x+3, y+45);
+    
+    if (playerX>=x-80&&playerX<=x+80&&playerY>=y&&playerY<=y+75||playerX>=x-91&&playerX<=x+91&&playerY>=y-45&&playerY<=y+30||playerX>=x-104&&playerX<=x+104&&playerY>=y-30&&playerY<=y+15||playerX>=x-48&&playerX<=x+48&&playerY>=y-60&&playerY<=y-30) {dead=true;}
+    
+    if (bulletX>=x-65&&bulletX<=x+65&&bulletY>=y&&bulletY<=y+60||bulletX>=x-76&&bulletX<=x+76&&bulletY>=y-30&&bulletY<=y+15||bulletX>=x-89&&bulletX<=x+89&&bulletY>=y-15&&bulletY<=y||bulletX>=x-33&&bulletX<=x+33&&bulletY>=y-45&&bulletY<=y-15) {
+        if (upBullet||leftBullet) {bulletX=-200;
+        bulletY=-200;}
+        
+        if (downBullet||rightBullet) {bulletX=600;
+        bulletY=600;}
+    }
+    
+    if (menu===false&&dead===false&&end===false&&attack===false) {attackCount++;}
+    
+    if (attackCount===500) {attackCount=0;
+        attack=true;
+        if (toolPlace[0]===false&&toolPlace[1]===false) {stunable=false;}
+        if (stunable) {atkSelect=random(0, 3);}
+        else {atkSelect=random(0, 2);
+        stunable=true;
+        }
+    }
+    
+    if (attack===true) {
+        if (atkSelect<=1) {
+            if (scan[0]===true&&dead===false&&menu===false||atkDuration>=498&&dead===false&&menu===false) {atkDuration++;}
+            if (atkDuration>=15) {scanner(x-66, y+60, 133, 250, 3, 0);}
+            if (scan[0]===false&&atkCalled[0]===false&&end===false) {
+                eneActive=[true, true, true, true];
+                atkCalled[0]=true;
+            }
+            if (eneActive[0]===false&&eneActive[1]===false&&eneActive[2]===false&&eneActive[3]===false&&scan[0]===false&&atkCalled[1]===false) {atkDuration=498;
+            atkCalled[1]=true;
+            }
+            if (atkDuration===250||atkDuration===500) {
+                atkDuration=0;
+                attack=false;
+                scan=[true];
+                frozen=false;
+                speed=4.5;
+            }
+        }
+        else if (atkSelect<=2) {
+            if (dead===false&&menu===false) {atkDuration++;}
+            
+            if (atkDuration===10) {
+            eneBulletX[0]=random(x-64, x+57);
+            eneBulletY[0]=150;
+            }
+            if (atkDuration===30) {
+            eneBulletX[1]=random(x-64, x+57);
+            eneBulletY[1]=150;
+            }
+            if (atkDuration===50) {
+            eneBulletX[2]=random(x-64, x+57);
+            eneBulletY[2]=150;
+            }
+            if (atkDuration===70) {
+            eneBulletX[3]=random(x-64, x+57);
+            eneBulletY[3]=150;
+            }
+            if (atkDuration===90) {
+            eneBulletX[4]=random(x-64, x+57);
+            eneBulletY[4]=150;
+            }
+            if (atkDuration===110) {
+            eneBulletX[5]=random(x-64, x+57);
+            eneBulletY[5]=150;
+            }
+            
+            eneBullet(eneBulletX[0], eneBulletY[0]);
+            eneBullet(eneBulletX[1], eneBulletY[1]);
+            eneBullet(eneBulletX[2], eneBulletY[2]);
+            eneBullet(eneBulletX[3], eneBulletY[3]);
+            eneBullet(eneBulletX[4], eneBulletY[4]);
+            eneBullet(eneBulletX[5], eneBulletY[5]);
+            
+            if (dead===false&&menu===false) {
+                if (eneBulletY[0]<=410) {eneBulletY[0]+=6;}
+                if (eneBulletY[1]<=410) {eneBulletY[1]+=6;}
+                if (eneBulletY[2]<=410) {eneBulletY[2]+=6;}
+                if (eneBulletY[3]<=410) {eneBulletY[3]+=6;}
+                if (eneBulletY[4]<=410) {eneBulletY[4]+=6;}
+                if (eneBulletY[5]<=410) {eneBulletY[5]+=6;}
+            }
+            
+            if (eneBulletY[0]>=410&&eneBulletY[1]>=410&&eneBulletY[2]>=410&&eneBulletY[3]>=410&&eneBulletY[4]>=410&&eneBulletY[5]>=410&&atkDuration>150) {atkDuration=0;
+            attack=false;
+            }
+        }
+        else {
+            if (dead===false&&menu===false) {atkDuration++;}
+            stunable=false;
+            if (atkDuration>0&&atkDuration<=200&&atkDuration%25===0) {
+                if (pupil===color(255, 0, 0)) {pupil=color(200, 200, 0);}
+                else {pupil=color(255, 0, 0);}
+            }
+            if (atkDuration===1) {
+                if (x<132) {
+                    if (random(0, 2)<=1) {eneWall[1]=0;}
+                    else {eneWall[2]=0;}
+                }
+                else if (x>268) {
+                    if (random(0, 2)<=1) {eneWall[0]=0;}
+                    else {eneWall[1]=0;}
+                }
+                else {
+                    if (random(0, 2)<=1) {eneWall[0]=0;}
+                    else {eneWall[2]=0;}
+                }
+            }
+            
+            if (atkDuration>=200&&dead===false&&menu===false) {
+                var replace = function(num) {
+                    if (fnlEneY[num]<410) {fnlEneY[num]+=3;}
+                    if (eneWall[num]===0&&fnlEneY[num]>=160) {
+                        eneWall=[true, true, true];
+                        eneNum[0]=true;
+                        fnlEneY[num]=410;
+                    }
+                };
+                replace(0);
+                replace(1);
+                replace(2);
+                pupil=color(255, 0, 0);
+            }
+            
+            if (fnlEneY[0]>=410&&fnlEneY[1]>=410&&fnlEneY[2]>=410) {
+                atkDuration=0;
+                attack=false;
+                eneWall=[true, true, true];
+                eneNum[0]=true;
+            }
+        }
+    }
+    
+    else {
+    atkCalled=[false, false];
+    atkDuration=0;
+    fnlEneY=[-60, -60, -60];
+    }
+};
+    var badCode = function(x, y, message1, message2, brokeNum, fixedMessage, size) {
+    
+    var rectSize = 15;
+    //these two (code directly above and below) are in case I wanted to slightly change the size to make it look more coherent.
+    if (size) {rectSize=size;}
+    
+    textFont(font, 14);
+    textAlign(LEFT, TOP);
+    fill(0, 0, 0);
+    stroke(0, 0, 0);
+    rect(x, y, 66, rectSize);
+    fill(255, 255, 255);
+    text(fixedMessage, x+3, y);
+    
+    var brokeNumTF = false;
+    var brokeTF = true;
+    if (brokeNum===true||brokeNum===false) {brokeTF=brokeNum;
+    brokeNumTF=true;
+    }
+    
+    if (broken[brokeNum]||brokeNumTF&&brokeTF) {
+        fill(200, 200, 0);
+        stroke(200, 200, 0);
+        rect(x, y, 66, 15);
+        fill(255, 255, 255);
+        text(message1, x+3, y);
+        
+        var upBorder = playerY<=y+34&&playerY>=y+26&&playerX>=x-12&&playerX<=x+77;
+        var downBorder = playerY>=y-17&&playerY<=y-7&&playerX>=x-12&&playerX<=x+77;
+        var leftBorder = playerX<=x+85&&playerX>=x+77&&playerY>=y-10&&playerY<=y+29;
+        var rightBorder = playerX>=x-19&&playerX<=x-10&&playerY>=y-10&&playerY<=y+29;
+        
+        if (stage===10&&x===266&&y===359) {
+        leftBorder = playerX<=x+75&&playerX>=x-67&&playerY>=y-10&&playerY<=y+29;
+        } //What? I had to stop the player exactly at this spot somehow
+        
+        if (rightBorder) {rightConditions[brokeNum]=false;}
+        else {rightConditions[brokeNum]=true;}
+        if (downBorder) {downConditions[brokeNum]=false;}
+        else {downConditions[brokeNum]=true;}
+        if (leftBorder) {leftConditions[brokeNum]=false;}
+        else {leftConditions[brokeNum]=true;}
+        if (upBorder) {upConditions[brokeNum]=false;}
+        else {upConditions[brokeNum]=true;}
+        
+        if (message2!==0) {
+        fill(0, 0, 255);
+        text(message2, x+3, y);
+        if (toolAcquired) {
+            if (rightBorder||leftBorder||upBorder||downBorder) {
+            toolAcquired=false;
+            broken[brokeNum]=false;
+            }
+        }
+    }
+    
+    }
+    else {
+    upConditions[brokeNum]=true;
+    downConditions[brokeNum]=true;
+    leftConditions[brokeNum]=true;
+    rightConditions[brokeNum]=true;
+    }
+    
+};
+    var tool = function(x, y, toolNum, Special) {
+    
+    if (toolPlace[toolNum]) {
+    stroke(0, 0, 255);
+    fill(0, 0, 255);
+    if (Special===true) {stroke(0, 150, 0);
+    fill(0, 150, 0);
+    }
+    rect(x-2, y, 10, 15);
+    textAlign(LEFT, TOP);
+    fill(255, 255, 255);
+    textFont(font, 14);
+    text(round(random(1.4-0)), x, y);
+    if (playerX>=x-15&&playerX<=x+23&&playerY>=y-14&&playerY<=y+30) {
+    if (Special===true) {
+        special=true;
+        toolPlace[toolNum]=false;
+    }
+    else if (toolAcquired===false) {
+        toolAcquired=true;
+        toolPlace[toolNum]=false;
+    }
+    }
+    
+    }
+}; //blue code, AKA "keys"
+    var player = function(x, y) {
+    stroke(0, 0, 0);
+    if (stage>=11) {
+        if (keys[32]&&bulletCalled&&stageComplete===false&&menu===false&&dead===false) {
+            if (bulletX>400||bulletX<0||bulletY>400||bulletY<0) {
+            fired=true;
+            if (rightCannon) {rightBullet=true;
+            leftBullet=false;
+            upBullet=false;
+            downBullet=false;
+            }
+            if (leftCannon) {rightBullet=false;
+            leftBullet=true;
+            upBullet=false;
+            downBullet=false;
+            }
+            if (upCannon) {rightBullet=false;
+            leftBullet=false;
+            upBullet=true;
+            downBullet=false;
+            }
+            if (downCannon) {rightBullet=false;
+            leftBullet=false;
+            upBullet=false;
+            downBullet=true;
+            }
+        }
+        }
+        if (fired) {
+        playLaser.currentTime = 0;
+        playLaser.play();
+        if (rightBullet) {bulletX=x+35;
+            bulletY=y;
+        }
+        if (leftBullet) {bulletX=x-35;
+            bulletY=y;
+        }
+        if (upBullet) {bulletX=x;
+            bulletY=y-35;
+        }
+        if (downBullet) {bulletX=x;
+            bulletY=y+35;
+        }
+    }
+        if (stageComplete===false&&menu===false&&dead===false) {
+            if (upBullet&&bulletY>-5) {bulletY-=bulletSpd;
+            bulletCalled=false;
+        }
+            if (downBullet&&bulletY<405) {bulletY+=bulletSpd;
+            bulletCalled=false;
+        }
+            if (rightBullet&&bulletX<405) {bulletX+=bulletSpd;
+            bulletCalled=false;
+        }
+            if (leftBullet&&bulletX>-5) {bulletX-=bulletSpd;
+            bulletCalled=false;
+        }
+        }
+        fill(199, 103, 0);
+        noStroke();
+        ellipse(bulletX, bulletY, 5, 5);
+        fired=false;
+        if (restart) {
+            if (upBullet||leftBullet) {bulletX=-200;
+            bulletY=-200;}
+            
+            if (downBullet||rightBullet) {bulletX=600;
+            bulletY=600;}
+        }
+        
+        if (bulletX>400||bulletX<0||bulletY>400||bulletY<0) {
+            chargedColor=color(0, 180, 0);}
+        else {chargedColor=color(255, 0, 0);}
+        
+        if (upCannon) {
+            stroke(0, 0, 0);
+            fill(161, 161, 161);
+            rect(x-4, y-33, 7, 15);
+            stroke(chargedColor);
+            strokeWeight(2);
+            line(x, y-33, x, y);
+            stroke(0);
+            strokeWeight(1);
+            fill(69, 69, 69);
+            ellipse(x, y-14, 15, 15);
+            rect(x-5, y-30, 9, 2);
+            rect(x-6, y-35, 11, 3);
+        }
+        if (downCannon) {
+            stroke(0, 0, 0);
+            fill(161, 161, 161);
+            rect(x-4, y+18, 7, 15);
+            stroke(chargedColor);
+            strokeWeight(2);
+            line(x, y+33, x, y);
+            stroke(0);
+            strokeWeight(1);
+            fill(69, 69, 69);
+            ellipse(x, y+13, 15, 15);
+            rect(x-5, y+27, 9, 2);
+            rect(x-6, y+31, 11, 3);
+        }
+        if (leftCannon) {
+            stroke(0, 0, 0);
+            fill(161, 161, 161);
+            rect(x-33, y-4, 15, 7);
+            stroke(chargedColor);
+            strokeWeight(2);
+            line(x-33, y, x, y);
+            stroke(0);
+            strokeWeight(1);
+            fill(69, 69, 69);
+            ellipse(x-14, y, 15, 15);
+            rect(x-30, y-5, 2, 9);
+            rect(x-35, y-6, 3, 11);
+        }
+        if (rightCannon) {
+            stroke(0, 0, 0);
+            fill(161, 161, 161);
+            rect(x+18, y-4, 15, 7);
+            stroke(chargedColor);
+            strokeWeight(2);
+            line(x+33, y, x, y);
+            stroke(0);
+            strokeWeight(1);
+            fill(69,69, 69);
+            ellipse(x+13, y, 15, 15);
+            rect(x+27, y-5, 2, 9);
+            rect(x+31, y-6, 3, 11);
+        }
+    }
+    
+    stroke(0);
+    if (stage===1) {fill(255, 255, 255);}
+    if (stage>=2) {fill(0, 125, 255);}
+    if (stage>=6) {fill(0, 145, 31);}
+    if (stage>=9) {fill(255, 150, 0);}
+    if (stage>=12) {fill(random(100, 255), 150, 0);}
+    if (stage>=13) {fill(75, 0, 0);}
+    if (stage>=14) {fill(random(0, 255), random(0, 255), random(0, 255));}
+    if (stage<=4) {ellipse(x, y, 30, 30);}
+    if (stage>=5) {
+    beginShape();
+    vertex(x, y-16);
+    vertex(x-15, y-5);
+    vertex(x-10, y+13);
+    vertex(x+10, y+13);
+    vertex(x+15, y-5);
+    endShape(CLOSE);}
+    if (stage>=3) {decor(x-4, y-7, true);}
+    if (stage>=7) {strokeWeight(3);
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    }
+    if (stage>=15) {
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    stroke(random(0, 255), random(0, 255), random(0, 255));
+    point(x-random(-25, 25), y-random(-25, 25));
+    }
+    stroke(0);
+    strokeWeight(1);
+};
+    var codeRules = function() {
+        up = true;
+        for (var a = 0; a < upConditions.length; a++) { if (upConditions[a]===false) { up = false; } }
+        down = true;
+        for (var a = 0; a < downConditions.length; a++) { if (downConditions[a]===false) { down = false; } }
+        left = true;
+        for (var a = 0; a < leftConditions.length; a++) { if (leftConditions[a]===false) { left = false; } }
+        right = true;
+        for (var a = 0; a < rightConditions.length; a++) { if (rightConditions[a]===false) { right = false; } }
+    };
+    glitchMaster.draw = function(x, y, big) {
+        fill(255, 200, 0);
+        if (big) { ellipse(x, y, 37, 37); }
+        else { ellipse(x, y, 30, 30); }
+    };
+    var logo = function(x, y, size) {
+    
+    stroke(209, 0, 0);
+    if (size/36.1 >= 1) {strokeWeight(size/36.1);}
+    else {strokeWeight(1);}
+    noFill();
+    beginShape(); //W
+    vertex(x-(size/2)/1.076923, y-(size/2)/1.3);
+    vertex(x-(size/2)/2.16, y+(size/2)/2.16);
+    vertex(x, y-(size/2)/1.625);
+    vertex(x+(size/2)/2.16, y+(size/2)/2.16);
+    vertex(x+(size/2)/1.076923, y-(size/2)/1.3);
+    endShape();
+    
+    stroke(201, 57, 0);
+    if (size/65 >= 1) {strokeWeight(size/65);}
+    else {strokeWeight(1);}
+    beginShape(); //L
+    vertex(x-(size/2)/3.25, y-(size/2)/1.3);
+    vertex(x-(size/2)/3.25, y+(size/2)/2.166);
+    vertex(x+(size/2)/2.7083, y+(size/2)/2.166);
+    endShape();
+    
+    stroke(176, 114, 0);
+    line(x-(size/2)/3.25, y-(size/2)/1.3, x-(size/2)/3.25, y+(size/2)/2.166); //R
+    arc(x-(size/2)/3.25, y-(size/2)/2.03125, size/1.47727, size/3.611, (6.3/360)*273, (6.3/360)*450);
+    line(x-(size/2)/3.25, y-(size/2)/4.6428571, x+(size/2)/3.25, y+(size/2)/2.166);
+    
+    stroke(255, 200, 0);
+    if (size/25 >= 1) {strokeWeight(size/25);}
+    else {strokeWeight(1);}
+    line(x-(size/2)/3.25, y-(size/2)/1.3, x-(size/2)/3.25, y+(size/2)/2.166); //K
+    line(x-(size/2)/3.25, y-(size/2)/4.6428571, x+(size/2)/3.25, y+(size/2)/2.166);
+    line(x-(size/2)/3.25, y-(size/2)/4.6428571, x+(size/2)/3.25, y-(size/2)/1.3);
+    
+    textAlign(CENTER, EDGE);
+    textSize(size/4.33);
+    fill(138, 0, 41);
+    text("8  9  0", x, y+(size/2)/1.083);//890
+    textSize(size/19.11764);
+};
+
+
+
+var typedText = {
+    //This program records each individual letter and then deposits them into a single text string.  By doing this, rather than just going straight to putting the letters into a single text string, the program can more easily delete letters.
+    letters: [],
+    text: "",
+    limit: 0,
+    //the available variable is used to tell the program when the user can type.
+    available: false,
+    backspace: function() {
+        var savedLetters = [];
+        for (var a = 0; a < typedText.letters.length - 1; a++) {
+            savedLetters.push(typedText.letters[a]);
+        }
+        typedText.letters = savedLetters;
+    }
+};
+
+var userInput = function(x, y, w, h, limit) {
+    //at the beginning of the draw function,this variable is turned off. By turing it on whenever this function is called, the program knows when this function is present.
+    typedText.available = true;
+    
+    //this ensures that the text does not go too far off whatever it's supposed to be on
+    typedText.limit = limit;
+    
+    //this empties out the text variable every frame and puts in letters according to an array containing all the letters, which changes any time the user presses a key.
+    typedText.text = "";
+    for (var a = 0; a < typedText.letters.length; a++) {
+        typedText.text += "";
+        typedText.text += typedText.letters[a];
+    }
+    
+    //this is the text that is visible on the screen
+    text(typedText.text + underscore, x, y, w, h);
+};
+
+keyPressed = function() { //debugging
+    keys[keyCode] = true;
+    bulletCalled=true;
+    
+    if (typedText.available && enterName===false) {
+        //if so, it then determines if it is a character and not a special key such as shift or caps lock. If it is, then the program passes it into the typedText variable
+        if (keyCode > 40 || keyCode === 32 || keyCode === 10) {
+            if (keyCode===127) { typedText.backspace(); }
+            else if (typedText.letters.length < typedText.limit) { typedText.letters.push(key.toString()); }
+        }
+        
+        else if (keyCode===8) { typedText.backspace(); }
+    }
+};
+keyReleased = function() { keys[keyCode] = false; };
+
+mousePressed = function() {
+    mouseIsPressed = true;
+    
+    if (page==="logo") {
+        logo(200, 200, 325);
+        fadeCount = 65;
+        L = false;
+    }
+    
+    if (page==="credits") {
+        creditsY = -1300;
+    }
+};
+mouseReleased = function() { mouseIsPressed = false; };
+
+draw = function() {
+    typedText.available = false;
+    
+    background(0, 0, 0); 
+    
+    if (page==="logo") {
+    
+    textFont(LicenceFont);
+    
+    if (W) {
+    strokeWeight(9);
+    stroke(209, 0, 0);
+    if (W && WX1 <= 125 && WY1 <= 275) {line(50, 75, WX1, WY1);
+    WX1+=3;
+    WY1+=8;
+    }
+    if (WX1 >= 125 && WY1 >= 275) {line(50, 75, 125, 275);}
+    if (WX1 >= 125 && WY1 >= 275 && WX2 <= 200 && WY2 >= 100) {line(125, 275, WX2, WY2);
+    WX2+=3;
+    WY2-=7;
+    }
+    if (WX2 >= 200 && WY2 <= 100) {line(125, 275, 200, 100);}
+    if (WX2 >= 200 && WY2 <= 100 && WX3 <= 275 && WY3 <= 275) {line(200, 100, WX3, WY3);
+    WX3 += 3;
+    WY3 += 7;
+    }
+    if (WX3 > 250) {num890 = true;}
+    if (WX3 >= 275 && WY3 >= 275) {line(200, 100, 275, 275);
+    }
+    if (WX3 >= 275 && WY3 >= 275 && WX4 <= 350 && WY4 >= 75) {line(275, 275, WX4, WY4);
+    WX4 += 3;
+    WY4 -= 8;
+    }
+    if (WX4 >= 350 && WY4 <= 75) {line(275, 275, 350, 75);}
+    }
+    
+    strokeWeight(5);
+    
+    if (L) {
+    stroke(201, 57, 0);
+    line(150, 75, 150, LY);
+    if (LY !== 275) {LY+=2;}
+    if (LY === 275 && LX !== 260) {line(150, 275, LX, 275);
+        LX+=2;}
+    if (LX === 260) {line(150, 275, 260, 275);}
+    }
+    
+    if (R) {
+    noFill();
+    stroke(176, 114, 0);
+    line(150, RLine, 150, 275);
+    if (RLine !== 75) {RLine-=2;}
+    if (RLine === 75 && RArc <= 450) {arc(150, 120, 220, 90, (6.3/360)*273, (6.3/360)*RArc);
+        RArc+=2;}
+    if (RArc >= 450) {arc(150, 120, 220, 90, (6.3/360)*273, (6.3/360)*450);
+    K=true;
+    }
+    if (RArc >= 450 && RX <= 250 && RY <= 275) {line(150, 165, RX, RY);
+        RX+=2.5;
+        RY+=2.75;
+    }
+    if (RX >= 250 && RY >= 275) {line(150, 165, 250, 275);}
+    }
+    
+    if (K) {
+    stroke(255, 200, 0);
+    strokeWeight(13);
+    line(150, KLine, 150, 275);
+    if (K && KLine >= 75) {KLine-=2.45;}
+    if (KLine <= 165 && KX1 <= 250 && KY1 >= 75) {line(150, 165, KX1, KY1);
+    KX1+=2.5;
+    KY1-=2.25;
+    }
+    if (KLine <= 165 && KX2 <= 250 && KY2 <= 275) {line(150, 165, KX2, KY2);
+    KX2+=2.5;
+    KY2+=2.75;
+    }
+    if (KX1 >= 250 && KY1 <= 75) {line(150, 165, 250, 75);}
+    if (KX2 >= 250 && KY2 >= 275) {line(150, 165, 250, 275);}
+    if (KLine <= 75) {W = true;}
+    }
+    
+    if (num890) {
+    textAlign(CENTER, EDGE);
+    textSize(75);
+    fill(numRed, 0, numGreen);
+    text("8  9  0", 200, 350);
+    textSize(17);
+    if (num890 && numRed < 138) {numRed+=4;}
+    if (num890 && numGreen < 41) {numGreen+=2;}
+    if (numRed >= 138) {fadeCount++;}
+    }
+    
+    if (L===false) { logo(200, 200, 325); }
+    
+    if (fadeCount>=65) {fade+=4;}
+    
+    fill(0, 0, 0, fade);
+    stroke(0, 0, 0, fade);
+    rect(0, 0, 400, 400);
+    fill(255, 0, 0);
+    
+    if (fade>=325) {page="home";}
+    }
+    
+    if (page==="home") {
+        dead = false;
+        stageComplete = false;
+        end = false;
+        if (tip === 1) {
+            alert("Congratulations! Now that you've beaten the game, it's time for some real fun!  Open the console on your browser (right click + " + '"Inspect") and type in "neatTricks" to get started!');
+            tip = 2;
+            localStorage.setItem("tip", "true");
+        }
+        background(158, 158, 158);
+        returnTo="home";
+        restart=true;
+        menu=false;
+        intro=true;
+        intermission=true;
+        sceneCount=0;
+        sceneFade=0;
+        upCannon=true;
+        downCannon=false;
+        leftCannon=false;
+        rightCannon=false;
+        endLuck=random(0, 5);
+        if (mouseIsPressed===false) {nextOrBack=true;}
+        
+        stroke(0, 0, 0);
+        fill(0, 0, 0);
+        textFont(font, 50);
+        textAlign(CENTER, EDGE);
+        if (TH) {text("[title here]", 200, 105);}
+        if (titleCount>=40) {titleSpeed=-1;}
+        if (titleCount<=0) {titleSpeed=1;}
+        if (titleCount===40) {TH=false;}
+        if (titleCount===0) {TH=true;}
+        titleCount+=titleSpeed;
+        
+        //I couldn't get loops to work
+        strokeWeight(1);
+        rect(75, 150, 250, 60);
+        rect(75, 220, 120, 40);
+        rect(205, 220, 120, 40);
+        
+        fill(255, 255, 255);
+        textSize(40);
+        text("Start", 200, 190);
+        textSize(17);
+        text("Intructions", 133, 245);
+        text("Options", 265, 245);
+        
+        if (mouseIsPressed&&mouseX>=75&&mouseY>=150&&mouseX<=325&&mouseY<=210&&nextOrBack) {
+            if (stageCount===1) {page="intro";}
+            else {page="stage select";
+            nextOrBack=false;
+            }
+        }
+        if (mouseIsPressed&&mouseX>=75&&mouseY>=220&&mouseX<=195&&mouseY<=260&&nextOrBack) {page="instructions";}
+        if (mouseIsPressed&&mouseX>=205&&mouseY>=220&&mouseX<=325&&mouseY<=260&&nextOrBack) {page="options";
+        nextOrBack=false;
+        }
+        
+        sceneCount=0;
+        sceneFade=0;
+        restart=true;
+        
+        textFont(LicenceFont, 11);
+        textSize(11);
+        fill(0, 0, 0);
+        textAlign(LEFT, BOTTOM);
+        text("Title Here 1.003", 3, 399);
+        textAlign(RIGHT, BOTTOM);
+        text("KRLW890 Software 2015-2016.", 397, 399);
+    }
+    
+    if (page==="intro") {
+        if (sceneCount >= 10) {sceneFade+=2;}
+        sceneCount++;
+        fill(255, 255, 255, sceneFade);
+        textAlign(CENTER, EDGE);
+        textFont(font, 15);
+        text("There was a virus.", 200, 135);
+        fill(255, 255, 255, sceneFade-300);
+        text("A virus that could hack anything.", 200, 185);
+        fill(255, 255, 255, sceneFade-600);
+        text("A virus that may not have been", 200, 235);
+        text("pleased with the world...", 200, 260);
+        fill(0, 0, 0, sceneFade-1200);
+        rect(0, 0, 400, 400);
+        if (sceneFade>=1500) {
+            intro=false;
+            page="game";
+            music[0].play();
+        }
+        }
+    
+    if (page==="stage select") {
+        background(158);
+        textSize(40);
+        textAlign(CENTER, EDGE);
+        fill(0);
+        text("Stage Select", 200, 70);
+        var lvButton = function(x, y, level) {
+            noStroke();
+            if (mouseIsPressed===false) {nextOrBack=true;}
+            if (stageCount>=level) {fill(0);}
+            else {fill(150, 0, 0);}
+            rect(x, y, 40, 50);
+            fill(255);
+            textSize(30);
+            text(level, x+20, y+35);
+            if (mouseIsPressed&&mouseX>x&&mouseX<x+40&&mouseY>y&&mouseY<y+50&&stageCount>=level&&nextOrBack) {
+                stage=level;
+                restart=true;
+                menu=false;
+                intro=true;
+                sceneCount=0;
+                sceneFade=0;
+                intermission=true;
+                page="game";
+                if (level >= 2 && level <= 5) { music[0].play(); }
+                else if (level <= 8) { music[1].play(); }
+                else if (level > 9 && level < 16) { music[2].play(); }
+                else if (level === 16) { music[3].play(); }
+            }
+        };
+        
+        lvButton(65, 100, 1);
+        lvButton(145, 100, 2);
+        lvButton(225, 100, 3);
+        lvButton(305, 100, 4);
+        lvButton(65, 175, 5);
+        lvButton(145, 175, 6);
+        lvButton(225, 175, 7);
+        lvButton(305, 175, 8);
+        lvButton(65, 250, 9);
+        lvButton(145, 250, 10);
+        lvButton(225, 250, 11);
+        lvButton(305, 250, 12);
+        lvButton(65, 325, 13);
+        lvButton(145, 325, 14);
+        lvButton(225, 325, 15);
+        lvButton(305, 325, 16);
+        
+        fill(0);
+        rect(10, 10, 50, 40);
+        fill(255);
+        textSize(17);
+        text("Back", 35, 35);
+        if (mouseIsPressed&&mouseX>10&&mouseX<60&&mouseY>10&&mouseY<50) {
+            page=returnTo;
+        }
+    }
+    
+    if (page==="game") {
+        if (permaKey) {
+            toolAcquired = true;
+            special = true;
+        }
+        for (var a = 0; a < 16; a++) {
+            biNum[a] = round(random(0, 1));
+        }
+        background(158, 158, 158);
+        returnTo="game";
+        if (restart) {
+            dead = false;
+            stageComplete = false;
+            end = false;
+            upCannon = true;
+            downCannon = false;
+            leftCannon = false;
+            rightCannon = false;
+            toolAcquired=false;
+            special=false;
+            slow=false;
+            frozen=false;
+            if (stage>=4) {speed=3;}
+            if (stage>=8) {speed=4.5;}
+            decSpeed=0.5;
+            if (stage>=10) {space="";}
+            else {space = " ";}
+        }
+        
+        if (stage===1) {
+            if (restart) {playerX=30;
+            playerY=370;
+            }
+            if (intro) {page="intro";}
+        fill(255, 255, 255);
+        
+        {var a = 300;
+        var b = 300;
+        var c = 300;
+        var d = 310;
+        var e = 320;
+        var f = 130;
+        var g = 100;
+        var h = 150;
+        
+        while (a<341) {decor(a, 0);
+        a+=10;
+        }
+        while (b<341) {decor(b, 15);
+        b+=10;
+        }
+        while (c<331) {decor(c, 30);
+        c+=10;
+        }
+        while (d<331) {decor(d, 45);
+        d+=10;
+        }
+        while (e<331) {decor(e, 60);
+        e+=10;
+        }
+        decor(320, 75);
+        
+        while (f<211) {decor(f, 165);
+        f+=10;
+        }
+        while (g<191) {decor(g, 180);
+        g+=10;
+        }
+        while (h<231) {decor(h, 195);
+        h+=10;
+        }
+        } //I got loops to work this time!...but now I'm too lazy to go back and fix the title screen
+        
+        {fill(0, 0, 0);
+        rect(4, 6, 234, 15);
+        rect(4, 21, 250, 15);
+        rect(4, 37, 219, 15);
+        rect(4, 53, 150, 15);
+        fill(255, 255, 255);
+        text("01010000 r 01101111 01100100 u 01100011 t 01101001 o n 00100000 01001010 01101111 01110101 r 01101110 a 01101100", 5, 5, 290, 100);} //the extreme variance in each of the rectangles renders loops obsolete for this occasion. Sorry.
+        
+        goal(320, 110);
+        
+        if (invincible) { dead = false; }
+        player(playerX, playerY);
+        
+        restart=false;
+        }
+        
+        if (stage===2) {
+            if (restart) {playerX=200;
+            playerY=350;
+            enemyX1=10;
+            enemyY1=99;
+            enemySpeed1=3;
+            }
+            
+            {var a = 50;
+            var b = 10;
+            var c = 30;
+            var d = 60;
+            
+            while (a<121) {decor(a, 30);
+            a+=10;
+            }
+            while (b<151) {decor(b, 45);
+            b+=10;
+            }
+            while (c<131) {decor(c, 60);
+            c+=10;
+            }
+            while (d<111) {decor(d, 75);
+            d+=10;
+            }
+            }
+            
+            {fill(0, 0, 0);
+            rect(175, 66, 196, 35);
+            rect(153, 99, 241, 14);
+            rect(160, 114, 227, 15);
+            rect(167, 130, 212, 31);
+            rect(152, 161, 242, 16);
+            rect(167, 178, 211, 15);
+            rect(210, 194, 134, 15);
+            rect(47, 232, 212, 30);
+            rect(25, 263, 257, 15);
+            rect(31, 279, 244, 16);
+            rect(25, 296, 257, 30);
+            rect(38, 327, 229, 15);
+            rect(25, 343, 257, 15);
+            rect(59, 359, 196, 15);
+            fill(255, 255, 255);
+            textAlign(CENTER, CENTER);
+            text("1101100 1100001 1110011 t 0100000 1100101 1100100 i 1110100 1100101 1100100 0100000 o 1110110 e 1110010 0100000 a 0100000 1110111 e e 1101011 0100000 a 1100111 o 0111010 0100000 R e 1100011 1100101 n t l 1111001 0101100 0100000 I 0100000 1101000 a", 150, 35, 255, 200);
+            text("1110110 1100101 0100000 b e 1100101 n 0100000 1101101 a 1101011 1101001 n 1100111 0100000 a 0100000 1110000 r 1101111 g r 1100001 1101101 0100000 o 1101110 0100000 m 1111001 0100000 1100011 o 1101101 p 1110101 1110100 e 1110010 0101110 0100000 0101000 m 1101111 r 1100101 0101001", 20, 200, 275, 200);}
+            
+            enemy2(enemyX1, enemyY1);
+            if (invincible) { dead = false; }
+            goal(175, 10);
+            player(playerX, playerY);
+            if (stageComplete===false&&menu===false&&dead===false&&enemyX1>=266) {enemySpeed1=-3;}
+            if (stageComplete===false&&menu===false&&dead===false&&enemyX1<=3) {enemySpeed1=3;}
+            if (stageComplete===false&&menu===false&&dead===false) {enemyX1+=enemySpeed1;}
+            restart = false;
+        }
+        
+        if (stage===3) {
+            if (restart) {playerX=200;
+            playerY=350;
+            enemyX1=200;
+            enemyY1=80;
+            enemyX2=265;
+            enemyY2=170;
+            }
+            
+            {var a=10;
+            var b=50;
+            var c=60;
+            var d=50;
+            var e=50;
+            var f=80;
+            var g=100;
+            var h=110;
+            var i=130;
+            var j=150;
+            
+            while (a<141) {decor(a, 0);
+            a+=10;
+            }
+            while (b<161) {decor(b, 15);
+            b+=10;
+            }
+            while (c<141) {decor(c, 30);
+            c+=10;
+            }
+            while (d<111) {decor(d, 45);
+            d+=10;
+            }
+            
+            while (e<151) {decor(e, 385);
+            e+=10;
+            }
+            while (f<131) {decor(f, 370);
+            f+=10;
+            }
+            while (g<131) {decor(g, 355);
+            g+=10;
+            }
+            while (h<141) {decor(h, 340);
+            h+=10;
+            }
+            while (i<161) {decor(i, 325);
+            i+=10;
+            }
+            while (j<191) {decor(j, 310);
+            j+=10;
+            }
+            }
+            
+            {fill(0, 0, 0);
+            rect(47, 99, 287, 157);
+            rect(24, 146, 333, 15);
+            rect(24, 177, 333, 15);
+            rect(24, 210, 333, 15);
+            rect(24, 257, 333, 16);
+            rect(96, 273, 196, 15);
+            
+            fill(255, 255, 255);
+            textAlign(CENTER, EDGE);
+            text("I t 0100000 1101001 1110011 0100000 a 0100000 1110011 1100101 l 1100110 - i 1101101 1110000 1110010 o 1110110 i n 1100111 0100000 p 1110010 1101111 1100111 r a 1101101 0100000 1110100 h 1100001 t 0100000 1110111 i l l 0100000 e 1110110 e n t 1110101 1100001 l l 1111001 0100000 1100101 x c 1100101 1100101 1100100 0100000 h 1110101 1101101 a n 0100000 1101001 1101110 1110100 e 1101100 l i 1100111 1100101 n 1100011 1100101 0101110 0100000 ( 1100101 n 1100100 0101001", 20, 100, 350, 400);}
+            
+            goal(310, 25);
+            enemy1(enemyX1, enemyY1);
+            enemy2(enemyX2, enemyY2);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            if (enemyY2<=0) {enemySpeed1=2.5;}
+            if (enemyX2>=265) {enemySpeed1=-2.5;}
+            
+            if(stageComplete===false&&menu===false&&dead===false) {
+                if (playerX>enemyX1&&enemyX1<332) {enemyX1+=0.7;}
+                if (playerX<enemyX1&&enemyX1>68) {enemyX1-=0.7;}
+                if (playerY>enemyY1+10&&enemyY1<362) {enemyY1+=0.7;}
+                if (playerY<enemyY1&&enemyY1>45) {enemyY1-=0.7;}
+                enemyX2+=enemySpeed1;
+                enemyY2+=enemySpeed1;
+            }
+            restart=false;
+        }
+        
+        if (stage===4) {
+        if (restart) {
+            playerX=200;
+            playerY=280;
+            enemyX1=200;
+            enemyY1=362;
+            enemyX2=266;
+            enemyY2=100;
+            enemyX3=3;
+            enemyY3=100;
+        }
+        
+        {var a=320;
+        var b=300;
+        var c=310;
+        var d=320;
+        var e=350;
+        var f=370;
+        var g=0;
+        var h=0;
+        
+        while (a<391) {decor(a, 385);
+        a+=10;
+        }
+        while (b<391) {decor(b, 370);
+        b+=10;
+        }
+        while (c<391) {decor(c, 355);
+        c+=10;
+        }
+        while (d<391) {decor(d, 340);
+        d+=10;
+        }
+        while (e<391) {decor(e, 325);
+        e+=10;
+        }
+        while (f<391) {decor(f, 310);
+        f+=10;
+        }
+        decor(350, 310);
+        decor(350, 295);
+        decor(390, 295);
+        
+        while (g<71) {decor(g, 105);
+        g+=10;
+        }
+        while (h<41) {decor(h, 120);
+        h+=10;
+        }
+        }
+        
+        {fill(0, 0, 0);
+        rect(34, 9, 103, 15);
+        rect(19, 25, 133, 61);
+        rect(249, 9, 133, 77);
+        rect(52, 154, 303, 30);
+        rect(75, 185, 257, 65);
+        rect(60, 202, 286, 15);
+        rect(52, 250, 302, 30);
+        rect(67, 281, 272, 15);
+        rect(148, 297, 117, 15);
+        fill(255, 255, 255);
+        textAlign(CENTER, CENTER);
+        text("l 1100001 s t 0100000 1100101 d 1101001 1110100 e d 0100000 0110101 0100000 d 1100001 ", 15, -5, 150, 100);
+       text("1111001 s 0100000 1100001 1100111 o : 0100000 1001001 0100000 g 1100001 1110110 e 0100000 ", 245, -5, 150, 100);
+       text("t h 1100101 0100000 p r 1101111 1100111 r a 1101101 0100000 1110100 h e 0100000 1100111 1101111 a 1101100 0100000 1101111 f 0100000 n a 1101101 1101001 1101110 g 0100000 1101001 1110100 1110011 e l f 0100000 1110011 o m 1100101 t h 1101001 1101110 g 0100000 i m 1110000 1101111 r 1110100 1100001 n t 0101110 0100000 0101000 m o 1110010 1100101 0101001", 50, 30, 315, 400);}
+       
+        speed=3;
+        enemy1(enemyX1, enemyY1);
+        enemy2(enemyX2, enemyY2);
+        enemy2(enemyX3, enemyY3);
+        if (invincible) { dead = false; }
+        goal(170, 25);
+        player(playerX, playerY);
+        
+        if (enemyX2>=266) {enemySpeed1=-3;}
+        if (enemyX2<=3) {enemySpeed1=3;}
+        if (stageComplete===false&&menu===false&&dead===false) {enemyX2+=enemySpeed1;}
+        if (enemyX3>=266) {enemySpeed2=-3;}
+        if (enemyX3<=3) {enemySpeed2=3;}
+        if (stageComplete===false&&menu===false&&dead===false) {enemyX3+=enemySpeed2;}
+        
+        if(stageComplete===false&&menu===false&&dead===false) {
+                if (playerX>enemyX1&&enemyX1<332) {enemyX1+=1;}
+                if (playerX<enemyX1&&enemyX1>68) {enemyX1-=1;}
+                if (playerY>enemyY1&&enemyY1<362) {enemyY1+=1;}
+                if (playerY<enemyY1&&enemyY1>45) {enemyY1-=1;}
+        }
+        
+        restart=false;
+        }
+        
+        if (stage===5) {
+            if (restart) {playerX = 200;
+            playerY = 365;
+            enemyX1 = 200;
+            enemyY1 = 46;
+            enemyX2 = 266;
+            enemyY2 = 280;
+        }
+        
+        {var a=265;
+        var b=280;
+        var c=280;
+        var d=180;
+        var e=180;
+        var f=195;
+        
+        while (a<386) {decor(3, a);
+        a+=15;
+        }
+        while (b<341) {decor(13, b);
+        b+=15;
+        }
+        while (c<311) {decor(23, c);
+        c+=15;
+        }
+        decor(13, 385);
+        decor(33, 295);
+        
+        while (d<331) {decor(390, d);
+        d+=15;
+        }
+        while (e<316) {decor(380, e);
+        e+=15;
+        }
+        while (f<286) {decor(370, f);
+        f+=15;
+        }
+        decor(360, 210);
+        decor(360, 255);
+        decor(360, 270);
+        decor(350, 210);
+        }
+        
+        {
+        fill(0, 0, 0);
+        rect(30, 5, 88, 62);
+        rect(8, 20, 133, 30);
+        rect(16, 68, 118, 15);
+        rect(250, 5, 134, 30);
+        rect(259, 36, 117, 32);
+        rect(243, 69, 149, 15);
+        rect(66, 98, 274, 143);
+        rect(52, 162, 302, 15);
+        rect(60, 194, 287, 15);
+        rect(52, 242, 302, 15);
+        rect(60, 258, 287, 15);
+        fill(255, 255, 255);
+        textAlign(CENTER, EDGE);
+        text("O 1101110 c 1100101 0100000 i t 0100000 1101000 a s 0100000 1100001 0100000 ", 4, 7, 150, 100);
+        text("1101000 u 1101101 \na 1101110 0101101 1101100 1101001 1101011 1100101 0100000 n a 1101101 ", 245, 7, 154, 100);
+        text("e 0100000 1100001 1101110 d 0100000 1100011 1100001 1101110 0100000 e x 1110000 1101100 1100001 i n 0100000 1110111 1101000 y 0101100 0100000 I 0100000 1110111 i l l 0100000 1101011 n o 1110111 0100000 i 1110100 0100000 1101000 1100001 s 0100000 1110010 e a 1100011 1101000 e d 0100000 1000001 1000111 I 0100000 o 1110010 0100000 1100101 v e n 0100000 1000001 S 1001001 . 0100000 0101000 e n 1100100 0101001 ", 50, 100, 315, 280);
+        }
+        
+        goal(169, 10);
+        enemy2(enemyX2, enemyY2);
+        enemy1(enemyX1, enemyY1);
+        enemy2(30, 340);
+        enemy2(240, 340);
+        if (invincible) { dead = false; }
+        player(playerX, playerY);
+        if (enemyX2>=266) {enemySpeed1=-3.4;}
+        if (enemyX2<=3) {enemySpeed1=3.4;}
+        if (stageComplete===false&&menu===false&&dead===false) {enemyX2+=enemySpeed1;}
+        
+        if(stageComplete===false&&menu===false&&dead===false) {
+                if (playerX>enemyX1&&enemyX1<332) {enemyX1+=0.8;}
+                if (playerX<enemyX1&&enemyX1>68) {enemyX1-=0.8;}
+                if (playerY>enemyY1&&enemyY1<362) {enemyY1+=0.8;}
+                if (playerY<enemyY1&&enemyY1>45) {enemyY1-=0.8;}
+                }
+                
+        restart=false;
+    }
+        
+        if (stage===6) {
+            if (restart) {playerX=200;
+            playerY=125;
+            enemyX1=0;
+            enemyY1=3;
+            }
+            
+            {var a=250;
+            var b=265;
+            var c=280;
+            var d=280;
+            var e=280;
+            var f=295;
+            var g=295;
+            var h=295;
+            var i=295;
+            var j=310;
+            var k=310;
+            var l=310;
+            var m=250;
+            var n=230;
+            var o=200;
+            var p=210;
+            var q=190;
+            var r=180;
+            
+            while (a<386) {decor(390, a);
+            a+=15;
+            }
+            while (b<386) {decor(380, b);
+            b+=15;
+            }
+            while (c<386) {decor(370, c);
+            c+=15;
+            }
+            while (d<386) {decor(360, d);
+            d+=15;
+            }
+            while (e<386) {decor(350, e);
+            e+=15;
+            }
+            while (f<386) {decor(340, f);
+            f+=15;
+            }
+            while (g<386) {decor(330, g);
+            g+=15;
+            }
+            while (h<386) {decor(320, h);
+            h+=15;
+            }
+            while (i<386) {decor(310, i);
+            i+=15;
+            }
+            while (j<386) {decor(300, j);
+            j+=15;
+            }
+            while (k<371) {decor(290, k);
+            k+=15;
+            }
+            while (l<341) {decor(280, l);
+            l+=15;
+            }
+            while (m<271) {decor(m, 325);
+            m+=10;
+            }
+            while (n<271) {decor(n, 310);
+            n+=10;
+            }
+            while (o<241) {decor(o, 295);
+            o+=10;
+            }
+            while (p<231) {decor(p, 280);
+            p+=10;
+            }
+            while (q<231) {decor(q, 265);
+            q+=10;
+            }
+            while (r<221) {decor(r, 250);
+            r+=10;
+            }
+            
+            decor(200, 235);
+            decor(210, 235);
+            decor(190, 310);
+            
+            decor(50, 0);
+            decor(60, 0);
+            decor(70, 15);
+            decor(270, 30);
+            decor(260, 30);
+            decor(260, 15);
+            }
+            
+            {fill(0, 0, 0);
+            rect(43, 58, 320, 15);
+            rect(51, 74, 304, 30);
+            rect(24, 105, 357, 16);
+            rect(44, 121, 320, 15);
+            rect(23, 146, 95, 15);
+            rect(29, 161, 82, 15);
+            rect(37, 177, 66, 32);
+            rect(23, 210, 95, 15);
+            rect(282, 146, 96, 15);
+            rect(298, 162, 65, 62);
+            rect(290, 193, 81, 15);
+            rect(22, 311, 127, 15);
+            rect(10, 326, 151, 31);
+            rect(29, 358, 113, 16);
+            rect(18, 375, 134, 15);
+            fill(255, 255, 255);
+            textAlign(CENTER, TOP);
+            text("01101100 a s 01110100 00100000 e 01100100 01101001 t e 01100100 00100000 00110010 00100000 d 01100001 01111001 s 00100000 01100001 01100111 01101111 : 00100000 01001001 ' m 00100000 01110100 a 01101011 01101001 ", 20, 57, 375, 400);
+            
+            text("n g 00100000 01101101 a 01101110 01111001 00100000 p r ", 15, 145, 120, 80);
+            text("01100101 c a 01110101 01110100 01101001 o 01101110 ", 275, 145, 120, 80);
+            text("s 00100000 w i t 01101000 00100000 i t 00101110 00100000 ( 01101101 o r 01100101 00101001 ", 10, 310, 160, 80);
+            }
+            
+            goal(169, 345);
+            enemy2(250, 240);
+            enemy2(20, 240);
+            enemy2(135, 150);
+            
+            enemy2(enemyX1, enemyY1);
+            enemy2(enemyX1+138, enemyY1);
+            enemy2(enemyX1+276, enemyY1);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            restart=false;
+            if (stageComplete===false&&dead===false&&menu===false) {enemyY1+=1.1;}
+        }
+        
+        if (stage===7) {
+            if (restart) {playerX=200;
+            playerY=359;
+            enemyX1=330;
+            enemyY1=359;
+            enemyX2=70;
+            enemyY2=359;
+            enemyX3=3;
+            enemyY3=230;
+            enemyX4=266;
+            }
+            
+            {var a=220;
+            var b=230;
+            var c=250;
+            var d=260;
+            
+            while (a<341) {decor(a, 385);
+            a+=10;
+            }
+            while (b<321) {decor(b, 370);
+            b+=10;
+            }
+            while (c<311) {decor(c, 355);
+            c+=10;
+            }
+            while (d<291) {decor(d, 340);
+            d+=10;
+            }
+            decor(260, 325);
+            decor(350, 370);
+            }
+            
+            {fill(0, 0, 0);
+            rect(37, 62, 333, 15);
+            rect(45, 77, 316, 65);
+            rect(37, 94, 333, 15);
+            rect(29, 143, 348, 31);
+            rect(37, 174, 333, 15);
+            rect(29, 190, 348, 31);
+            rect(44, 288, 318, 15);
+            rect(29, 303, 348, 15);
+            fill(255, 255, 255);
+            textAlign(CENTER, EDGE);
+            text("1001001 ' m 0100000 1101111 1101110 1101100 1111001 0100000 a 1101100 1101100 1101111 1110111 i 1101110 1100111 0100000 i 1110100 0100000 1100001 1100011 c 1100101 1110011 1110011 0100000 t 1101111 0100000 1100001 0100000 s 1101101 1100001 l l 0100000 1110010 1100001 n g 1100101 0100000 1101111 f 0100000 1100001 p 1110000 1110011 0100000 1101111 n 0100000 m 1111001 0100000 1100011 o m 1110000 1110101 t e r 0101110 0100000 1001110 1101111 ", 20, 65, 375, 400);
+            text("0100000 i n t 1100101 r n 1100101 1110100 0101110 0100000 0101000 1101101 o r e 0101001 ", 20, 290, 375, 400);
+            }
+            
+            goal(169, 10);
+            enemy1(enemyX1, enemyY1);
+            enemy1(enemyX2, enemyY2);
+            enemy2(enemyX3, enemyY3);
+            enemy2(enemyX4, enemyY3);
+            if (invincible) { dead = false; }
+            
+            player(playerX, playerY);
+            restart=false;
+            
+            if (enemyX4>=266) {enemySpeed1=-3;}
+        if (enemyX4<=3) {enemySpeed1=3;}
+        if (stageComplete===false&&menu===false&&dead===false) {enemyX4+=enemySpeed1;}
+        if (enemyX3>=266) {enemySpeed2=-3;}
+        if (enemyX3<=3) {enemySpeed2=3;}
+        if (stageComplete===false&&menu===false&&dead===false) {enemyX3+=enemySpeed2;}
+        
+        if(stageComplete===false&&menu===false&&dead===false) {
+            if (playerX>enemyX1&&enemyX1<332) {enemyX1+=0.6;}
+            if (playerX<enemyX1&&enemyX1>68) {enemyX1-=0.6;}
+            if (playerY>enemyY1&&enemyY1<362) {enemyY1+=0.6;}
+            if (playerY<enemyY1&&enemyY1>45) {enemyY1-=0.6;}
+            
+            if (playerX>enemyX2&&enemyX2<332) {enemyX2+=0.6;}
+            if (playerX<enemyX2&&enemyX2>68) {enemyX2-=0.6;}
+            if (playerY>enemyY2&&enemyY2<362) {enemyY2+=0.6;}
+            if (playerY<enemyY2&&enemyY2>45) {enemyY2-=0.6;}
+        }
+        
+    }
+        
+        if (stage===8) {
+            if (restart) {
+                playerX=200;
+                playerY=200;
+                enemyX1=200;
+                enemyY1=43;
+                enemyX2=67;
+                enemyY2=200;
+                enemyX3=333;
+                enemyY3=200;
+                enemyX4=200;
+                enemyY4=364;
+            }
+            speed = 4.5;
+            enemySpeed1 = 0.5;
+            
+            {var a=170;
+            var b=190;
+            var c=150;
+            
+            while (a<281) {decor(a, 310);
+            a+=10;
+            }
+            while (b<291) {decor(b, 325);
+            b+=10;
+            }
+            while (c<261) {decor(c, 340);
+            c+=10;
+            }
+            }
+            
+            {fill(0, 0, 0);
+            rect(60, 117, 271, 15);
+            rect(67, 133, 257, 31);
+            rect(53, 165, 285, 15);
+            rect(73, 181, 243, 16);
+            rect(53, 198, 286, 15);
+            rect(60, 213, 271, 15);
+            rect(52, 229, 287, 15);
+            rect(68, 245, 256, 16);
+            rect(53, 261, 285, 15);
+            fill(255, 255, 255);
+            textAlign(CENTER, EDGE);
+            text("1001001 0100000 d 1101111 n 0100111 1110100 0100000 1110111 1100001 n 1110100 0100000 a 0100000 1010000 1100001 p e 1110010 1100011 l 1101001 p 0100000 1001101 a x i 1101101 1101001 1111010 e 1110010 0100000 s c 1100101 1101110 1100001 1110010 i o 0101110 0100000 ( e n 1100100 0100000 1101111 1100110 0100000 1100100 o 1100011 1110101 m e n 1110100 0101001 ", 50, 120, 300, 300);
+            }
+            
+            goal(8, 5);
+            goal(8, 347);
+            goal(331, 5);
+            goal(331, 347);
+            enemy1(enemyX1, enemyY1);
+            enemy1(enemyX2, enemyY2);
+            enemy1(enemyX3, enemyY3);
+            enemy1(enemyX4, enemyY4);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            restart=false;
+            intermission=true; //just in case
+            sceneCount=0;
+            sceneFade=0;
+            
+            if (stageComplete===false&&dead===false&&menu===false) {
+                if (playerX>enemyX1&&enemyX1<332) {enemyX1+=enemySpeed1;}
+                if (playerX<enemyX1&&enemyX1>68) {enemyX1-=enemySpeed1;}
+                if (playerY>enemyY1&&enemyY1<362) {enemyY1+=enemySpeed1;}
+                if (playerY<enemyY1&&enemyY1>45) {enemyY1-=enemySpeed1;}
+                
+                if (playerX>enemyX2&&enemyX2<332) {enemyX2+=enemySpeed1;}
+                if (playerX<enemyX2&&enemyX2>68) {enemyX2-=enemySpeed1;}
+                if (playerY>enemyY2&&enemyY2<362) {enemyY2+=enemySpeed1;}
+                if (playerY<enemyY2&&enemyY2>45) {enemyY2-=enemySpeed1;}
+                
+                if (playerX>enemyX3&&enemyX3<332) {enemyX3+=enemySpeed1;}
+                if (playerX<enemyX3&&enemyX3>68) {enemyX3-=enemySpeed1;}
+                if (playerY>enemyY3&&enemyY3<362) {enemyY3+=enemySpeed1;}
+                if (playerY<enemyY3&&enemyY3>45) {enemyY3-=enemySpeed1;}
+                
+                if (playerX>enemyX4&&enemyX4<332) {enemyX4+=enemySpeed1;}
+                if (playerX<enemyX4&&enemyX4>68) {enemyX4-=enemySpeed1;}
+                if (playerY>enemyY4&&enemyY4<362) {enemyY4+=enemySpeed1;}
+                if (playerY<enemyY4&&enemyY4>45) {enemyY4-=enemySpeed1;}
+            }
+        }
+        
+        if (stage===9) {
+            if (intermission) {page="intermission";}
+            if (restart) {playerX=200;
+            playerY=360;
+            for (var a = 0; a < 12; a++) { broken[a]=true; }
+            enemyX1 = 200;
+            enemyY1 = 150;
+            goalX=15;
+            goalY=15;
+            toolPlace[0]=true;
+            eneActive[0]=false;
+            }
+            
+            {var a=23;
+            var b=23;
+            var c=33;
+            var d=43;
+            var e=0;
+            var f=0;
+            var g=0;
+            var h=0;
+            var i=0;
+            var j=0;
+            var k=0;
+            var l=0;
+            
+            while (a<154) {decor(a, 385);
+            a+=10;
+            }
+            while (b<134) {decor(b, 370);
+            b+=10;
+            }
+            while (c<124) {decor(c, 355);
+            c+=10;
+            }
+            while (d<104) {decor(d, 340);
+            d+=10;
+            }
+            decor(83, 325);
+            decor(93, 325);
+            
+            while (e<61) {decor(390, e);
+            e+=15;
+            }
+            while (f<91) {decor(380, f);
+            f+=15;
+            }
+            while (g<151) {decor(370, g);
+            g+=15;
+            }
+            while (h<121) {decor(360, h);
+            h+=15;
+            }
+            while (i<136) {decor(350, i);
+            i+=15;
+            }
+            while (j<76) {decor(340, j);
+            j+=15;
+            }
+            while (k<46) {decor(330, k);
+            k+=15;
+            }
+            while (l<31) {decor(320, l);
+            l+=15;
+            }
+            
+            moveDecor(410, 470, -10, 200, 0);
+            moveDecor(0, 320, 270, 300, 1);
+            moveDecor(-10, 410, -70, -10, 2);
+            moveDecor(-70, -10, -10, 285, 3);
+            moveDecor(410, 470, 180, 285, 4);
+            }
+            
+            {textSize(14);
+            textAlign(LEFT, TOP);
+            tool(83, 355, 0);
+            badCode(0, 270, "01100111", 0, 0);
+            badCode(66.5, 270, "01110010", 0, 1);
+            badCode(133, 270, "01100001", 0, 2);
+            badCode(199.5, 270, "01101110", 0, 3);
+            badCode(266, 270, "01110100", 0, 4);
+            badCode(0, 285, "00100000", 0, 12);
+            badCode(66.5, 285, "01101001", 0, 13);
+            badCode(133, 285, "01101110", 0, 14);
+            badCode(199.5, 285, "01110100", 0, 15);
+            badCode(266, 285, "01100101", 0, 5);
+            badCode(0, 300, "01110010", 0, 6);
+            badCode(66.5, 300, "01101110", 0, 7);
+            badCode(133, 300, "01100101", 0, 8);
+            badCode(199.5, 300, "01110100", 0, 9);
+            badCode(266, 300, "00111111", 0, 10);
+            codeRules();
+            badCode(332.5, 315, "011 1", "   0 110", 11, "01111001");
+            }
+            
+            goal(goalX, goalY);
+            enemy1(enemyX1, enemyY1, 0);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            restart=false;
+            if (broken[11]===false) {eneActive[0]=true;}
+            if(stageComplete===false&&menu===false&&dead===false&&broken[11]===false) {
+            if (playerX>enemyX1&&enemyX1<332) {enemyX1+=1.5;}
+            if (playerX<enemyX1&&enemyX1>68) {enemyX1-=1.5;}
+            if (playerY>enemyY1&&enemyY1<362) {enemyY1+=1.5;}
+            if (playerY<enemyY1&&enemyY1>45) {enemyY1-=1.5;}
+        }
+        }
+        
+        if (stage===10) {
+            if (restart) {playerX=200;
+            playerY=190;
+            enemyX1=134;
+            enemyY1=230;
+            enemyX2=134;
+            enemyY2=100;
+            enemyX3=3;
+            enemyY3=165;
+            enemyX4=265;
+            enemyY4=165;
+            toolPlace[0]=true;
+            toolPlace[1]=true;
+            toolPlace[2]=true;
+            toolPlace[3]=true;
+            toolPlace[11]=true;
+            for (var a = 0; a < 12; a++) { broken[a]=true; }
+            toolAcquired=false;
+            goalX=60;
+            goalY=345;
+            x=[100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
+            y=[340, 340, 340, 340, 340, 340, 340, 340, 340, 340];
+            }
+            
+            {var a=30;
+            var b=40;
+            var c=40;
+            var d=120;
+            var e=50;
+            var f=130;
+            var g=60;
+            var h=140;
+            var i=310;
+            var j=170;
+            var k=190;
+            
+            while (a<381) {decor(a, 0);
+            a+=10;
+            }
+            while (b<381) {decor(b, 15);
+            b+=10;
+            }
+            while (c<101) {decor(c, 30);
+            c+=10;
+            }
+            while (d<371) {decor(d, 30);
+            d+=10;
+            }
+            while (e<101) {decor(e, 45);
+            e+=10;
+            }
+            while (f<341) {decor(f, 45);
+            f+=10;
+            }
+            while (g<91) {decor(g, 60);
+            g+=10;
+            }
+            while (h<281) {decor(h, 60);
+            h+=10;
+            }
+            while (i<341) {decor(i, 60);
+            i+=10;
+            }
+            while (j<271) {decor(j, 75);
+            j+=10;
+            }
+            while (k<251) {decor(k, 90);
+            k+=20;
+            }
+            decor(360, 45);
+            decor(330, 75);
+            decor(320, 75);
+            decor(80, 75);
+            
+            moveDecor(-10, 410, -70, -10, 0);
+            moveDecor(-70, -10, -10, 340, 1);
+            moveDecor(410, 470, -10, 340, 2);
+            moveDecor(-10, 360, 410, 470, 3);
+            moveDecor(-10, 360, 410, 470, 4);
+            moveDecor(199, 370, 370, 400, 5);
+            moveDecor(0, 315, 295, 295, 6);
+            moveDecor(266, 320, 295, 400, 7);
+            moveDecor(-20, -10, 340, 400, 8);
+            }
+            
+            {tool(80, 30, 0);
+            tool(160, 30, 1);
+            tool(240, 30, 2);
+            tool(320, 30, 3);
+            
+            badCode(199.5, 359, "", "", false, "00100000");
+            badCode(332.5, 359, "01100  1", "     10", 1, "01100011");
+            badCode(332.5, 373, "011 00", "   0  11", 3, "01110000");
+            badCode(266, 359, "011 00", "   1  10", 0, "01100001");
+            badCode(199.5, 373, "0110 01", "    1  0", 2, "01100011");
+            badCode(266, 373, "", "", false, "01100101");
+            badCode(199.5, 386.5, "", "", false, "01110100");
+            badCode(266, 386.5, "", "", false, "01100101");
+            badCode(332.5, 386.5, "", "", false, "01100100");
+            
+            badCode(0, 295, "01010000", 0, 4);
+            badCode(66.5, 295, "01100001", 0, 5);
+            badCode(133, 295, "01110011", 0, 6);
+            badCode(199.5, 295, "01110011", 0, 7);
+            badCode(266, 295, "01110111", 0, 8);
+            badCode(266, 311, "01101111", 0, 9);
+            badCode(266, 327, "01110010", 0, 11);
+            badCode(266, 343, "01100100", 0, 10);
+            codeRules();
+            }
+            
+            goal(goalX, goalY);
+            enemy2(enemyX1, enemyY1);
+            enemy2(enemyX2, enemyY2);
+            enemy2(enemyX3, enemyY3);
+            enemy2(enemyX4, enemyY4);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            restart = false;
+            
+            enemySpeed1 = 0.8;
+            if (stageComplete===false&&menu===false&&dead===false) {
+                if (enemyY1<=230&&enemyX1>=265) {enemyY1+=enemySpeed1;}
+                if (enemyX1>=3&&enemyY1>=230) {enemyX1-=enemySpeed1;}
+                if (enemyY1>=100&&enemyX1<=3) {enemyY1-=enemySpeed1;}
+                if (enemyX1<=265&&enemyY1<=100) {enemyX1+=enemySpeed1;}
+                
+                if (enemyY2<=230&&enemyX2>=265) {enemyY2+=enemySpeed1;}
+                if (enemyX2>=3&&enemyY2>=230) {enemyX2-=enemySpeed1;}
+                if (enemyY2>=100&&enemyX2<=3) {enemyY2-=enemySpeed1;}
+                if (enemyX2<=265&&enemyY2<=100) {enemyX2+=enemySpeed1;}
+                
+                if (enemyY3<=230&&enemyX3>=265) {enemyY3+=enemySpeed1;}
+                if (enemyX3>=3&&enemyY3>=230) {enemyX3-=enemySpeed1;}
+                if (enemyY3>=100&&enemyX3<=3) {enemyY3-=enemySpeed1;}
+                if (enemyX3<=265&&enemyY3<=100) {enemyX3+=enemySpeed1;}
+                
+                if (enemyY4<=230&&enemyX4>=265) {enemyY4+=enemySpeed1;}
+                if (enemyX4>=3&&enemyY4>=230) {enemyX4-=enemySpeed1;}
+                if (enemyY4>=100&&enemyX4<=3) {enemyY4-=enemySpeed1;}
+                if (enemyX4<=265&&enemyY4<=100) {enemyX4+=enemySpeed1;}
+            }
+        }
+        
+        if (stage===11) {
+            if (restart) {playerX=203;
+            playerY=360;
+            enemyX1=0;
+            enemyY1=112;
+            goalX=172;
+            goalY=55;
+            x=[210, 210, 210, 210, 210, 210, 210, 210, 210];
+            y=[60, 60, 60, 60, 60, 60, 60, 60, 60];
+            eneNum[0]=true;
+            eneNum[1]=true;
+            eneNum[2]=true;
+            enemySpeed1=1.3;
+            }
+            
+            {var a=60;
+            var b=80;
+            var c=110;
+            var d=70;
+            var e=90;
+            var f=60;
+            
+            while (a<111) {decor(a, 310);
+            a+=10;
+            }
+            while (b<141) {decor(b, 325);
+            b+=10;
+            }
+            while (c<131) {decor(c, 340);
+            c+=10;
+            }
+            while (d<151) {decor(d, 355);
+            d+=10;
+            }
+            
+            while (e<151) {decor(380, e);
+            e+=15;
+            }
+            while (f<101) {decor(370, f);
+            f+=15;
+            }
+            }
+            
+            {
+            fill(0, 0, 0);
+            rect(30, 113, 332, 30);
+            rect(44, 144, 303, 48);
+            rect(29, 160, 334, 15);
+            rect(29, 192, 334, 15);
+            rect(53, 208, 286, 15);
+            rect(29, 224, 334, 47);
+            rect(44, 272, 302, 15);
+            rect(141, 288, 117, 16);
+            
+            fill(255, 255, 255);
+            textAlign(CENTER, EDGE);
+            text("1000110 1101001 r s 1110100 , 0100000 u p l 1101111 1100001 1100100 0100000 a 0100000 d e 1110011 1101001 g n 0100000 1101111 r 0100000 1110101 1110011 1100101 0100000 o u 1110010 0100000 d e s 1101001 g 1101110 0100000 1110100 o o 1101100 1110011 0100000 1110100 1101111 0100000 m 1100001 k e 0100000 1100001 0100000 1101101 1101111 d e 1101100 0100000 1101111 f 0100000 1110111 h a t 0100000 y o u 0100000 1110111 1100001 n t 0100000 1110000 r i n 1110100 1100101 1100100 0101110", 30, 115, 340, 400);
+            
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            
+            textAlign(LEFT, TOP);
+            badCode(0, 0, "", "", false, "01111001");
+            badCode(66.5, 0, "", "", false, "01101111");
+            badCode(133, 0, "", "", false, "01110101");
+            badCode(199.5, 0, "", "", false, "01110010");
+            badCode(266, 0, "", "", false, "00110011");
+            badCode(332.5, 0, "", "", false, "01100100");
+            badCode(0, 15, "", "", false, "01110000");
+            badCode(66.5, 15, "", "", false, "01110010");
+            badCode(133, 15, "", "", false, "01101001");
+            badCode(199.5, 15, "", "", false, "01101110");
+            badCode(266, 15, "", "", false, "01110100");
+            badCode(332.5, 15, "", "", false, "01100101");
+            badCode(0, 30, "", "", false, "01110010");
+            badCode(66.5, 30, "", "", false, "00101110");
+            badCode(133, 30, "", "", false, "01100011");
+            badCode(199.5, 30, "", "", false, "01101111");
+            badCode(266, 30, "", "", false, "01101101");
+            badCode(332.5, 30, "", "", false, "00101111");
+            }
+            
+            goal(goalX, goalY);
+            enemy2(enemyX1, enemyY1, 0);
+            enemy2(enemyX1+138, enemyY1, 1);
+            enemy2(enemyX1+276, enemyY1, 2);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            restart=false;
+            if (enemyY1<=0) {enemySpeed1=1.3;}
+            if (enemyY1>=352) {enemySpeed1=-1.3;}
+            if (stageComplete===false&&dead===false&&menu===false) {enemyY1+=enemySpeed1;}
+        }
+        
+        if (stage===12) {
+            if (restart) {playerX=30;
+            playerY=370;
+            eneActive=[false, false];
+            scan=[true, true];
+            speed=4.5;
+            scanCount=[0, 0];
+            slow=false;
+            broken=[true, true, true, true, true, true, true, true, true, true];
+            toolPlace=[true, true, true];
+            toolAcquired=false;
+            enemyX1=140;
+            enemyY1=285;
+            enemyX2=260;
+            enemyY2=171;
+            eneNum=[true, true, true];
+            goalX=35;
+            goalY=150;
+            x=[35, 35, 35, 35, 35, 35, 35, 35, 35];
+            y=[150, 150, 150, 150, 150, 150, 150, 150, 150];
+            }
+            
+            {var a=270;
+            var b=260;
+            var c=250;
+            var d=320;
+            var e=240;
+            var f=330;
+            var g=330;
+            
+            while (a<391) {decor(a, 385);
+            a+=10;
+            }
+            while (b<391) {decor(b, 370);
+            b+=10;
+            }
+            while (c<301) {decor(c, 355);
+            c+=10;
+            }
+            while (d<391) {decor(d, 355);
+            d+=10;
+            }
+            while (e<271) {decor(e, 340);
+            e+=10;
+            }
+            while (f<381) {decor(f, 340);
+            f+=10;
+            }
+            while (g<361) {decor(g, 325);
+            g+=10;
+            }
+            decor(340, 310);
+            decor(380, 325);
+            
+            tool(280, 370, 0);
+            tool(330, 370, 1);
+            tool(350, 340, 2);
+            
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            }
+            
+            {
+            badCode(0, 0, "", "", false, "01111001");
+            badCode(66.5, 0, "", "", false, "01101111");
+            badCode(133, 0, "", "", false, "01110101");
+            badCode(199.5, 0, "", "", false, "01110010");
+            badCode(266, 0, "", "", false, "00110011");
+            badCode(332.5, 0, "", "", false, "01100100");
+            badCode(0, 15, "", "", false, "01110000");
+            badCode(66.5, 15, "", "", false, "01110010");
+            badCode(133, 15, "", "", false, "01101001");
+            badCode(199.5, 15, "", "", false, "01101110");
+            badCode(266, 15, "", "", false, "01110100");
+            badCode(332.5, 15, "", "", false, "01100101");
+            badCode(0, 30, "", "", false, "01110010");
+            badCode(66.5, 30, "", "", false, "00101110");
+            badCode(133, 30, "", "", false, "01100011");
+            badCode(199.5, 30, "", "", false, "01101111");
+            badCode(266, 30, "", "", false, "01101101");
+            badCode(332.5, 30, "", "", false, "00101111");
+            
+            badCode(332.5, 240, "0 101101", " 0", 6, "01101101");
+            badCode(332.5, 225, "0 1011", " 0    01", 7, "01101110");
+            badCode(332.5, 210, "001  101", "   01", 8, "00110101");
+            
+            badCode(0, 210, "01010011", 0, 0);
+            badCode(66.5, 210, "01101001", 0, 1);
+            badCode(133, 210, "01111010", 0, 2);
+            badCode(199.5, 210, "01100101", 0, 4);
+            badCode(266, 210, "00111010", 0, 5);
+            codeRules();
+            }
+            
+            goal(goalX, goalY);
+            
+            scanner(107, 310, 65, 100, 1, 0);
+            scanner(250, 145, 150, 47, 1, 1);
+            scanner(73, 55, 327, 48, 2, false);
+            scanner(0, 100, 137, 110, 2, false);
+            enemy1(enemyX1, enemyY1, 0, 0);
+            enemy1(enemyX2, enemyY2, 1, 1);
+            enemy2(3, 55, true);
+            if (invincible) { dead = false; }
+            
+            player(playerX, playerY);
+            
+            restart=false;
+            
+            if(stageComplete===false&&menu===false&&dead===false) {
+                if (eneActive[0]) {
+                    if (playerX>enemyX1&&enemyX1<332) {enemyX1+=1;}
+                    if (playerX<enemyX1&&enemyX1>68) {enemyX1-=1;}
+                    if (playerY>enemyY1+10&&enemyY1<362) {enemyY1+=1;}
+                    if (playerY<enemyY1&&enemyY1>45) {enemyY1-=1;}
+                }
+                
+                if (eneActive[1]) {
+                    if (playerX>enemyX2&&enemyX2<332) {enemyX2+=0.7;}
+                    if (playerX<enemyX2&&enemyX2>68) {enemyX2-=0.7;}
+                    if (playerY>enemyY2+10&&enemyY2<362) {enemyY2+=0.7;}
+                    if (playerY<enemyY2&&enemyY2>45) {enemyY2-=0.7;}
+                }
+                
+            }
+        }
+        
+        if (stage===13) {
+            if (restart) {goalX=170;
+            goalY=350;
+            wild=0;
+            eneNum=[true, true, true];
+            enemyX1=random(-50, 450);
+            enemyY1=random(500, 550);
+            enemyX2=random(-100, -150);
+            enemyY2=random(10, 380);
+            enemyX3=random(500, 550);
+            enemyY3=random(10, 380);
+            x=[170, 170, 170, 170, 170, 170, 170, 170, 170];
+            y=[350, 350, 350, 350, 350, 350, 350, 350, 350];
+            enemySpeed1=0.9;
+            }
+            
+            background(100, 100, 100);
+            playerX=200;
+            playerY=100;
+            
+            {
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            }
+            
+            {badCode(0, 0, "", "", false, "01111001");
+            badCode(66.5, 0, "", "", false, "01101111");
+            badCode(133, 0, "", "", false, "01110101");
+            badCode(199.5, 0, "", "", false, "01110010");
+            badCode(266, 0, "", "", false, "00110011");
+            badCode(332.5, 0, "", "", false, "01100100");
+            badCode(0, 15, "", "", false, "01110000");
+            badCode(66.5, 15, "", "", false, "01110010");
+            badCode(133, 15, "", "", false, "01101001");
+            badCode(199.5, 15, "", "", false, "01101110");
+            badCode(266, 15, "", "", false, "01110100");
+            badCode(332.5, 15, "", "", false, "01100101");
+            badCode(0, 30, "", "", false, "01110010");
+            badCode(66.5, 30, "", "", false, "00101110");
+            badCode(133, 30, "", "", false, "01100011");
+            badCode(199.5, 30, "", "", false, "01101111");
+            badCode(266, 30, "", "", false, "01101101");
+            badCode(332.5, 30, "", "", false, "00101111");
+            }
+            
+            goal(goalX, goalY);
+            
+            enemy1(enemyX1, enemyY1, true, 0);
+            enemy1(enemyX2, enemyY2, true, 1);
+            enemy1(enemyX3, enemyY3, true, 2);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            if(stageComplete===false&&menu===false&&dead===false) {
+            wild++;
+            if (wild===20) {
+                goalY--;
+                wild=0;
+                }
+                
+                if (playerX>enemyX1&&enemyX1<332) {enemyX1+=enemySpeed1;}
+                if (playerX<enemyX1&&enemyX1>68) {enemyX1-=enemySpeed1;}
+                if (playerY>enemyY1+10&&enemyY1<362) {enemyY1+=enemySpeed1;}
+                if (playerY<enemyY1&&enemyY1>45) {enemyY1-=enemySpeed1;}
+            if (eneNum[0]===false) {
+                enemyX1=random(-50, 450);
+                enemyY1=random(500, 550);
+                eneNum[0]=true;
+                }
+                
+                if (playerX>enemyX2&&enemyX2<332) {enemyX2+=enemySpeed1;}
+                if (playerX<enemyX2&&enemyX2>68) {enemyX2-=enemySpeed1;}
+                if (playerY>enemyY2+10&&enemyY2<362) {enemyY2+=enemySpeed1;}
+                if (playerY<enemyY2&&enemyY2>45) {enemyY2-=enemySpeed1;}
+            if (eneNum[1]===false) {
+                enemyX2=random(-100, -150);
+                enemyY2=random(10, 380);
+                eneNum[1]=true;
+                }
+                
+                if (playerX>enemyX3&&enemyX3<332) {enemyX3+=enemySpeed1;}
+                if (playerX<enemyX3&&enemyX3>68) {enemyX3-=enemySpeed1;}
+                if (playerY>enemyY3+10&&enemyY3<362) {enemyY3+=enemySpeed1;}
+                if (playerY<enemyY3&&enemyY3>45) {enemyY3-=enemySpeed1;}
+            if (eneNum[2]===false) {
+                enemyX3=random(500, 550);
+                enemyY3=random(10, 380);
+                eneNum[2]=true;
+                }
+            }
+            
+            restart=false;
+        }
+        
+        if (stage===14) {
+            if (restart) {playerX=70;
+            playerY=90;
+            speed=4.5;
+            goalX=300;
+            goalY=51;
+            broken=[true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+            toolPlace=[true, true, true];
+            toolAcquired=false;
+            enemyX1=138;
+            enemyX2=3;
+            enemyX3=266;
+            enemySpeed1=-4.4;
+            enemySpeed2=-2.5;
+            enemySpeed3=2.5;
+            eneNum=[true, true];
+            x=[300, 300, 300, 300, 300, 300, 300, 300, 300];
+            y=[51, 51, 51, 51, 51, 51, 51, 51, 51];
+            }
+            
+            {var a=160;
+            var b=120;
+            var c=170;
+            var d=140;
+            var e=70;
+            var f=60;
+            var g=70;
+            var h=150;
+            
+            while (a<221) {decor(a, 180);
+            a+=10;
+            }
+            while (b<201) {decor(b, 195);
+            b+=10;
+            }
+            while (c<231) {decor(c, 210);
+            c+=10;
+            }
+            while (d<211) {decor(d, 225);
+            d+=10;
+            }
+            while (e<231) {decor(e, 385);
+            e+=10;
+            }
+            while (f<201) {decor(f, 370);
+            f+=10;
+            }
+            while (g<181) {decor(g, 355);
+            if (g===100) {g+=20;}
+            else {g+=10;}
+            }
+            while (h<171) {decor(h, 340);
+            h+=10;
+            }
+            decor(80, 340);
+            
+            tool(200, 210, 0);
+            tool(160, 355, 1);
+            tool(100, 370, 2);
+            
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            }
+            
+            {
+            badCode(133, 45, "0 10   1", " 0  110", 0, "01100011");
+            badCode(199.5, 45, "0 1011 1", " 0    0", 1, "01101111");
+            badCode(133, 60, "0 10110", " 0     1", 2, "01101100");
+            badCode(199.5, 60, "0 10110", " 0     1", 3, "01101100");
+            badCode(133, 75, "0 10 101", " 0  1", 4, "01100101");
+            badCode(199.5, 75, "0 10   1", " 0  110", 5, "01100011");
+            badCode(133, 90, "0 1  10", " 0 01  1", 6, "01110100");
+            badCode(199.5, 90, "00101 0", "     1 1", 7, "00101000");
+            badCode(133, 105, "0 10  01", " 0  11", 8, "01100001");
+            badCode(199.5, 105, "0 1  10", " 0 01  1", 9, "01110100");
+            badCode(266, 105, "0 1011 1", " 0    0", 10, "01101111");
+            badCode(332.5, 105, "0 101101", " 0", 11, "01101101");
+            badCode(199.5, 120, "0 1    1", " 0 0110", 12, "01110011");
+            badCode(266, 120, "00101 01", "     1", 13, "00101001");
+            badCode(332.5, 120, "001 1  1", "   0 10", 14, "00111011");
+            
+            badCode(0, 295, "0 1", " 0 01101", 15, "01110010");
+            badCode(66.5, 295, "0 10 101", " 0  1", 16, "01100101");
+            badCode(133, 295, "0 1   0", " 0 011 1", 17, "01110000");
+            badCode(199.5, 295, "0 10110", " 0     1", 18, "01101100");
+            badCode(0, 310, "0 101 01", " 0   1", 19, "01101001");
+            badCode(66.5, 310, "0 10   1", " 0  110", 20, "01100011");
+            badCode(133, 310, "0 10  01", " 0  11", 21, "01100001");
+            badCode(199.5, 310, "0 1  10", " 0 01  1", 22, "01110100");
+            badCode(0, 325, "0 10 101", " 0  1", 23, "01100101");
+            badCode(66.5, 325, "00101 0", "     1 1", 24, "00101000");
+            badCode(133, 325, "0 1    1", " 0 0110", 25, "01110011");
+            badCode(199.5, 325, "0 10 101", " 0  1", 26, "01100101");
+            badCode(266, 340, "0 10110", " 0     1", 27, "01101100");
+            badCode(266, 355, "0 10 1", " 0  1 01", 28, "01100110");
+            badCode(266, 370, "00101 01", "     1", 29, "00101001");
+            badCode(266, 385, "001 1  1", "   0 10", 30, "00111011");
+            
+            codeRules();
+                {
+                if (broken[15]===false||broken[16]===false||broken[17]===false||broken[18]===false||broken[19]===false||broken[20]===false||broken[21]===false||broken[22]===false||broken[23]===false||broken[24]===false||broken[25]===false||broken[26]===false||broken[27]===false||broken[28]===false||broken[29]===false||broken[30]===false) {
+                broken[15]=false;
+                broken[16]=false;
+                broken[17]=false;
+                broken[18]=false;
+                broken[19]=false;
+                broken[20]=false;
+                broken[21]=false;
+                broken[22]=false;
+                broken[23]=false;
+                broken[24]=false;
+                broken[25]=false;
+                broken[26]=false;
+                broken[27]=false;
+                broken[28]=false;
+                broken[29]=false;
+                broken[30]=false;}
+                
+                if (broken[0]===false||broken[2]===false||broken[4]===false||broken[6]===false||broken[8]===false||broken[12]===false||broken[13]===false||broken[14]===false) {
+                broken[0]=false;
+                broken[2]=false;
+                broken[4]=false;
+                broken[6]=false;
+                broken[8]=false;
+                broken[12]=false;
+                broken[13]=false;
+                broken[14]=false;
+                }
+                
+                if (broken[1]===false||broken[3]===false||broken[5]===false||broken[7]===false||broken[9]===false||broken[10]===false||broken[11]===false) {
+                broken[1]=false;
+                broken[3]=false;
+                broken[5]=false;
+                broken[7]=false;
+                broken[9]=false;
+                broken[10]=false;
+                broken[11]=false;
+                }
+                
+                }
+            
+            badCode(0, 0, "", "", false, "01111001");
+            badCode(66.5, 0, "", "", false, "01101111");
+            badCode(133, 0, "01110101", 0, 31);
+            badCode(199.5, 0, "01110010", 0, 32);
+            badCode(266, 0, "", "", false, "00110011");
+            badCode(332.5, 0, "", "", false, "01100100");
+            badCode(0, 15, "", "", false, "01110000");
+            badCode(66.5, 15, "", "", false, "01110010");
+            badCode(133, 15, "01101001", 0, 33);
+            badCode(199.5, 15, "01101110", 0, 34);
+            badCode(266, 15, "", "", false, "01110100");
+            badCode(332.5, 15, "", "", false, "01100101");
+            badCode(0, 30, "", "", false, "01110010");
+            badCode(66.5, 30, "", "", false, "00101110");
+            badCode(133, 30, "01100011", 0, 35);
+            badCode(199.5, 30, "01101111", 0, 36);
+            badCode(266, 30, "", "", false, "01101101");
+            badCode(332.5, 30, "", "", false, "00101111");
+            codeRules();
+            
+            if (playerY===63) {down=true;
+                left=true;
+                if (rightConditions[1]!==false) {right=true;}
+                
+                } //my patience was up after about an hour of trying to fix this glitch
+            }
+            
+            goal(goalX, goalY);
+            
+            enemy2(enemyX1, 193, true);
+            enemy2(enemyX2, 140, 0);
+            enemy2(enemyX3, 244, 1);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            if (enemyX1<=3) {enemySpeed1=4.4;}
+            if (enemyX1>=266) {enemySpeed1=-4.4;}
+            if (enemyX2<=3) {enemySpeed2=2.5;}
+            if (enemyX2>=266) {enemySpeed2=-2.5;}
+            if (enemyX3<=3) {enemySpeed3=2.5;}
+            if (enemyX3>=266) {enemySpeed3=-2.5;}
+            if (stageComplete===false&&menu===false&&dead===false) {enemyX1+=enemySpeed1;
+            enemyX2+=enemySpeed2;
+            enemyX3+=enemySpeed3;
+            }
+            
+            restart=false;
+        }
+        
+        if (stage===15) {
+            if (restart) {playerX=200;
+            playerY=170;
+            broken=[true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+            toolPlace=[true, true, true, true, true];
+            toolAcquired=false;
+            goalX=169;
+            goalY=347;
+            x=[169, 169, 169, 169, 169, 169, 169, 169, 169];
+            y=[347, 347, 347, 347, 347, 347, 347, 347, 347];
+            eneActive=[false];
+            scan=[true];
+            eneNum=[true];
+            enemyX1=201;
+            enemyY1=45;
+            speed=4.5;
+            slow=false;
+            }
+            
+            {var a=137;
+            var b=147;
+            var c=147;
+            var d=147;
+            var e=137;
+            var f=137;
+            
+            while (a<248) {decor(a, 265);
+            a+=10;
+            }
+            while (b<258) {decor(b, 250);
+            b+=10;
+            }
+            while (c<268) {decor(c, 235);
+            if (c===227) {c+=30;}
+            else {c+=10;}
+            }
+            while (d<278) {decor(d, 220);
+            if (d===197) {d+=80;}
+            else {d+=10;}
+            }
+            while (e<178) {decor(e, 205);
+            e+=10;
+            }
+            while (f<158) {decor(f, 190);
+            f+=10;
+            }
+            decor(147, 175);
+            decor(127, 160);
+            decor(137, 175);
+            
+            tool(197, 250, 0);
+            
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            }
+            
+            {
+            badCode(0, 45, "01101111", 0, 0);
+            badCode(66.5, 45, "01110101", 0, 1);
+            badCode(0, 60, "", "", false, "01110100");
+            badCode(66.5, 60, "01100101", 0, 2);
+            badCode(0, 75, "", "", false, "01110010");
+            badCode(66.5, 75, "00100000", 0, 3);
+            badCode(0, 90, "", "", false, "01110011");
+            badCode(66.5, 90, "01101000", 0, 4);
+            badCode(0, 105, "", "", false, "01100101");
+            badCode(66.5, 105, "01101100", 0, 5);
+            badCode(0, 120, "", "", false, "01101100");
+            badCode(66.5, 120, "00111010", 0, 6);
+            badCode(0, 135, "", "", false, "00100000");
+            badCode(66.5, 135, "0  0 1", " 01 1 01", 7, "01000110");
+            badCode(0, 150, "0 10 101", " 0  1", 8, "01100101");
+            tool(19, 75, 1);
+            tool(42, 105, 2);
+            
+            badCode(266, 45, "01100101", 0, 9);
+            badCode(332.5, 45, "01101110", 0, 10);
+            badCode(266, 60, "01100011", 0, 11);
+            badCode(332.5, 60, "", "", false, "01101100");
+            badCode(266, 75, "01101111", 0, 12);
+            badCode(332.5, 75, "", "", false, "01110011");
+            badCode(266, 90, "01100101", 0, 13);
+            badCode(332.5, 90, "", "", false, "01100100");
+            badCode(266, 105, "00100000", 0, 14);
+            badCode(332.5, 105, "", "", false, "01101101");
+            badCode(266, 120, "01100001", 0, 15);
+            badCode(332.5, 120, "", "", false, "01110100");
+            badCode(266, 135, "01100101", 0, 16);
+            badCode(332.5, 135, "", "", false, "01110010");
+            badCode(266, 150, "01101001", 0, 17);
+            badCode(332.5, 150, "", "", false, "01100001");
+            badCode(266, 165, "01101100", 0, 18);
+            badCode(332.5, 165, "", "", false, "00111010");
+            badCode(266, 180, "00100000", 0, 19);
+            badCode(332.5, 180, "0  01 0", " 01  1 1", 20, "01001000");
+            badCode(266, 195, "0  0   1", " 01 110", 20, "01000011");
+            badCode(332.5, 195, "0  011", " 01   01", 21, "01001110");
+            tool(351, 90, 3);
+            tool(366, 135, 4);
+            
+            badCode(0, 280, "0 101 01", " 0   1", 22, "01101001");
+            badCode(66.5, 280, "0 10 1", " 0  1 01", 23, "01100110");
+            badCode(133, 280, "00101 0", "     1 1", 24, "00101000");
+            badCode(199.5, 280, "0 1    1", " 0 0110", 25, "01110011");
+            badCode(266, 280, "0 101 01", " 0   1", 26, "01101001");
+            badCode(332.5, 280, "0 10 1 1", " 0  1 0", 27, "01100111");
+            badCode(0, 295, "0 1011", " 0    01", 40, "01101110");
+            badCode(66.5, 295, "0 10  01", " 0  11", 40, "01100001");
+            badCode(133, 295, "0 10110", " 0     1", 40, "01101100");
+            badCode(199.5, 295, "0 10 101", " 0  1", 40, "01100101");
+            badCode(266, 295, "0 10 10", " 0  1  1", 40, "01100100");
+            badCode(332.5, 295, "00101 01", "     1", 40, "00101001");
+            badCode(0, 310, "0010  0", "    11 1", 28, "00100000");
+            
+            badCode(66.5, 310, "0 1  10", " 0 01  1", 29, "01110100");
+            badCode(133, 310, "0 101 0", " 0   1 1", 30, "01101000");
+            badCode(199.5, 310, "0 10 101", " 0  1", 31, "01100101");
+            badCode(266, 310, "0 1011", " 0    01", 32, "01101110");
+            badCode(332.5, 310, "0 1 1  1", " 0 0 10", 33, "01111011");
+            badCode(0, 325, "0 1011 1", " 0    0", 34, "01101111");
+            badCode(66.5, 325, "0 1   0", " 0 011 1", 35, "01110000");
+            badCode(133, 325, "0 10 101", " 0  1", 36, "01100101");
+            badCode(199.5, 325, "0 1011", " 0    01", 37, "01101110");
+            badCode(266, 325, "0 1 1101", " 0 0", 38, "01111101");
+            badCode(332.5, 325, "001 1  1", "   0 10", 39, "00111011");
+            
+            codeRules();
+            {
+                if (broken[7]===false||broken[8]===false) {
+                    broken[7]=false;
+                    broken[8]=false;
+                }
+                if (broken[20]===false||broken[21]===false) {
+                    broken[20]=false;
+                    broken[21]=false;
+                }
+                if (broken[22]===false||broken[23]===false||broken[24]===false||broken[25]===false||broken[26]===false||broken[27]===false) {
+                    broken[22]=false;
+                    broken[23]=false;
+                    broken[24]=false;
+                    broken[25]=false;
+                    broken[26]=false;
+                    broken[27]=false;
+                    broken[40]=false;
+                }
+                if (broken[28]===false||broken[29]===false||broken[30]===false||broken[31]===false||broken[32]===false||broken[33]===false) {
+                    broken[28]=false;
+                    broken[29]=false;
+                    broken[30]=false;
+                    broken[31]=false;
+                    broken[32]=false;
+                    broken[33]=false;
+                }
+                if (broken[34]===false||broken[35]===false||broken[36]===false||broken[37]===false||broken[38]===false||broken[39]===false) {
+                    broken[34]=false;
+                    broken[35]=false;
+                    broken[36]=false;
+                    broken[37]=false;
+                    broken[38]=false;
+                    broken[39]=false;
+                }
+            }
+            
+            badCode(0, 0, "", "", false, "01111001");
+            badCode(66.5, 0, "", "", false, "01101111");
+            badCode(133, 0, "", "", false, "01110101");
+            badCode(199.5, 0, "", "", false, "01110010");
+            badCode(266, 0, "", "", false, "00110011");
+            badCode(332.5, 0, "", "", false, "01100100");
+            badCode(0, 15, "", "", false, "01110000");
+            badCode(66.5, 15, "", "", false, "01110010");
+            badCode(133, 15, "", "", false, "01101001");
+            badCode(199.5, 15, "", "", false, "01101110");
+            badCode(266, 15, "", "", false, "01110100");
+            badCode(332.5, 15, "", "", false, "01100101");
+            badCode(0, 30, "", "", false, "01110010");
+            badCode(66.5, 30, "", "", false, "00101110");
+            badCode(133, 30, "", "", false, "01100011");
+            badCode(199.5, 30, "", "", false, "01101111");
+            badCode(266, 30, "", "", false, "01101101");
+            badCode(332.5, 30, "", "", false, "00101111");
+            
+            if (playerY>=309&&playerY<=315&&broken[34]) {down=false;} //I am DONE with glitches
+            else if (playerY>=309&&playerY<=315) {down=true;}
+            }
+            
+            goal(goalX, goalY);
+            
+            scanner(132, 231, 270, 49, 2, 180);
+            scanner(132, 50, 35, 230, 1, 0);
+            scanner(233, 50, 35, 230, 1, 0);
+            scanner();
+            enemy2(3, 232, true);
+            enemy1(enemyX1, enemyY1, 0, true);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            fill(0, 255, 255);
+            
+            restart=false;
+            
+            if(stageComplete===false&&menu===false&&dead===false&&eneActive[0]) {
+                    if (playerX>enemyX1&&enemyX1<332) {enemyX1+=0.25;}
+                    if (playerX<enemyX1&&enemyX1>68) {enemyX1-=0.25;}
+                    if (playerY>enemyY1+10&&enemyY1<362) {enemyY1+=0.25;}
+                    if (playerY<enemyY1&&enemyY1>45) {enemyY1-=0.25;}
+                }
+            }
+        
+
+
+        if (stage === 256) {//glitchmaster
+            if (restart) {
+                funMusic[1].pause();
+                funMusic[1].currentTime = 0;
+                if (glitchMaster.first === false) {
+                    glitchMaster.x = 200;
+                    glitchMaster.y = 100;
+                    playerX = 200;
+                    playerY = 300;
+                }
+                funMusic[0].play();
+                toolAcquired = false;
+                special = false;
+                glitchMaster.spawns = [];
+                upConditions = [true];
+                downConditions = [true];
+                leftConditions = [true];
+                rightConditions = [true];
+            }
+            if (funMusic[0].currentTime < 5) {
+                fill(255);
+                textFont(font, 20);
+                textAlign(CENTER, CENTER);
+                text("  Title Here presents...", 200, 75);
+                if (glitchMaster.progression > 0) {
+                    text("the", 200, glitchMaster.wild-30);
+                    textAlign(RIGHT, CENTER);
+                    text("Glitch", 175, glitchMaster.wild);
+                    if (glitchMaster.progression > 1) {
+                        textAlign(LEFT, CENTER);
+                        text("Master", 225, glitchMaster.wild);
+                    }
+                }
+            }
+            
+            textFont(font, 14);
+            for (var a = 0; a < glitchMaster.spawns.length; a++) {
+                switch (glitchMaster.spawns[a].id) {
+                case 0:
+                    badCode(glitchMaster.spawns[a].x-68, glitchMaster.spawns[a].y-7.5, "", "TROLOLOL", a, "trololol");
+                    break;
+                case 1:
+                    tool(glitchMaster.spawns[a].x, glitchMaster.spawns[a].y, a);
+                    break;
+                case 2:
+                    enemy1(glitchMaster.spawns[a].x, glitchMaster.spawns[a].y, true, a);
+                    if (dead===false && stageComplete===false) {
+                        if (playerX > glitchMaster.spawns[a].x) { glitchMaster.spawns[a].x += 1; }
+                        if (playerX < glitchMaster.spawns[a].x) { glitchMaster.spawns[a].x -= 1; }
+                        if (playerY > glitchMaster.spawns[a].y) { glitchMaster.spawns[a].y += 1; }
+                        if (playerY < glitchMaster.spawns[a].y) { glitchMaster.spawns[a].y -= 1; }
+                    }
+                    break;
+                case 3:
+                    enemy2(glitchMaster.spawns[a].x-68, glitchMaster.spawns[a].y-43.5, a);
+                    break;
+                case 4:
+                    enemy2(glitchMaster.spawns[a].x-68, glitchMaster.spawns[a].y-43.5, true);
+                    break;
+                case 5:
+                    badCode(glitchMaster.spawns[a].x-68, glitchMaster.spawns[a].y-7.5, "TROLOLOL", 0, a);
+                    break;
+                case 10:
+                    if (glitchMaster.spawns[a].x < 410 && glitchMaster.spawns[a].x > -20 && glitchMaster.spawns[a].y < 410 && glitchMaster.spawns[a].y > -50) {
+                        eneBullet(glitchMaster.spawns[a].x, glitchMaster.spawns[a].y);
+                        if (dead===false && stageComplete===false) {
+                            glitchMaster.spawns[a].x += glitchMaster.spawns[a].xMove;
+                            glitchMaster.spawns[a].y += glitchMaster.spawns[a].yMove;
+                        }
+                    }
+                    break;
+                case 15:
+                    eyeFade = 0;
+                    attackCount = 0;
+                    boss(glitchMaster.spawns[a].x, glitchMaster.spawns[a].y);
+                    if (dead===false && stageComplete===false) {
+                        glitchMaster.spawns[a].x += glitchMaster.spawns[a].xMove;
+                        glitchMaster.spawns[a].y += glitchMaster.spawns[a].yMove;
+                        if (glitchMaster.spawns[a].x>310 || glitchMaster.spawns[a].x<90) {
+                            glitchMaster.spawns[a].xMove *= -1;
+                            if (glitchMaster.spawns[a].x>310) { glitchMaster.spawns[a].x = 310; }
+                            else { glitchMaster.spawns[a].x = 90; }
+                        }
+                        if (glitchMaster.spawns[a].y>340 || glitchMaster.spawns[a].y<45) {
+                            glitchMaster.spawns[a].yMove *= -1;
+                            if (glitchMaster.spawns[a].y>340) { glitchMaster.spawns[a].y = 340; }
+                            else { glitchMaster.spawns[a].y = 45; }
+                        }
+                    }
+                    break;
+                }
+            }
+            codeRules();
+            
+            if (glitchMaster.progression >= 3 || dead && glitchMaster.progression===2) { player(playerX, playerY); }
+            glitchMaster.draw(glitchMaster.x, glitchMaster.y, glitchMaster.big);
+            restart = false;
+            
+            if (funMusic[0].currentTime >= glitchMaster.que[glitchMaster.progression][0]-0.05 && funMusic[0].currentTime <= glitchMaster.que[glitchMaster.progression][0]+0.05 && dead===false) {
+                switch (glitchMaster.que[glitchMaster.progression][1]) {
+                case 0:
+                    glitchMaster.xMove = random(1, 2)*(biNum[biCount%16]*-2+1);
+                    biCount++;
+                    glitchMaster.yMove = (3-abs(glitchMaster.xMove))*(biNum[biCount%16]*-2+1);
+                if (biNum[biCount%16]===1 || biNum[(biCount+1)%16]===1) {
+                    biCount += 3;
+                    glitchMaster.spawns.push({
+                        //0=badCode Fix,  1=key,  2=enemy1 Vuln,  3=enemy2 Vuln,  4=enemy2 Inv,  5=badCode Perm,  6=(-=6),  7=(-=6),  8=(-=6),  9=(-=6),  10=(-=10),  11=(-=10)
+                        id: floor(random(0, 12)),
+                        x: glitchMaster.x,
+                        y: glitchMaster.y
+                    });
+                    if (glitchMaster.spawns[glitchMaster.spawns.length-1].id > 9) { glitchMaster.spawns[glitchMaster.spawns.length-1].id -= 6; }
+                    if (glitchMaster.spawns[glitchMaster.spawns.length-1].id > 5) { glitchMaster.spawns[glitchMaster.spawns.length-1].id -= 6; }
+                    if (glitchMaster.spawns[glitchMaster.spawns.length-1].id === 4) {
+                        if (biNum[biCount%16]===1 || biNum[(biCount+1)%16]===1|| biNum[(biCount+2)%16]===1) { glitchMaster.spawns[glitchMaster.spawns.length-1].id = biNum[(biCount+2)%16]; }
+                    }
+                    if (glitchMaster.spawns[glitchMaster.spawns.length-1].id === 5) {
+                        if (biNum[biCount%16]===1) { glitchMaster.spawns[glitchMaster.spawns.length-1].id = biNum[(biCount+2)%16]; }
+                    }
+                    switch (glitchMaster.spawns[glitchMaster.spawns.length-1].id) {
+                    case 0:
+                        broken[glitchMaster.spawns.length-1] = true;
+                        break;
+                    case 1:
+                        toolPlace[glitchMaster.spawns.length-1] = true;
+                        break;
+                    case 2:
+                        eneNum[glitchMaster.spawns.length-1] = true;
+                        break;
+                    case 3:
+                        eneNum[glitchMaster.spawns.length-1] = true;
+                        break;
+                    case 5:
+                        broken[glitchMaster.spawns.length-1] = true;
+                        break;
+                    }
+                }
+                    break;
+                case 1:
+                    glitchMaster.xMove = 0;
+                    glitchMaster.yMove = 0;
+                    glitchMaster.wild = glitchMaster.y;
+                    break;
+                case 2:
+                    glitchMaster.xMove = 0;
+                    glitchMaster.yMove = 1;
+                    break;
+                case 3:
+                    glitchMaster.xMove = random(1, 2)*(biNum[biCount%16]*-2+1);
+                    biCount++;
+                    glitchMaster.yMove = (3-abs(glitchMaster.xMove))*(biNum[biCount%16]*-2+1);
+                    if (glitchMaster.first && glitchMaster.progression<4) {
+                        playerX = glitchMaster.x;
+                        playerY = glitchMaster.y;
+                    }
+                    else {
+                        glitchMaster.spawns = [];
+                        upConditions = [true];
+                        downConditions = [true];
+                        leftConditions = [true];
+                        rightConditions = [true];
+                    }
+                    break;
+                case 4:
+                    glitchMaster.xMove = random(0.5, 1)*(biNum[biCount%16]*-2+1);
+                    biCount++;
+                    glitchMaster.yMove = (1.5-abs(glitchMaster.xMove))*(biNum[biCount%16]*-2+1);
+                    biCount++;
+                    glitchMaster.spawns.push({
+                        id: 10,
+                        x: glitchMaster.x,
+                        y: glitchMaster.y,
+                        xMove: random(0, 3)*(biNum[biCount%16]*-2+1),
+                        yMove: (3-abs(glitchMaster.xMove))*(biNum[(biCount+1)%16]*-2+1)
+                    });
+                    glitchMaster.wild = 0;
+                    break;
+                case 5:
+                    glitchMaster.spawns.push({
+                        id: 15,
+                        x: glitchMaster.x,
+                        y: glitchMaster.y,
+                        xMove: random(0.1, 0.4)*(biNum[biCount%16]*-2+1),
+                        yMove: (0.5-abs(glitchMaster.xMove))*(biNum[(biCount+1)%16]*-2+1)
+                    });
+                    glitchMaster.returnTo = 50.48;
+                    break;
+                }
+                glitchMaster.lastCommand = glitchMaster.que[glitchMaster.progression][1];
+                glitchMaster.big = true;
+                glitchMaster.bigLength = 0;
+                glitchMaster.progression++;
+            }
+            else if (funMusic[0].currentTime > glitchMaster.que[glitchMaster.progression][0]) { glitchMaster.progression++; }
+            
+            if (glitchMaster.bigLength < 3) { glitchMaster.bigLength++; }
+            else if (glitchMaster.lastCommand!==4) {
+                glitchMaster.big = false;
+            }
+            else if (dead===false && stageComplete===false) {
+                switch (glitchMaster.lastCommand) {
+                case 4:
+                    glitchMaster.wild++;
+                    if (glitchMaster.wild%6 === 0) {
+                        glitchMaster.spawns.push({
+                            id: 10,
+                            x: glitchMaster.x,
+                            y: glitchMaster.y,
+                            xMove: random(0, 3)*(biNum[biCount%16]*-2+1),
+                            yMove: (3-abs(glitchMaster.xMove))*(biNum[(biCount+1)%16]*-2+1)
+                        });
+                    }
+                    break;
+                default:
+                    glitchMaster.big = false;
+                    break;
+                }
+            }
+            
+            if (dead === false && stageComplete === false) {
+                glitchMaster.x += glitchMaster.xMove;
+                glitchMaster.y += glitchMaster.yMove;
+            }
+            if (glitchMaster.progression > 0) {
+                if (glitchMaster.x > 385 || glitchMaster.x < 15) {
+                    glitchMaster.xMove *= -1;
+                    if (glitchMaster.x > 385) { glitchMaster.x--; }
+                    else { glitchMaster.x++; }
+                }
+                if (glitchMaster.y > 385 || glitchMaster.y < 15) {
+                    glitchMaster.yMove *= -1;
+                    if (glitchMaster.y > 385) { glitchMaster.y--; }
+                    else { glitchMaster.y++; }
+                }
+            }
+        }
+
+        if (stage===16) {
+            if (restart) {playerX=200;
+            playerY=268;
+            speed=4.5;
+            slow=false;
+            frozen=false;
+            bossX=200;
+            bossSpd=0;
+            stunable=false;
+            eneBulletX = [200, 200, 200, 200, 200, 200];
+            eneBulletY = [410, 410, 410, 410, 410, 410];
+            eyeFade=250;
+            pupil=color(255, 0, 0);
+            wild=-50;
+            attackCount=0;
+            attack=false;
+            scan=[true];
+            scanCount[1]=0;
+            enemyX1=random(-50, 450);
+            enemyY1=random(-65, -40);
+            enemyX2=random(-50, 450);
+            enemyY2=random(-65, -40);
+            enemyX3=random(-130, -70);
+            enemyY3=random(-10, 200);
+            enemyX4=random(470, 530);
+            enemyY4=random(-10, 200);
+            eneActive=[false, false, false, false];
+            eneWall=[true, true, true];
+            fnlEneY=[-60, -60, -60];
+            eneNum=[true, true, true, true, true, true, true];
+            broken=[true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+            toolPlace=[true, true, false];
+            toolAcquired=false;
+            special=false;
+            goalX=269;
+            goalY=354;
+            x=[269, 269, 269, 269, 269, 269, 269, 269, 269];
+            y=[354, 354, 354, 354, 354, 354, 354, 354, 354];
+            decSpeed=0.5;
+            end=false;
+            endText=[1, -20];
+            endActions=[0, 0];
+            sceneCount=0;
+            sceneFade=0;
+            TitleHere=[true, false];
+            insertCheck=false;
+            enterName=false;
+            typedLetters=[];
+            epilText[1]="";
+            udrscrTimer=[0, 0];
+            }
+            
+            {background(0, 0, 0);
+            
+            for (var a=1; a<392; a+=10) {
+                for (var b=45; b<386; b+=16.1) {
+                //decor(a, b);
+                
+                }
+                }
+            
+            textSize(14);
+            textAlign(LEFT, TOP);
+            for (var a=45; a<390; a+=30) {eneBullet(2, a);
+            eneBullet(391, a);
+            }
+            
+            textAlign(CENTER, CENTER);
+            textSize(14);
+            fill(255);
+            if (endText[0]===1) {
+                text("01000011 01101000 o 01101111 s e 00100000 01101111 n e 00100000 01101111 r 00100000 01101101 01100001 n 01111001 00100000 o f 00100000", 79, 50, 250, 100);
+                text("o u 01110010 00100000 2 00110000 00110000 00100000 w 01101111 r l 01100100 w 01101001 01100100 01100101 00100000 l 01101111 01100011\na t i 01101111 01101110 01110011", 7, 155, 390, 170);
+            }
+            if (endText[0]===2) {
+                text("01000011 01101111 01101110 01100110 01101001 01110010 01101101", 79, 54, 250, 100);
+                text("01101111 01110010 01100100 01100101 01110010 00111111", 5, 155, 400, 170);
+            }
+            if (endText[0]===3) {
+                text("01010100 01101000 01100001 n 01101011 00100000 y o 01110101 00100000 01100110 o r 00100000 u 01110011 01101001 n g 00100000 01011001 01101111 u r 00110011 01000100 P r i 01101110 t e 01110010 . 01100011 o 01101101 !", 60, 10, 290, 180);
+                text("01011001 01101111 01110101 00100000 01101111 01110111 01100101 00111010 00100000", 5, 145, 400, 170);
+                
+                endText[1]++;
+                if (endText[1]>=40) {
+                text("01000101 01010010 01010010 01001111 01010010", 5, 170, 400, 170);
+                }
+                if (endText[1]===80) {endText[1]=0;}
+            }
+            if (endText[0]===4) {
+                text("01001111 01110010 01100100 01100101 01110010", 79, 47, 250, 100);
+                text("01100011 01100001 01101110 01100011 01100101 01101100 01100101 01100100 00101110", 5, 155, 400, 170);
+            }
+            
+            moveDecor(-10, 410, 410, 470, 0);
+            moveDecor(-10, 410, 410, 470, 1);
+            moveDecor(-70, -10, -10, 410, 2);
+            moveDecor(-70, -10, -10, 410, 3);
+            moveDecor(-10, 410, -70, -10, 4);
+            moveDecor(-10, 410, -70, -10, 5);
+            moveDecor(410, 470, -10, 410, 6);
+            moveDecor(410, 470, -10, 410, 7);
+            }
+            
+            endGoal(goalX, goalY);
+            
+            {textAlign(LEFT, TOP);
+            
+            badCode(0, 280, "0 10  01", " 0  11", 18, "01100001");
+            badCode(66.5, 280, "0 10110", " 0     1", 19, "01101100");
+            badCode(0, 295, "0 10110", " 0     1", 20, "01101100");
+            badCode(66.5, 295, "", "", false, "00100000");
+            if (broken[18]===false||broken[19]===false||broken[20]===false) {
+                broken[18]=false;
+                broken[19]=false;
+                broken[20]=false;
+            }
+            
+            badCode(133, 295, "01000001", 0, 21);
+            badCode(199.5, 295, "01101101", 0, 22);
+            badCode(266, 295, "01101111", 0, 23);
+            badCode(332.5, 295, "01110101", 0, 24);
+            badCode(133, 310, "01101110", 0, 25);
+            badCode(199.5, 310, "01110100", 0, 27);
+            badCode(266, 310, "00100000", 0, 27);
+            badCode(332.5, 310, "01110000", 0, 27);
+            badCode(133, 325, "01100101", 0, 26);
+            badCode(199.5, 325, "01110010", 0, 27);
+            badCode(266, 325, "00100000", 0, 27);
+            badCode(332.5, 325, "01110011", 0, 27);
+            badCode(133, 340, "01101001", 0, 28);
+            badCode(199.5, 340, "01110100", 0, 29);
+            badCode(266, 340, "01100101", 0, 30);
+            badCode(332.5, 340, "00111010", 0, 31);
+            
+            badCode(0, 355, "001   01", "   011", 32, "00110001");
+            badCode(66.5, 355, "001   0", "   011 1", 33, "00110000");
+            badCode(133, 355, "001   0", "   011 1", 34, "00110000");
+            badCode(0, 370, "001   0", "   011 1", 34, "00110000");
+            badCode(66.5, 370, "001   0", "   011 1", 34, "00110000");
+            badCode(133, 370, "001   0", "   011 1", 34, "00110000");
+            badCode(0, 385, "001   0", "   011 1", 34, "00110000");
+            badCode(66.5, 385, "001   0", "   011 1", 34, "00110000");
+            badCode(133, 385, "001   0", "   011 1", 34, "00110000");
+            if (broken[32]===false||broken[33]===false) {
+                if (broken[34]) {
+                    if (endLuck<=1) {toolPlace[2]=true;}
+                    endText[0]=2;
+                }
+                broken[32]=false;
+                broken[33]=false;
+                broken[34]=false;
+                decSpeed=1;
+                
+                if (music[4].currentTime === 0) {
+                    music[4].currentTime = music[3].currentTime/1.1111;
+                    music[3].pause();
+                    music[4].play();
+                }
+            }
+            
+            badCode(0, 0, "01111001", 0, 0);
+            badCode(66.5, 0, "01101111", 0, 1);
+            badCode(133, 0, "01110101", 0, 2);
+            badCode(199.5, 0, "01110010", 0, 3);
+            badCode(266, 0, "00110011", 0, 4);
+            badCode(332.5, 0, "01100100", 0, 5);
+            badCode(0, 15, "01110000", 0, 6);
+            badCode(66.5, 15, "01110010", 0, 7);
+            badCode(133, 15, "01101001", 0, 8);
+            badCode(199.5, 15, "01101110", 0, 9);
+            badCode(266, 15, "01110100", 0, 10);
+            badCode(332.5, 15, "01100101", 0, 11);
+            badCode(0, 30, "01110010", 0, 12);
+            badCode(66.5, 30, "00101110", 0, 13);
+            badCode(133, 30, "01100011", 0, 14);
+            badCode(199.5, 30, "01101111", 0, 15);
+            badCode(266, 30, "01101101", 0, 16);
+            badCode(332.5, 30, "00101111", 0, 17);
+            codeRules();
+            
+            tool(41, 94, 0);
+            tool(351, 94, 1);
+            tool(64, 288, 2, true);
+            }
+            
+            enemy2(0, 160, eneWall[0]);
+            enemy2(270, 160, eneWall[2]);
+            enemy2(135.4, 160, eneWall[1]);
+            enemy2(0, fnlEneY[0], true);
+            enemy2(270, fnlEneY[2], true);
+            enemy2(135.4, fnlEneY[1], true);
+            enemy1(enemyX1, enemyY1, true, 3);
+            enemy1(enemyX2, enemyY2, true, 4);
+            enemy1(enemyX3, enemyY3, true, 5);
+            enemy1(enemyX4, enemyY4, true, 6);
+            boss(bossX, 95);
+            if (invincible) { dead = false; }
+            player(playerX, playerY);
+            
+            restart=false;
+            
+            if(stageComplete===false&&menu===false&&dead===false&&eneActive[0]) {
+                    if (playerX>enemyX1&&enemyX1<332) {enemyX1+=1;}
+                    if (playerX<enemyX1&&enemyX1>68) {enemyX1-=1;}
+                    if (playerY>enemyY1+10&&enemyY1<362) {enemyY1+=1;}
+                    if (playerY<enemyY1&&enemyY1>45) {enemyY1-=1;}
+            }
+            if(stageComplete===false&&menu===false&&dead===false&&eneActive[1]) {
+                    if (playerX>enemyX2&&enemyX2<332) {enemyX2+=0.7;}
+                    if (playerX<enemyX2&&enemyX2>68) {enemyX2-=0.7;}
+                    if (playerY>enemyY2+10&&enemyY2<362) {enemyY2+=0.7;}
+                    if (playerY<enemyY2&&enemyY2>45) {enemyY2-=0.7;}
+            }
+            if(stageComplete===false&&menu===false&&dead===false&&eneActive[2]) {
+                    if (playerX>enemyX3&&enemyX3<332) {enemyX3+=1.3;}
+                    if (playerX<enemyX3&&enemyX3>68) {enemyX3-=1.3;}
+                    if (playerY>enemyY3+10&&enemyY3<362) {enemyY3+=1.3;}
+                    if (playerY<enemyY3&&enemyY3>45) {enemyY3-=1.3;}
+            }
+            if(stageComplete===false&&menu===false&&dead===false&&eneActive[3]) {
+                    if (playerX>enemyX4&&enemyX4<332) {enemyX4+=1;}
+                    if (playerX<enemyX4&&enemyX4>68) {enemyX4-=1;}
+                    if (playerY>enemyY4+10&&enemyY4<362) {enemyY4+=1;}
+                    if (playerY<enemyY4&&enemyY4>45) {enemyY4-=1;}
+            }
+            
+            if (eneNum[3]===false) {
+            enemyX1=random(-50, 450);
+            enemyY1=random(-65, -40);
+            eneActive[0]=false;
+            eneNum[3]=true;
+            }
+            if (eneNum[4]===false) {
+            enemyX2=random(-50, 450);
+            enemyY2=random(-65, -40);
+            eneActive[1]=false;
+            eneNum[4]=true;
+            }
+            if (eneNum[5]===false) {
+            enemyX3=random(-130, -70);
+            enemyY3=random(-10, 200);
+            eneActive[2]=false;
+            eneNum[5]=true;
+            }
+            if (eneNum[6]===false) {
+            enemyX4=random(470, 530);
+            enemyY4=random(-10, 200);
+            eneActive[3]=false;
+            eneNum[6]=true;
+            }
+            
+            if (menu===false&&dead===false&&end===false&&attack===false) {
+            wild++;
+            
+            if (wild>=30) {
+                    if (toolPlace[0]===false&&bossSpd>0||toolPlace[1]===false&&bossSpd<0) {spdChange=9;}
+                    else {spdChange=7;}
+                if (random(0, 10)<=spdChange||bossSpd===0) {bossSpd=random(-3, 3);
+                    if (bossSpd>=-1.3&&bossSpd<=1.3) {
+                        while (bossSpd<=1.3&&bossSpd>=-1.3) {bossSpd=random(-3, 3);}
+                    }
+                }
+            
+            wild=0;
+            }
+            
+            if (bossX<=66) {wild=0;
+            bossSpd=random(1.5, 3);
+            }
+            if (bossX>=333) {wild=0;
+            bossSpd=random(-1.5, -3);
+            }
+            
+            bossX+=bossSpd;
+        }
+            
+            if (end) {
+                dead=false;
+                if (special) {
+                    endText[0]=4;
+                    if (bossX>playerX) {bossX--;}
+                    if (bossX<playerX) {bossX++;}
+                    if (bossX<playerX+1&&bossX>playerX-1) {bossX=playerX;}
+                    if (bossX===playerX) {
+                        scanner(bossX-66, 155, 133, 250, 3, 0);
+                    }
+                    if (scan[0]===false&&eyeFade>=370) {endActions[1]+=12;
+                    fill(0, 0, 0, endActions[1]);
+                    rect(-1, -1, 402, 402);
+                    if (endActions[1]>=800) {page="epilogue";}
+                    }
+                }
+                
+                else {
+                    endText[0]=3;
+                    if (endActions[0]>=155) {
+                    endActions[1]+=12;
+                    fill(0, 0, 0, endActions[1]);
+                    rect(-1, -1, 402, 402);
+                    }
+                    if (endActions[1]>=800) {page="epilogue";}
+                }
+                
+            }
+            
+    }
+
+        
+        if (stageComplete===false&&menu===false&&dead===false&&end===false) {
+            if (keys[UP]&&playerY>16&&up) {playerY-=speed;
+            upCannon=true;
+            downCannon=false;
+            leftCannon=false;
+            rightCannon=false;
+            }
+            if (keys[DOWN]&&playerY<384&&down) {playerY+=speed;
+            upCannon=false;
+            downCannon=true;
+            leftCannon=false;
+            rightCannon=false;
+            }
+            if (keys[LEFT]&&playerX>16&&left) {playerX-=speed;
+            upCannon=false;
+            downCannon=false;
+            leftCannon=true;
+            rightCannon=false;
+            }
+            if (keys[RIGHT]&&playerX<384&&right) {playerX+=speed;
+            upCannon=false;
+            downCannon=false;
+            leftCannon=false;
+            rightCannon=true;
+            }
+        }
+        if (stageComplete) {fill(255, 255, 255, 195);
+        rect(-1, -1, 401, 401);
+        textAlign(CENTER, EDGE);
+        fill(60, 0, 255);
+        textSize(20);
+        if (stage===256) {
+            text("Congratulations! You beat\nthe Glitch Master!", 200, 190);
+            textSize(13);
+            text("(that's not true. he just got bored)", 200, 250);
+            if (mouseIsPressed || keys[32]) {stageComplete=false;
+            page = "home";
+            localStorage.removeItem("GM");
+            bulletCalled = false;
+            right=true;
+            left=true;
+            up=true;
+            down=true;
+            upCannon=true;
+            downCannon=false;
+            leftCannon=false;
+            rightCannon=false;
+            restart=true;
+            nextOrBack = false;
+            }
+        }
+        else {
+        text("Congratulations! You completed\nstage " + stage + "!", 200, 190);
+        textSize(13);
+        text("Click anywhere or press space to continue", 200, 250);
+        if (mouseIsPressed || keys[32]) {stageComplete=false;
+        stage++;
+            if (stage===6) {
+                music[1].currentTime = music[0].currentTime;
+                music[0].pause();
+                music[1].play();
+            }
+            if (stage===16) {
+                music[3].currentTime = music[2].currentTime/1.125;
+                music[2].pause();
+                music[3].play();
+            }
+            if (stageCount<=stage) {
+                stageCount=stage;
+                localStorage.setItem("unlocked", stageCount.toString());
+            }
+        bulletCalled = false;
+        right=true;
+        left=true;
+        up=true;
+        down=true;
+        upCannon=true;
+        downCannon=false;
+        leftCannon=false;
+        rightCannon=false;
+        restart=true;}
+        }
+        }
+        if (dead) {fill(255, 255, 255, 195);
+        rect(-1, -1, 401, 401);
+        fill(255, 0, 0);
+        textSize(35);
+        textAlign(CENTER, EDGE);
+        if (stage === 256) {
+            text("lol You died", 200, 205);
+            if (funMusic[0].currentTime !== glitchMaster.returnTo) {
+                funMusic[0].pause();
+                funMusic[0].currentTime = glitchMaster.returnTo;
+                if (glitchMaster.returnTo > 5) { glitchMaster.progression = 84; }
+                else { glitchMaster.progression = 2; }
+                glitchMaster.lastCommand = 0;
+                funMusic[1].currectTime = 0;
+                funMusic[1].play();
+                glitchMaster.first = false;
+            }
+        }
+        else { text("You died", 200, 205); }
+        textSize(13);
+        text("Click anywhere or press space to continue", 200, 250);
+        if(mouseIsPressed || keys[32]) {
+        bulletCalled = false;
+        up=true;
+        down=true;
+        left=true;
+        right=true;
+        upCannon=true;
+        downCannon=false;
+        leftCannon=false;
+        rightCannon=false;
+        restart=true;
+        dead=false;}
+        }
+        if (keys[10]&&dead===false&&stageComplete===false&&end===false) {
+            if (stage === 256) { console.log("You can't pause the Glitch Master!"); }
+            else { menu=true; }
+        }
+        if (menu) {
+            fill(255, 255, 255, 175);
+            rect(-1, -1, 402, 402);
+            fill(0);
+            textSize(40);
+            textAlign(CENTER, EDGE);
+            text("Paused", 200, 55);
+            rect(100, 90, 200, 50);
+            rect(100, 165, 200, 50);
+            rect(100, 240, 200, 50);
+            rect(100, 315, 200, 50);
+            fill(255);
+            textSize(25);
+            text("Resume", 200, 125);
+            text("Exit to Menu", 200, 200);
+            text("Stage Select", 200, 275);
+            text("Credits", 200, 350);
+            if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>90&&mouseY<140) {
+                menu=false;
+            }
+            if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>165&&mouseY<215) {
+                page="home";
+                nextOrBack=false;
+            }
+            if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>240&&mouseY<290) {
+                page="stage select";
+                nextOrBack=false;
+            }
+            if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>315&&mouseY<365) {
+                page="credits";
+            }
+        }
+        creditsFade=-100;
+        creditsY=450;
+    }
+    else {
+        for (var a = 0; a < music.length; a++) {
+            music[a].pause();
+            music[a].currentTime = 0;
+        }
+    }
+    
+    if (page==="intermission") {
+        if (sceneCount >= 10) {sceneFade+=2;}
+        sceneCount++;
+        fill(255, 255, 255, sceneFade);
+        textAlign(CENTER, EDGE);
+        textFont(font, 15);
+        text("The virus had a goal.", 200, 135);
+        fill(255, 255, 255, sceneFade-300);
+        text("The virus must achieve its goal.", 200, 185);
+        fill(255, 255, 255, sceneFade-600);
+        text("And it will do anything", 200, 235);
+        text("to protect it...", 200, 260);
+        fill(0, 0, 0, sceneFade-1200);
+        rect(0, 0, 400, 400);
+        if (sceneFade>=1500) {
+            intermission=false;
+            page="game";
+            music[2].play();
+        }
+    }
+    
+    if (page==="epilogue") {
+        end = false;
+    
+    if (special) {
+        
+if (TitleHere[0]) {
+        textFont(font, 27);
+        udrscrTimer[0]++;
+        udrscrTimer[1]++;
+        if (udrscrTimer[0]<30) {underscore=" ";}
+        if (udrscrTimer[0]>=30) {underscore="_";}
+        if (udrscrTimer[0]>=60) {udrscrTimer[0]=0;}
+        
+        if (udrscrTimer[1]>=120&&udrscrTimer[1]<=160&&udrscrTimer[1]%3===0) {
+            epilText[1]+=epilText[0][(udrscrTimer[1]-120)/3];
+        }
+        fill(255);
+        textAlign(CENTER, CENTER);
+        if (udrscrTimer[1]<=160) { text(epilText[1]+underscore, 0, 0, 400, 250); }
+        else { text(epilText[1], 0, 0, 400, 250); }
+        
+        if (udrscrTimer[1]>=160) {
+            
+            if (typedText.text.length>=20) {underscore=" ";}
+            userInput(10, 195, 380, 50, 20);
+            if (typedText.text.length>=1) {fill(150);
+                stroke(0);
+                rect(150, 300, 100, 50);
+                fill(0);
+                text("Enter", 200, 325);
+                if (mouseIsPressed&&mouseX>150&&mouseX<250&&mouseY>300&&mouseY<350 || keys[10]) {
+                    enterName=true;
+                }
+            }
+            
+            
+        if (enterName) {fill(255, 255, 255, 200);
+            rect(-1, -1, 402, 402);
+            fill(0);
+            text("Is "+typedText.text+" the name you want to enter?", 0, 0, 400, 337);
+            text("y", 100, 300);
+            text("n", 300, 300);
+            
+            if (mouseX>90&&mouseX<110&&mouseY>290&&mouseY<315) {
+                noFill();
+                stroke(0);
+                rect(90, 290, 20, 25);
+                if (mouseIsPressed) {enterName=false;
+                    TitleHere[0]=false;
+                    typedText.letters = [];
+                    typedText.text = "";
+                }
+            }
+            if (mouseX>290&&mouseX<310&&mouseY>290&&mouseY<315) {
+                noFill();
+                stroke(0);
+                rect(290, 290, 20, 25);
+                if (mouseIsPressed) {enterName=false;
+                    //TitleHere[1]=true;
+                }
+            }
+        }
+            
+        }
+}
+
+else {
+        if (sceneCount>=10) {sceneFade+=2;}
+        sceneCount++;
+        fill(255, 255, 255, sceneFade);
+        textAlign(CENTER, EDGE);
+        textFont(font, 15);
+        text("The virus was no longer harmful.", 200, 135);
+        fill(255, 255, 255, sceneFade-300);
+        text("It was no longer a virus.", 200, 185);
+        fill(255, 255, 255, sceneFade-600);
+        text("But it still needs to know one thing.", 200, 235);
+        fill(255, 255, 255, sceneFade-900);
+        text("What now?", 200, 260);
+        fill(0, 0, 0, sceneFade-1400);
+        rect(0, 0, 400, 400);
+        fill(255, 255, 255, sceneFade-1650);
+        text("The answer is up to us.", 200, 200);
+        returnTo="logo";
+        if (sceneFade>=2200) {
+            page="credits";
+            if (tip===0) { tip = 1; }
+        }
+}
+    }
+    
+    
+    else {
+        if (sceneCount>=10) {sceneFade+=2;}
+        sceneCount++;
+        fill(255, 255, 255, sceneFade);
+        textAlign(CENTER, EDGE);
+        textFont(font, 15);
+        text("There was a virus.", 200, 135);
+        fill(255, 255, 255, sceneFade-300);
+        text("A virus that learned to hack anything.", 200, 185);
+        fill(255, 255, 255, sceneFade-600);
+        text("A virus that was pleased with the world", 200, 235);
+        fill(255, 255, 255, sceneFade-900);
+        text("in all its catastrophe.", 200, 260);
+        if (sceneFade>=1500) {
+            page="home";
+            if (tip===0) { tip = 1; }
+        }
+        }
+    }
+    
+    if (page==="instructions") {
+        background(158, 158, 158);
+        
+        strokeWeight(1);
+        textFont(font, 15);
+        fill(0, 0, 0);
+        textAlign(CENTER, EDGE);
+        text("Use the arrow keys to move.\n\nPress enter to bring up the\npause menu.\n\nIn later levels, you will\nbe able to attack using\nthe spacebar.\n\nReach the green goal labeled 'update' to complete each level.\n\nAnything red is an enemy. Do not let it touch you.\n\nEnemies with a red outline are immune to your laser.", 55, 25, 325, 400);
+        stroke(0, 0, 0);
+        rect(25, 25, 50, 40);
+        rect(25, 80, 50, 40);
+        fill(255, 255, 255);
+        text("Exit", 50, 50);
+        text("Next", 50, 105);
+        stage=1;
+        goal(100, 320);
+        enemy2(200, 320);
+        if (mouseIsPressed&&mouseX>=25&&mouseY>=25&&mouseX<=75&&mouseY<=65) {page=returnTo;}
+        if (mouseIsPressed&&mouseX>=25&&mouseY>=80&&mouseX<=75&&mouseY<=120&&nextOrBack) {page="instructions 2";}
+        
+        if (mouseIsPressed) {nextOrBack=false;}
+        else {nextOrBack=true;}
+    }
+    if (page==="instructions 2") {background(158, 158, 158);
+    
+    fill(0, 0, 0);
+    textAlign(CENTER, EDGE);
+    textSize(15);
+    text("  Digits with a yellow background\n  are broken, and act as a wall.\n\nIf the broken code has blue\ndigits, it can be fixed.\n\nCode with blue backgrounds can be picked up and used to fix broken code.\n\nIn the later stages, you will encounter three types of scanners. Yellow ones activate enemies, orange ones slow you down, and red ones freeze you.\n\n\nIn Title Here, you play as a computer program designed as a self-improving software.  Your goal is just that: find code to improve yourself.", 35, 30, 335, 400);
+        stroke(0, 0, 0);
+        rect(25, 25, 50, 40);
+        rect(25, 80, 50, 40);
+        fill(255, 255, 255);
+        text("Exit", 50, 50);
+        text("Back", 50, 105);
+        tool(300, 350);
+        textAlign(LEFT, TOP);
+        textSize(14);
+        badCode(87, 370, "01101110", 0, true);
+        badCode(250, 370, "011 1   ", "   0 110", true);
+        scanner(154, 370, 96, 16, 2, 51);
+        toolPlace=[true];
+        tool(198, 370, 0);
+        if (mouseIsPressed&&mouseX>=25&&mouseY>=25&&mouseX<=75&&mouseY<=65) {page=returnTo;}
+        if (mouseIsPressed&&mouseX>=25&&mouseY>=80&&mouseX<=75&&mouseY<=120&&nextOrBack) {page="instructions";}
+        
+    if (mouseIsPressed) {nextOrBack=false;}
+    else {nextOrBack=true;}
+    }
+    
+    if (page==="options") {
+        background(158);
+        if (mouseIsPressed===false) {nextOrBack=true;}
+        textFont(font, 40);
+        textAlign(CENTER, EDGE);
+        fill(0);
+        text("Options", 200, 80);
+        rect(100, 120, 200, 50);
+        rect(100, 200, 200, 50);
+        rect(100, 280, 200, 50);
+        fill(255);
+        textSize(27);
+        text("Menu", 200, 155);
+        text("Stage Select", 200, 235);
+        text("Credits", 200, 315);
+        if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>120&&mouseY<170) {
+            page="home";
+            nextOrBack=false;
+        }
+        if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>200&&mouseY<250&&nextOrBack) {
+            page="stage select";
+            returnTo="options";
+            nextOrBack=false;
+        }
+        if (mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>280&&mouseY<330) {
+            page="credits";
+            returnTo="options";
+            creditsY=450;
+            creditsFade=-200;
+            nextOrBack=false;
+        }
+    }
+    
+    
+    if (page==="Glitch Master") {
+        if (sceneCount>=10) {sceneFade+=2;}
+        sceneCount++;
+        fill(255, 255, 255, sceneFade);
+        textAlign(CENTER, EDGE);
+        textFont(font, 15);
+        if (localStorage.getItem("GM") > 7) { localStorage.setItem("GM", "7"); }
+        text(glitchMaster.cantEscape[localStorage.getItem("GM")-2][0], 200, 140);
+        fill(255, 255, 255, sceneFade-300);
+        text(glitchMaster.cantEscape[localStorage.getItem("GM")-2][1], 200, 220);
+        if (sceneFade>=800) {
+            if (localStorage.getItem("GM") < 7) {
+                page = "game";
+                stage = 256;
+            }
+            else {
+                page = "home";
+                localStorage.removeItem("GM");
+            }
+        }
+        
+    }
+    
+    
+    if (page==="credits") {
+    
+    {K = false;
+R = true;
+L = true;
+W = false;
+num890 = false;
+RLine = 275;
+RArc = 273;
+RX = 150;
+RY = 165;
+LY = 75;
+LX = 150;
+KLine = 275;
+KX1 = 150;
+KY1 = 165;
+KX2 = 150;
+KY2 = 165;
+WX1 = 50;
+WY1 = 75;
+WX2 = 125;
+WY2 = 275;
+WX3 = 200;
+WY3 = 100;
+WX4 = 275;
+WY4 = 275;
+numRed = 0;
+numGreen = 0;
+fadeCount = 0;
+fade = 0;}
+    
+    background(158);
+    fill(0);
+    textFont(font, 25);
+    textAlign(CENTER, TOP);
+    if (creditsY>=-1300) {creditsY--;}
+    else {creditsFade+=2;}
+    text("A KRLW890 Software production", 0, creditsY, 400, 1000);
+    textSize(50);
+    text("[title here]", 200, creditsY+170);
+    textSize(20);
+    text('Help with decoration design:\nthe Ashbox Binary Translator\n\n\n\nAll other code/design/plot/etc.:\nKRLW890\n\n\n\n\n\nSpecial Thanks to:\n\nKhan Academy and everyone who works there for making programming easy and enjoyable.\n\n\n\nAll friends and relatives who supported me along the way.\n\n\n\n"Wait But Why"\nfor plot inspiration.\n\n\n\nAnd you, for playing Title Here. Thanks!', 0, creditsY+350, 400, 10000);
+    textFont(LicenceFont);
+    logo(200, creditsY+1500, 200);
+    fill(0, 0, 0, creditsFade);
+    noStroke();
+    rect(-1, -1, 402, 402);
+    if (creditsFade>=300) {page=returnTo;}
+    }
+};
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+
+    });
+
+  </script>
+
+</body>
+
+</html>
