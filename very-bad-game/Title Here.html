@@ -58,16 +58,6 @@
 
         }
 
-        function getImage(s) {
-
-            var url = "https://www.kasandbox.org/stylesheets/scratchpads-exec-package/images/" + s + ".png";
-
-            processing.externals.sketch.imageCache.add(url);
-
-            return processing.loadImage(url);
-
-        }
-
 
         with (processing) {
 var font = createFont("monospace");
@@ -1042,9 +1032,9 @@ draw = function() {
         textSize(11);
         fill(0, 0, 0);
         textAlign(LEFT, BOTTOM);
-        text("Title Here 1.003", 3, 399);
+        text("Title Here 1.004", 3, 399);
         textAlign(RIGHT, BOTTOM);
-        text("KRLW890 Software 2015-2016.", 397, 399);
+        text("KRLW890 Software 2015-2019.", 397, 399);
     }
     
     if (page==="intro") {
@@ -3766,12 +3756,17 @@ else {
         text(glitchMaster.cantEscape[localStorage.getItem("GM")-2][0], 200, 140);
         fill(255, 255, 255, sceneFade-300);
         text(glitchMaster.cantEscape[localStorage.getItem("GM")-2][1], 200, 220);
-        if (sceneFade>=800) {
-            if (localStorage.getItem("GM") < 7) {
-                page = "game";
-                stage = 256;
+        if (localStorage.getItem("GM") < 7) {
+            textSize(10);
+            fill(255, 255, 255, sceneFade*4-2400);
+            text("When you have prepared yourself,\nclick to start.", 200, 300);
+        }
+        if (sceneFade>=500) {
+            if (localStorage.getItem("GM") < 7 && mouseIsPressed) {
+                    page = "game";
+                    stage = 256;
             }
-            else {
+            else if (localStorage.getItem("GM") >= 7 && (sceneFade >= 800 || mouseIsPressed)) {
                 page = "home";
                 localStorage.removeItem("GM");
             }
