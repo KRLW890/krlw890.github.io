@@ -29,7 +29,7 @@ The main instructions are available in-game.  This document is mainly to explain
 tricks (although I would definitely recommend reading instructions!).
 
     **LAUNCHING:
-Here's a link where you can play it. Please dont.
+Here's a link where you can play it. Please don't.
 https://krlw890.github.io/very-bad-game/Title%20Here.html
 This game was made for Google Chrome. Using another browser could affect the visuals, audio,
 and/or gameplay. If you want to play this game (which, again, I do not recommend), then use
