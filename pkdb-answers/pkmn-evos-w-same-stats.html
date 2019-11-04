@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pokemon that keep stats when they evolve</title>
+  </head>
+    <script src="../PapaParse-4.3.2/papaparse.min.js"></script>
+  
+  <body>
+    <p>Pokemon information by <a href="https://veekun.com">veekun</a>.</p>
+    <p id="text"><i>Loading... <i id="percent"></i></i></p>
+    <h1>Pokemon that keep every stat when evolving:</h1>
+    <p id="6stat"></p>
+    <h1>Pokemon that keep five stats when evolving:</h1>
+    <p id="5stat"></p>
+    <h1>Pokemon that keep four stats when evolving:</h1>
+    <p id="4stat"></p>
+    <h1>Pokemon that keep three stats when evolving:</h1>
+    <p id="3stat"></p>
+    <h1>Pokemon that keep two stats when evolving:</h1>
+    <p id="2stat"></p>
+    <h1>Pokemon that keep one stat when evolving:</h1>
+    <p id="1stat"></p>
+  </body>
+  
+  <script>
+    var pair = function(mon1, stats1, mon2, stats2) {
+        this.mon1 = {
+            name: mon1,
+            stats: stats1
+        };
+        this.mon2 = {
+            name: mon2,
+            stats: stats2
+        };
+    };
+    
+    var pairs = [];
+    
+    Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_species.csv", {
+        download: true,
+        header: true,
+        complete: function(pokemon) {
+            Papa.parse("https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon_stats.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    stats = [];
+                    for (var a = 0; a < results.data.length; a++) {
+                        if (stats[results.data[a].pokemon_id] === undefined) { stats[results.data[a].pokemon_id] = []; }
+                        stats[results.data[a].pokemon_id][results.data[a].stat_id-1] = results.data[a].base_stat;
+                    }
+                    for (var a = 0; a < pokemon.data.length; a++) {
+                        if (a%100 === 0) { document.getElementById("percent").innerText = Math.round(a/pokemon.data.length*100)+"%"; }
+                        
+                        if (pokemon.data[a].evolves_from_species_id !== "" && pokemon.data[a].evolves_from_species_id !== undefined)
+                        {
+                            for (var i = 0; i < 6; i++)
+                            {
+                                if (stats[pokemon.data[a].id][i] == stats[pokemon.data[a].evolves_from_species_id][i])
+                                {
+                                    var evolvesFromName;
+                                    for (var b = 0; b < pokemon.data.length; b++) {
+                                        if (pokemon.data[b].id === pokemon.data[a].evolves_from_species_id)
+                                        {
+                                            evolvesFromName = pokemon.data[b].identifier;
+                                            break;
+                                        }
+                                    }
+                                    pairs.push(new pair(evolvesFromName, stats[pokemon.data[a].evolves_from_species_id], pokemon.data[a].identifier, stats[pokemon.data[a].id]));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    document.getElementById("text").innerText = "Done!";
+                    
+                    for (var i = 0; i < pairs.length; i++)
+                    {
+                        var p = document.createElement("p"), p1 = document.createElement("label"), p2 = document.createElement("label");
+                        var commonStats = 0;
+                        p1.innerHTML = pairs[i].mon1.name + " (";
+                        p2.innerHTML = pairs[i].mon2.name + " (";
+                        for (var j = 0; j < 6; j++)
+                        {
+                            if (pairs[i].mon1.stats[j] == pairs[i].mon2.stats[j])
+                            {
+                                var s1 = document.createElement("strong"), s2 = document.createElement("strong");
+                                s1.innerText = pairs[i].mon1.stats[j]; s2.innerText = pairs[i].mon1.stats[j];
+                                p1.appendChild(s1); p2.appendChild(s2);
+                                commonStats++;
+                            }
+                            else
+                            {
+                                p1.innerHTML += pairs[i].mon1.stats[j];
+                                p2.innerHTML += pairs[i].mon2.stats[j];
+                            }
+                            if (j != 5)
+                            {
+                                p1.innerHTML += ", ";
+                                p2.innerHTML += ", ";
+                            }
+                        }
+                        p1.innerHTML += ")";
+                        p2.innerHTML += ")";
+                        
+                        p.appendChild(p1);
+                        p.innerHTML += " into ";
+                        p.appendChild(p2);
+                        document.getElementById(commonStats+"stat").appendChild(p);
+                    }
+                }
+            });
+        }
+    });
+    
+  </script>
+
+<html>
+
