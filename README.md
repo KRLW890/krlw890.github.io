@@ -11,7 +11,9 @@ Finds the weaknesses of all possible triple-type combinations achievable via For
 
 Finds all Pokemon with stats mirrored over Physical and Special stats, once again to find an answer for a database question: <a href="https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-w-mirror-stats.html</a>
 
-An edited version of the above that find all Pokemon who switch from a higher atk to spa stat upon evolution, and vise versa (database answer): <a href="https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html">https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html</a>
+An edited version of the above program that finds all Pokemon who switch from a higher atk to spa stat upon evolution, and vise versa (database answer): <a href="https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html">https://krlw890.github.io/pkdb-answers/pkmn-evos-w-stat-swaps.html</a>
+
+Another edited version of the above that finds all Pokemon who keep some stats from their previous form after they evolve (another database answer): <a href="https://krlw890.github.io/pkdb-answers/pkmn-evos-w-same-stats.html">https://krlw890.github.io/pkdb-answers/pkmn-evos-w-same-stats.html</a>
 
 Finds the Hidden Power types of all possible even/odd IV combinations (database answer): <a href="https://krlw890.github.io/pkdb-answers/hptypes.html">https://krlw890.github.io/pkdb-answers/hptypes.html</a>
 
