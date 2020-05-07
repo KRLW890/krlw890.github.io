@@ -1,0 +1,55 @@
+var active = true, reportText = true, reportUsers = true, printInLog = true, secondsBetweenChecking = 5;
+var ping = new Audio("https://raw.githubusercontent.com/KRLW890/krlw890.github.io/master/ping.mp3");
+var chat =  document.getElementsByClassName("qa-part-custom-form")[0];
+var users =  document.getElementById("qa-chat-sidebar");
+var chatText = chat.innerText;
+var userlist = users.innerText;
+
+var check = function() {
+if (active) {
+    if (printInLog)
+        console.log("Checking...");
+    if (reportText && chat.innerText != chatText) {
+        console.log("New messages!");
+        ping.play();
+        chatText = chat.innerText;
+        userlist = users.innerText;
+    }
+    else if (reportUsers && userlist != users.innerText) {
+        console.log("New users!");
+        ping.play();
+        userlist = users.innerText;
+    }
+    else if (printInLog)
+        console.log("No new messages");
+    
+    window.setTimeout(check, secondsBetweenChecking*1000);
+}
+else if (printInLog)
+    console.log("Check terminated.");
+};
+
+var cancel = function() {
+    active = false;
+};
+var resume = function() {
+    active = true;
+    chatText = chat.innerText;
+    userlist = users.innerText;
+    window.setTimeout(check, secondsBetweenChecking*1000);
+};
+
+window.setTimeout(check, secondsBetweenChecking*1000);
+
+
+/** HOW TO USE **
+Every five seconds, this script checks the chatlog and online users and pings you if there's an update. 
+Type these commands into the console to change various settings (case-sensitive):
+
+  "cancel()" cancels the check until reactivated
+  "resume()" resumes the check after canceling it (default is on)
+  "reportText = " [true/false] toggles whether to ping for new messages in chat (default is true)
+  "reportUsers = " [true/false] toggles whether to ping when new users join the room (default is true)
+  "printInLog = " [true/false] toggles whether the script posts a message in the console every time it checks (default is true)
+  "secondsBetweenChecking = " [number] change how long the script waits before checking (default is 5)
+*/
