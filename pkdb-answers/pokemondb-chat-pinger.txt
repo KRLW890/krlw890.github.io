@@ -1,3 +1,5 @@
+// A guide for how to use this is at the bottom
+
 var active = true, reportText = true, reportUsers = true, printInLog = true, secondsBetweenChecking = 5;
 var ping = new Audio("https://raw.githubusercontent.com/KRLW890/krlw890.github.io/master/ping.mp3");
 var chat =  document.getElementsByClassName("qa-part-custom-form")[0];
