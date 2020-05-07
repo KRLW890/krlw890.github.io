@@ -42,7 +42,10 @@ var resume = function() {
 window.setTimeout(check, secondsBetweenChecking*1000);
 
 
-/** HOW TO USE **
+/*************************
+******* HOW TO USE *******
+**************************
+In Chrome, (and possibly some other browsers, I didn't test it super extensively) open up your brower's console (ctrl+shift+I, make sure you select the tab that says "console"), copy and paste the text here onto it, then press enter.
 Every five seconds, this script checks the chatlog and online users and pings you if there's an update. 
 Type these commands into the console to change various settings (case-sensitive):
 
