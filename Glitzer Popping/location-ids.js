@@ -257,3 +257,26 @@ var locations = [
     "(fateful encounter)"
 ];
 
+var getLocationId = function(name, col)
+{
+    var value = "?";
+    if (name === "") { value = 0; }
+    else {
+        for (var a = 0; a < locations.length; a++) {
+            if (name.toLowerCase() === locations[a].toLowerCase()) {
+                value = a;
+                break;
+            }
+        }
+    }
+    
+    if (value === "?") {
+        document.getElementById("locationNote-"+col).innerText = " Location not found";
+        return "abort";
+    }
+    else {
+        document.getElementById("locationNote-"+col).innerText = "";
+        return value;
+    }
+};
+

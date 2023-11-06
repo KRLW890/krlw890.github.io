@@ -5,7 +5,7 @@ var mon = function(name, expRate, glitch) {
 };
 
 var pokemon = [
-    new mon("Ten question marks", 0, true),
+    new mon("??????????", 0, true),
     new mon("Bulbasaur", 4),
     new mon("Ivysaur", 4),
     new mon("Venusaur", 4),
@@ -37,7 +37,7 @@ var pokemon = [
     new mon("Nidoran-F", 4),
     new mon("Nidorina", 4),
     new mon("Nidoqueen", 4),
-    new mon("Nidoran-M™‚", 4),
+    new mon("Nidoran-Mï¿½ï¿½", 4),
     new mon("Nidorino", 4),
     new mon("Nidoking", 4),
     new mon("Clefairy", 3),
@@ -450,17 +450,75 @@ var pokemon = [
 var EXPgroup = [0, 0, 0];
 var EXPformula = [
     function(exp) { return "Level ???"; },
-    function(exp) { return "Level "+Math.floor(Math.cbrt(4*exp/5)); },
-    function(exp) { return "Level "+Math.floor(Math.cbrt(exp)); },
-    function(exp) { return "Level "+Math.floor(Math.cbrt(5*exp/4)); },
-    function(exp) { return "Equation in progress :("; },
     function(exp) {
-        if (9) {  }
-        return "Equation in progress :(";
+        if (exp >= 1250000)
+            return "Level 100";
+        else
+            return "Level "+Math.floor(Math.cbrt(Math.ceil(4*exp/5)));
     },
     function(exp) {
-        
-        return "Equation in progress :(";
+        if (exp >= 1000000)
+            return "Level 100";
+        else
+            return "Level "+Math.floor(Math.cbrt(exp));
+    },
+    function(exp) {
+        if (exp >= 800000)
+            return "Level 100";
+        else
+            return "Level "+Math.floor(Math.cbrt(5*exp/4));
+    },
+    function(exp) {
+        if (exp >= 1059860)
+            return "Level 100";
+        else if (exp == 0)
+            return "Level 0";
+        else if (exp <= 9)
+            return "Level 1";
+        else
+        {
+            var l;
+            for (l = 0; exp >= Math.floor(6/5*Math.pow(l,3) - 15*Math.pow(l,2) + 100*l - 140); l++) {}
+            return "Level " + (l-1);
+        }
+    },
+    function(exp) {
+        if (exp >= 600000)
+            return "Level 100";
+        else
+        {
+            var l;
+            if (exp < 125000)
+                for (l = 1; exp >= Math.floor(Math.pow(l,3)*(100-l)/50); l++) {}
+            else if (exp < 257834)
+                for (l = 51; exp >= Math.floor(Math.pow(l,3)*(150-l)/100); l++) {}
+            else if (exp < 583539)
+                for (l = 69; exp >= Math.floor(Math.pow(l,3)*Math.floor((1911-10*l)/3) / 500); l++) {}
+            else
+                for (l = 99; exp >= Math.floor(Math.pow(l,3)*(160-l)/100); l++) {
+                    if (l >= 160)
+                    {
+                        l = 1000;
+                        break;
+                    }
+                }
+            return "Level " + (l-1);
+        }
+    },
+    function(exp) {
+        if (exp >= 1640000)
+            return "Level 100";
+        else
+        {
+            var l;
+            if (exp < 1957)
+                for (l = 1; exp >= Math.floor(Math.pow(l,3) * (Math.floor((l+1)/3)+24)/50); l++) {}
+            else if (exp < 46656)
+                for (l = 16; exp >= Math.floor(Math.pow(l,3) * (l+14)/50); l++) {}
+            else
+                for (l = 37; exp >= Math.floor(Math.pow(l,3) * (Math.floor(l/2)+32)/50); l++) {}
+            return "Level " + (l-1);
+        }
     }
 ];
 var setEXP = function(id, col) {

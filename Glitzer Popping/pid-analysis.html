@@ -215,6 +215,39 @@ var analyze = function() {
         }
         type += substructures[0].charAt(a) + document.getElementById("sub1").innerText.charAt(b) + " ";
     }
+    switch (type)
+    {
+    case "GG AE EM MA ":
+        type += "(Type 1)";
+        break;
+    case "GG AM EA ME ":
+        type += "(Type 2)";
+        break;
+    case "GA AG EM ME ":
+        type += "(Type 3)";
+        break;
+    case "GA AE EG MM ":
+        type += "(Type 4)";
+        break;
+    case "GA AM EE MG ":
+        type += "(Type 5)";
+        break;
+    case "GE AG EA MM ":
+        type += "(Type 6)";
+        break;
+    case "GE AA EM MG ":
+        type += "(Type 7)";
+        break;
+    case "GE AM EG MA ":
+        type += "(Type 8)";
+        break;
+    case "GM AG EE MA ":
+        type += "(Type 9)";
+        break;
+    case "GM AA EG ME ":
+        type += "(Type 10)";
+        break;
+    };
     document.getElementById("cor1").innerText = type;
     
     type = "";
@@ -224,6 +257,39 @@ var analyze = function() {
         }
         type += substructures[0].charAt(a) + document.getElementById("sub2").innerText.charAt(b) + " ";
     }
+    switch (type)
+    {
+    case "GG AE EM MA ":
+        type += "(Type 1)";
+        break;
+    case "GG AM EA ME ":
+        type += "(Type 2)";
+        break;
+    case "GA AG EM ME ":
+        type += "(Type 3)";
+        break;
+    case "GA AE EG MM ":
+        type += "(Type 4)";
+        break;
+    case "GA AM EE MG ":
+        type += "(Type 5)";
+        break;
+    case "GE AG EA MM ":
+        type += "(Type 6)";
+        break;
+    case "GE AA EM MG ":
+        type += "(Type 7)";
+        break;
+    case "GE AM EG MA ":
+        type += "(Type 8)";
+        break;
+    case "GM AG EE MA ":
+        type += "(Type 9)";
+        break;
+    case "GM AA EG ME ":
+        type += "(Type 10)";
+        break;
+    };
     document.getElementById("cor2").innerText = type;
 };
 </script>

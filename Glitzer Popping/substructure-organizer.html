@@ -8,6 +8,7 @@
 <script src="attack-ids.js"></script>
 <script src="location-ids.js"></script>
 <script src="table-builder.js"></script>
+<script src="save-handler.js"></script>
 <style>
   body {
     text-align: center;
@@ -41,20 +42,42 @@
   .note {
     color: rgb(255, 0, 0);
   }
+  saves {
+    width: 95%;
+  }
+  .savefile {
+    width: 2%;
+  }
 </style>
 <body>
   <a href="pid-analysis.html">Click here for the PID Analyzer</a><br>
+  <table id="saves">
+    <tr>
+      <td id="save0"></td>
+      <td id="save1"></td>
+      <td id="save2"></td>
+      <td id="save3"></td>
+      <td id="save4"></td>
+    </tr>
+    <tr>
+      <td id="save5"></td>
+      <td id="save6"></td>
+      <td id="save7"></td>
+      <td id="save8"></td>
+      <td id="save9"></td>
+    </tr>
+  </table><br>
   <label>Corruption type:</label><br>
-  <input type="radio" name="type" onclick="buildOrganizer('GG AE EM MA');">1 (GG AE EM MA)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GG AM EA ME');">2 (GG AM EA ME)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GA AG EM ME');">3 (GA AG EM ME)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GA AE EG MM');">4 (GA AE EG MM)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GA AM EE MG');">5 (GA AM EE MG)</input><br>
-  <input type="radio" name="type" onclick="buildOrganizer('GE AG EA MM');">6 (GE AG EA MM)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GE AA EM MG');">7 (GE AA EM MG)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GE AM EG MA');">8 (GE AM EG MA)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GM AG EE MA');">9 (GM AG EE MA)</input>
-  <input type="radio" name="type" onclick="buildOrganizer('GM AA EG ME');">10 (GM AA EG ME)</input>
+  <input type="radio" id="corType1" name="type" onclick="buildOrganizer('GG AE EM MA');">1 (GG AE EM MA)</input>
+  <input type="radio" id="corType2" name="type" onclick="buildOrganizer('GG AM EA ME');">2 (GG AM EA ME)</input>
+  <input type="radio" id="corType3" name="type" onclick="buildOrganizer('GA AG EM ME');">3 (GA AG EM ME)</input>
+  <input type="radio" id="corType4" name="type" onclick="buildOrganizer('GA AE EG MM');">4 (GA AE EG MM)</input>
+  <input type="radio" id="corType5" name="type" onclick="buildOrganizer('GA AM EE MG');">5 (GA AM EE MG)</input><br>
+  <input type="radio" id="corType6" name="type" onclick="buildOrganizer('GE AG EA MM');">6 (GE AG EA MM)</input>
+  <input type="radio" id="corType7" name="type" onclick="buildOrganizer('GE AA EM MG');">7 (GE AA EM MG)</input>
+  <input type="radio" id="corType8" name="type" onclick="buildOrganizer('GE AM EG MA');">8 (GE AM EG MA)</input>
+  <input type="radio" id="corType9" name="type" onclick="buildOrganizer('GM AG EE MA');">9 (GM AG EE MA)</input>
+  <input type="radio" id="corType10" name="type" onclick="buildOrganizer('GM AA EG ME');">10 (GM AA EG ME)</input>
   <br><br>
 
   <table id="organizer" style="width: 100%; text-align: center;">
@@ -162,6 +185,63 @@ var setPPups = function(input, external) {
         for (var a = 0; a < 4; a++) {
             value += Math.pow(4, a)*document.getElementById("ppup-"+input.col+"-"+a).value;
         }
+        document.getElementById("decVal"+input.row).value = value;
+        synchValues(document.getElementById("decVal"+input.row), input.col);
+    }
+};
+
+var setPokerus = function(row, col, external)
+{
+    var value;
+    if (external === false)
+        value = document.getElementById("pokerusStrain"+col).value * 16 + JSON.parse(document.getElementById("pokerusDays"+col).value);
+    else
+    {
+        value = JSON.parse(document.getElementById("decVal"+row).value);
+        document.getElementById("pokerusStrain"+col).value = Math.floor(value/16);
+        document.getElementById("pokerusDays"+col).value = value%16;
+    }
+    
+    document.getElementById("pokerusLabel"+col).innerText = " (";
+    if (Math.floor(value/16) == 0)
+    {
+        if (value == 0)
+            document.getElementById("pokerusLabel"+col).innerText += "No Pokerus";
+        else
+            document.getElementById("pokerusLabel"+col).innerText += "Invalid strain";
+    }
+    else
+    {
+        switch (Math.floor(value/16)%4)
+        {
+        case 0:
+            document.getElementById("pokerusLabel"+col).innerText += "Type A";
+            break;
+        case 1:
+            document.getElementById("pokerusLabel"+col).innerText += "Type B";
+            break;
+        case 2:
+            document.getElementById("pokerusLabel"+col).innerText += "Type C";
+            break;
+        case 3:
+            document.getElementById("pokerusLabel"+col).innerText += "Type D";
+            break;
+        };
+        if (value%16 == 0)
+            document.getElementById("pokerusLabel"+col).innerText += ", cured";
+    }
+    document.getElementById("pokerusLabel"+col).innerText += ")";
+    if (external == false)
+    {
+        document.getElementById("decVal"+row).value = value;
+        synchValues(document.getElementById("decVal"+row), col);
+    }
+};
+
+var setLocation = function(input) {
+    var value = getLocationId(input.value, input.col);
+    if (value != "abort")
+    {
         document.getElementById("decVal"+input.row).value = value;
         synchValues(document.getElementById("decVal"+input.row), input.col);
     }
@@ -305,6 +385,8 @@ var setRibbonsFromValues = function(input) {
         synchValues(document.getElementById("hexVal"+(input.row+(3-a))), input.col);
     }
 };
+
+setSaveBoxes();
 
 </script>
 </html>
