@@ -183,7 +183,7 @@ var analyze = function() {
     document.getElementById("25F").innerText = gender(pid.dec%256, 63);
     document.getElementById("75F").innerText = gender(pid.dec%256, 191);
     
-    if (pid.hex.charAt(0)==="0" || pid.hex.charAt(0)==="1" || pid.hex.charAt(0)==="2" || pid.hex.charAt(0)==="3" || pid.hex.charAt(0)==="8" || pid.hex.charAt(0)==="9" || pid.hex.charAt(0).toLowerCase()==="a" || pid.hex.charAt(0).toLowerCase==="b") {
+    if (pid.hex.charAt(0)==="0" || pid.hex.charAt(0)==="1" || pid.hex.charAt(0)==="2" || pid.hex.charAt(0)==="3" || pid.hex.charAt(0)==="8" || pid.hex.charAt(0)==="9" || pid.hex.charAt(0).toLowerCase()==="a" || pid.hex.charAt(0).toLowerCase()==="b") {
         document.getElementById("cor1-val").innerText = "+ 0x40000000";
         document.getElementById("cor2-val").innerText = "- 0x40000000";
         for (var a = 0; a < 16; a++) {
