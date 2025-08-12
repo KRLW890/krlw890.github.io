@@ -1,17 +1,25 @@
 # KRLW890's linkable programs
 
-<a href="https://github.com/KRLW890/krlw890.github.io/">Source code</a>
-
 I'm just using this as a place where I can post programs and link them to wherever I might need them.  As such, this repository consists of several different, unrelated programs such as:
 
-<strong>Major stuff</strong><br>
-<a href="https://krlw890.github.io/Falinks-March/index.html">Falinks March</a>. It's the game Snake, but with Falinks.
+<h2>Major stuff</h2>
+<h3><a href="https://krlw890.github.io/pokemon-raid-search/">A Pokemon Max Raid den searcher</a></h3>
+For easily finding a specific raid den in Sword/Shield, allowing you to search for criteria such as Pokemon, HAs, GMax forms, etc.
+<br><br>
 
-<a href="https://krlw890.github.io/pokemon-raid-search/">A Pokemon Max Raid den searcher</a>, for easily finding with raid den has specific Pokemon with HAs, GMax forms, etc.
+<h3><a href="https://krlw890.github.io/Magic-Wars/">Magic Wars</a></h3>
+An early prototype for a turn-based battle system. Might do something more with it. Probably not.
+<br><br>
 
-<a href="https://krlw890.github.io/Magic-Wars/">Magic Wars</a>, an early prototype for a turn-based battle system. Might do something more with it.
+<h3><a href="https://krlw890.github.io/nakkadile/play.html">Nakkadile</a></h3>
+A browser game parody of Homestuck and Nyan Cat.
+<br><br>
 
-<strong>Minor stuff</strong><br>
+<h3><a href="https://krlw890.github.io/Falinks-March/index.html">Falinks March</a></h3>
+It's the game Snake, but with the Pokemon Falinks.
+<br><br>
+
+<h2>Minor stuff</h2>
 (Pokemon)<br>
 A type combination calculator, capable of finding the weaknesses, resistances, and immunities of a Pokemon with any number of type combinations: <a href="https://krlw890.github.io/pkdb-answers/type_combos.html">krlw890.github.io/pkdb-answers/type_combos.html</a>
 
@@ -38,4 +46,4 @@ A friendly game of chess. Nothing too impressive: <a href="https://krlw890.githu
 The same game of chess, except that there are only Knights: <a
 href="https://krlw890.github.io/Chess/Chess_butOnlyKnights.html">krlw890.github.io/Chess/Chess_butOnlyKnights.html</a>
 
-...I guess I'll just sort of... uh... leave this... here: <a href="https://krlw890.github.io/nakkadile/play.html">krlw890.github.io/nakkadile/play.html</a>
+<a href="https://github.com/KRLW890/krlw890.github.io/">Source code</a>
