@@ -3,6 +3,10 @@
 I'm just using this as a place where I can post programs and link them to wherever I might need them.  As such, this repository consists of several different, unrelated programs such as:
 
 <h2>Major stuff</h2>
+<h3><a href="https://krlw890.itch.io/blooming-beast">Pokemon Blooming Beast</a></h3>
+By far my most impressive work
+<br><br>
+
 <h3><a href="https://krlw890.github.io/pokemon-raid-search/">A Pokemon Max Raid den searcher</a></h3>
 For easily finding a specific raid den in Sword/Shield, allowing you to search for criteria such as Pokemon, HAs, GMax forms, etc.
 <br><br>
