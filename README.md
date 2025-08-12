@@ -23,6 +23,10 @@ A browser game parody of Homestuck and Nyan Cat.
 It's the game Snake, but with the Pokemon Falinks.
 <br><br>
 
+<h3><a href="https://krlw890.github.io/Glitzer%20Popping/substructure-organizer.html">Pokemon Emerald Data Subtructure Organizer</a></h3>
+A tool made to assist with performing the Glitzer Popping glitch in Pokemon Emerald. Shows the internal Pokemon data structure before and after data corruption to make it easier to plan what setup you need to get a desired result when performing the glitch.
+<br><br>
+
 <h2>Minor stuff</h2>
 (Pokemon)<br>
 A type combination calculator, capable of finding the weaknesses, resistances, and immunities of a Pokemon with any number of type combinations: <a href="https://krlw890.github.io/pkdb-answers/type_combos.html">krlw890.github.io/pkdb-answers/type_combos.html</a>
