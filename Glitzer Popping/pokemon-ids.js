@@ -37,7 +37,7 @@ var pokemon = [
     new mon("Nidoran-F", 4),
     new mon("Nidorina", 4),
     new mon("Nidoqueen", 4),
-    new mon("Nidoran-M��", 4),
+    new mon("Nidoran-M", 4),
     new mon("Nidorino", 4),
     new mon("Nidoking", 4),
     new mon("Clefairy", 3),
@@ -559,4 +559,5 @@ var getPokemon = {
             return value;
         }
     }
+
 };
