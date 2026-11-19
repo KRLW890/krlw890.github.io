@@ -27,6 +27,15 @@ It's the game Snake, but with the Pokemon Falinks.
 A tool made to assist with performing the Glitzer Popping glitch in Pokemon Emerald. Shows the internal Pokemon data structure before and after data corruption to make it easier to plan what setup you need to get a desired result when performing the glitch.
 <br><br>
 
+<h3>Gen 4 Battle Facility Pokemon Lookup: <a href="https://krlw890.github.io/Battle-Facility-Lookup/Gen4_dp.html">DP version</a>, <a href="https://krlw890.github.io/Battle-Facility-Lookup/Gen4_pthgss.html">PtHGSS version</a></h3>
+A tool made to lookup the specific sets opponents in the Gen 4 Battle Frontier.
+<br><br>
+
+
+<h3><a href="https://krlw890.github.io/Pokemon-Language-Quest/">Pokemon Language Quest</a></h3>
+A tool made to record your Pokedex in Home (or any other game) in all 10 lenguages, so that you don't have to reopen and close your in-game/app dex every time you want to check.
+<br><br>
+
 <h2>Minor stuff</h2>
 (Pokemon)<br>
 A type combination calculator, capable of finding the weaknesses, resistances, and immunities of a Pokemon with any number of type combinations: <a href="https://krlw890.github.io/pkdb-answers/type_combos.html">krlw890.github.io/pkdb-answers/type_combos.html</a>
